@@ -7,11 +7,11 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-#import <Firebase.h>
 #import "AppDelegate.h"
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+//#import <Firebase.h>
 
 @implementation AppDelegate
 
@@ -34,7 +34,7 @@
   [self.window makeKeyAndVisible];
 
   // Uses Firebase library to configure APIs
-  [FIRApp configure];
+  //[FIRApp configure];
 
   return YES;
 }
