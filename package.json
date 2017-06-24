@@ -17,8 +17,9 @@
   "dependencies": {
     "firebase": "4.1.2",
     "prop-types": "15.5.10",
-    "react": "16.0.0-alpha.6",
-    "react-native": "0.44.2"
+    "react": "16.0.0-alpha.12",
+    "react-native": "0.45.1",
+    "react-native-firebase": "1.1.1"
   },
   "devDependencies": {
     "babel-jest": "20.0.3",
