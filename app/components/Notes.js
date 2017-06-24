@@ -52,7 +52,9 @@ class Notes extends BaseComponent {
   constructor(props) {
     super(props);
 
-    this.listViewDataSource = new ListView.DataSource({ rowHasChanged: (originalRow, newRow) => newRow !== originalRow });
+    this.listViewDataSource = new ListView.DataSource({
+      rowHasChanged: (originalRow, newRow) => newRow !== originalRow,
+    });
     this.dataRef = firebaseDb.ref(this.props.userInfo.login).child('notes');
 
     this.state = {
@@ -60,7 +62,7 @@ class Notes extends BaseComponent {
       newNote: '',
       error: '',
     };
-    this._bind('_handleSubmit', '_handleChange');
+    this._bind('_handleClick', '_handleChange');
   }
 
   componentDidMount() {
@@ -84,7 +86,7 @@ class Notes extends BaseComponent {
       <View style={ styles.container }>
         <ListView
           dataSource={ this.state.noteListViewDataSource }
-          renderRow={ this._renderNote }
+          renderRow={ Notes._renderNote }
           enableEmptySections={ true }
           renderHeader={ () => (
             <Badge
@@ -132,7 +134,7 @@ class Notes extends BaseComponent {
     });
   }
 
-  _renderNote(note) {
+  static _renderNote(note) {
     return (
       <View>
         <View style={ styles.rowContainer }>
