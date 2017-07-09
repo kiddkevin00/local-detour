@@ -1,12 +1,11 @@
-import Main from './app/components/Main';
+import Landing from './src/lib/src/app/components/Landing';
 import { AppRegistry, StyleSheet, NavigatorIOS } from 'react-native';
 import React, { Component } from 'react';
 
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#111111',
+    flexGrow: 1,
   },
 });
 
@@ -15,8 +14,8 @@ class SpiritualGuide extends Component {
   render() {
     return (
       <NavigatorIOS
-        initialRoute={ { title: 'Spiritual Guide', component: Main } }
         style={ styles.container }
+        initialRoute={ { title: 'Welcome', component: Landing } }
       />
     );
   }

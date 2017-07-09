@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: '#F6F6EF',
     flexDirection: 'column',
   },

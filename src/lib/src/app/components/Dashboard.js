@@ -2,7 +2,6 @@ import Profile from './Profile';
 import Repositories from './Repositories';
 import Notes from './Notes';
 import BaseComponent from './common/BaseComponent';
-import GithubProxy from '../proxies/GithubProxy';
 import {
   StyleSheet,
   Text,
@@ -17,7 +16,7 @@ import PropTypes from 'prop-types';
 const styles = StyleSheet.create({
   container: {
     marginTop: 65,
-    flex: 1,
+    flexGrow: 1,
   },
   image: {
     height: 350,
@@ -42,12 +41,16 @@ class Dashboard extends BaseComponent {
     this._bind('_goToProfile', '_goToRepos', '_goToNotes', '_makeBackground');
   }
 
+  static propTypes = {
+    userInfo: PropTypes.object.isRequired,
+  }
+
   render() {
     const buttonStyleBase = {
       flexDirection: 'row',
       alignSelf: 'stretch',
       justifyContent: 'center',
-      flex: 1,
+      flexGrow: 1,
     };
 
     return (
@@ -111,7 +114,7 @@ class Dashboard extends BaseComponent {
       flexDirection: 'row',
       alignSelf: 'stretch',
       justifyContent: 'center',
-      flex: 1,
+      flexGrow: 1,
     };
 
     if (btn === 0) {
@@ -126,8 +129,5 @@ class Dashboard extends BaseComponent {
   }
 
 }
-Dashboard.propTypes = {
-  userInfo: PropTypes.object.isRequired,
-};
 
 export default Dashboard;

@@ -1,4 +1,4 @@
-import firebaseProxy from 'firebase';
+import * as firebaseProxy from 'firebase';
 
 
 const config = {

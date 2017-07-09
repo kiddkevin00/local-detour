@@ -16,13 +16,13 @@ import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     flexDirection: 'column',
   },
   rowContainer: {
     padding: 10,
   },
-  footerContainer: {
+  footer: {
     backgroundColor: '#E3E3E3',
     alignItems: 'center',
     flexDirection: 'row'
@@ -32,12 +32,12 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 18,
     color: '#111',
-    flex: 10
+    flexGrow: 10
   },
   button: {
     height: 60,
     backgroundColor: '#48BBEC',
-    flex: 3,
+    flexGrow: 3,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -63,6 +63,10 @@ class Notes extends BaseComponent {
       error: '',
     };
     this._bind('_handleClick', '_handleChange');
+  }
+
+  static propTypes = {
+    userInfo: PropTypes.object.isRequired,
   }
 
   componentDidMount() {
@@ -96,7 +100,7 @@ class Notes extends BaseComponent {
             />
           ) }
         />
-        <View style={ styles.footerContainer }>
+        <View style={ styles.footer }>
           <TextInput
             style={ styles.noteInput }
             value={ this.state.newNote }
@@ -146,8 +150,5 @@ class Notes extends BaseComponent {
   }
 
 }
-Notes.propTypes = {
-  userInfo: PropTypes.object.isRequired,
-};
 
 export default Notes;

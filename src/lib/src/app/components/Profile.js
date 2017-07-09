@@ -8,11 +8,12 @@ import {
   ScrollView,
 } from 'react-native';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
   },
   rowContainer: {
     padding: 10,
@@ -32,6 +33,10 @@ class Profile extends BaseComponent {
     super(props);
 
     this.state = {};
+  }
+
+  static propTypes = {
+    userInfo: PropTypes.object.isRequired,
   }
 
   render() {
@@ -68,8 +73,5 @@ class Profile extends BaseComponent {
   }
 
 }
-Profile.propTypes = {
-  userInfo: React.PropTypes.object.isRequired,
-};
 
 export default Profile;

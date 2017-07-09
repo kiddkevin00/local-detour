@@ -11,15 +11,16 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
   },
   rowContainer: {
     flexDirection: 'column',
-    flex: 1,
+    flexGrow: 1,
     padding: 10
   },
   name: {
@@ -48,6 +49,10 @@ class Repositories extends BaseComponent {
       error: '',
     };
     this._bind('_openPage');
+  }
+
+  static propTypes = {
+    userInfo: PropTypes.object.isRequired,
   }
 
   componentDidMount() {
@@ -106,8 +111,5 @@ class Repositories extends BaseComponent {
   }
 
 }
-Repositories.propTypes = {
-  userInfo: React.PropTypes.object.isRequired,
-};
 
 export default Repositories;
