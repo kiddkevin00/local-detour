@@ -185,6 +185,8 @@ class Signup extends BaseComponent {
       const userInfo = await firebaseAuth.createUserWithEmailAndPassword(this.state.formEmail,
         this.state.formPassword);
 
+      userInfo.sendEmailVerification();
+
       this.props.navigator.push({
         title: 'All Events',
         component: EventView,

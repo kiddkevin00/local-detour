@@ -1,8 +1,5 @@
-// BEGIN - THIS PART SHOULD BE CONSISTENT WITH FRONTEND
-
 const sources = {
-  SUGARPOST_BACKEND_CORE: 'sugarpost-backend-core',
-  SUGARPOST_FRONTEND_WEB_CORE: 'sugarpost-frontend-web-core',
+  SPIRITUAL_GUIDE: 'spiritual-guide',
 };
 const httpStatusCodes = {
   OK: 200,
@@ -19,19 +16,8 @@ exports.SOURCES = sources;
 
 exports.HTTP_STATUS_CODES = httpStatusCodes;
 
-exports.USER_TYPES = {
-  UNPAID: 'Not Subscribed',
-  PAID: 'Paid',
-  CANCELLED: 'Cancelled',
-  VENDOR: 'Vendor',
-  ADMIN: 'Admin',
-  INFLUENCER: 'Influencer',
-};
-
-// END - THIS PART SHOULD BE CONSISTENT WITH FRONTEND
-
 exports.COMMON = {
-  CURRENT_SOURCE: sources.SUGARPOST_FRONTEND_WEB_CORE,
+  CURRENT_SOURCE: sources.SPIRITUAL_GUIDE,
 };
 
 exports.DEFAULT_CONFIG = {};
@@ -61,10 +47,4 @@ exports.HTTP_METHODS = {
   POST: 'POST',
   PUT: 'PUT',
   DELETE: 'DELETE',
-};
-
-exports.URL_BASES = {
-  LOCAL_BACKEND_API: 'http://0.0.0.0:8087',
-  TEST_BACKEND_API: 'https://bulletin-board-system-staging.herokuapp.com',
-  PROD_BACKEND_API: 'https://bulletin-board-system.herokuapp.com',
 };
