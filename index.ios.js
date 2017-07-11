@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class SpiritualGuide extends Component {
+class localDetour extends Component {
 
   render() {
     return (
@@ -22,6 +22,6 @@ class SpiritualGuide extends Component {
 
 }
 
-AppRegistry.registerComponent('SpiritualGuide', () => SpiritualGuide);
+AppRegistry.registerComponent('localDetour', () => localDetour);
 
-export default SpiritualGuide;
+export default localDetour;

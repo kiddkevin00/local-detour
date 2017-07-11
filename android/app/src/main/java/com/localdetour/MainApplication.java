@@ -1,4 +1,4 @@
-package com.spiritualguide;
+package com.localdetour;
 
 import android.app.Application;
 

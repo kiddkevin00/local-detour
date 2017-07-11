@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "SpiritualGuide.app"
-               BlueprintName = "SpiritualGuide"
-               ReferencedContainer = "container:SpiritualGuide.xcodeproj">
+               BuildableName = "localDetour.app"
+               BlueprintName = "localDetour"
+               ReferencedContainer = "container:localDetour.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "SpiritualGuideTests.xctest"
-               BlueprintName = "SpiritualGuideTests"
-               ReferencedContainer = "container:SpiritualGuide.xcodeproj">
+               BuildableName = "localDetourTests.xctest"
+               BlueprintName = "localDetourTests"
+               ReferencedContainer = "container:localDetour.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "SpiritualGuideTests.xctest"
-               BlueprintName = "SpiritualGuideTests"
-               ReferencedContainer = "container:SpiritualGuide.xcodeproj">
+               BuildableName = "localDetourTests.xctest"
+               BlueprintName = "localDetourTests"
+               ReferencedContainer = "container:localDetour.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "SpiritualGuide.app"
-            BlueprintName = "SpiritualGuide"
-            ReferencedContainer = "container:SpiritualGuide.xcodeproj">
+            BuildableName = "localDetour.app"
+            BlueprintName = "localDetour"
+            ReferencedContainer = "container:localDetour.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "SpiritualGuide.app"
-            BlueprintName = "SpiritualGuide"
-            ReferencedContainer = "container:SpiritualGuide.xcodeproj">
+            BuildableName = "localDetour.app"
+            BlueprintName = "localDetour"
+            ReferencedContainer = "container:localDetour.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -113,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "SpiritualGuide.app"
-            BlueprintName = "SpiritualGuide"
-            ReferencedContainer = "container:SpiritualGuide.xcodeproj">
+            BuildableName = "localDetour.app"
+            BlueprintName = "localDetour"
+            ReferencedContainer = "container:localDetour.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

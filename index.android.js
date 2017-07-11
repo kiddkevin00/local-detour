@@ -3,7 +3,7 @@ import { AppRegistry } from 'react-native';
 import React, { Component } from 'react';
 
 
-class SpiritualGuide extends Component {
+class localDetour extends Component {
 
   render() {
     return (
@@ -13,6 +13,6 @@ class SpiritualGuide extends Component {
 
 }
 
-AppRegistry.registerComponent('SpiritualGuide', () => SpiritualGuide);
+AppRegistry.registerComponent('localDetour', () => localDetour);
 
-export default SpiritualGuide;
+export default localDetour;

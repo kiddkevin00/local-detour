@@ -1,5 +1,5 @@
 {
-  "name": "SpiritualGuide",
+  "name": "localDetour",
   "version": "0.0.1",
   "description": "",
   "main": "./app/components/Main.js",
@@ -20,8 +20,7 @@
     "react": "16.0.0-alpha.12",
     "react-native": "0.45.1",
     "react-native-firebase": "1.1.1",
-    "react-native-swiper": "1.5.4",
-    "react-redux": "5.0.5"
+    "react-native-swiper": "1.5.4"
   },
   "devDependencies": {
     "babel-jest": "20.0.3",
