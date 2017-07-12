@@ -112,4 +112,4 @@ class Repositories extends BaseComponent {
 
 }
 
-export default Repositories;
+export { Repositories as default };

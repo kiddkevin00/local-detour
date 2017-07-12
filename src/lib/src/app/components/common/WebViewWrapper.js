@@ -27,4 +27,4 @@ WebViewWrapper.propTypes = {
   url: PropTypes.string.isRequired,
 };
 
-export default WebViewWrapper;
+export { WebViewWrapper as default };

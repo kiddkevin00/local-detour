@@ -151,4 +151,4 @@ class Notes extends BaseComponent {
 
 }
 
-export default Notes;
+export { Notes as default };

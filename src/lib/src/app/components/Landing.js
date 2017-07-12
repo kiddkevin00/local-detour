@@ -98,4 +98,4 @@ class Landing extends BaseComponent {
 
 }
 
-export default Landing;
+export { Landing as default };

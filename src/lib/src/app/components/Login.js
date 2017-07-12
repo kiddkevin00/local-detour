@@ -1,5 +1,5 @@
+import Events from './Events';
 import Signup from './Signup';
-import EventView from './EventsView';
 import BaseComponent from './common/BaseComponent';
 import { firebaseAuth, firebaseGoogleAuthProvider } from '../proxies/FirebaseProxy';
 import {
@@ -157,7 +157,7 @@ class Login extends BaseComponent {
 
       this.props.navigator.push({
         title: 'All Events',
-        component: EventView,
+        component: Events,
         passProps: { userInfo },
       });
 
@@ -190,7 +190,7 @@ class Login extends BaseComponent {
     });
   }
 
-  async _gotoSignup() {
+  _gotoSignup() {
     this.props.navigator.push({
       title: 'Sign Up',
       component: Signup,
@@ -199,4 +199,4 @@ class Login extends BaseComponent {
 
 }
 
-export default Login;
+export { Login as default };

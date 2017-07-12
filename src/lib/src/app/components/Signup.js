@@ -1,5 +1,5 @@
+import Events from './Events';
 import Login from './Login';
-import EventView from './EventsView';
 import BaseComponent from './common/BaseComponent';
 import { firebaseAuth, firebaseGoogleAuthProvider } from '../proxies/FirebaseProxy';
 import {
@@ -10,7 +10,6 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
-//import { connect } from 'react-redux';
 import React from 'react';
 
 
@@ -189,7 +188,7 @@ class Signup extends BaseComponent {
 
       this.props.navigator.push({
         title: 'All Events',
-        component: EventView,
+        component: Events,
         passProps: { userInfo },
       });
 
@@ -229,7 +228,7 @@ class Signup extends BaseComponent {
     });
   }
 
-  async _gotoLogin() {
+  _gotoLogin() {
     this.props.navigator.push({
       title: 'Log In',
       component: Login,
@@ -246,7 +245,7 @@ class Signup extends BaseComponent {
 
       this.props.navigator.push({
         title: 'All Events',
-        component: EventView,
+        component: Events,
         passProps: { userInfo },
       });
 
@@ -276,4 +275,4 @@ class Signup extends BaseComponent {
 
 }
 
-export default Signup;
+export { Signup as default };

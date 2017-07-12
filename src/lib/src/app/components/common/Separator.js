@@ -25,4 +25,4 @@ class Separator extends BaseComponent {
 
 }
 
-export default Separator;
+export { Separator as default };

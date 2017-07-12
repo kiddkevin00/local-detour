@@ -130,4 +130,4 @@ class Dashboard extends BaseComponent {
 
 }
 
-export default Dashboard;
+export { Dashboard as default };

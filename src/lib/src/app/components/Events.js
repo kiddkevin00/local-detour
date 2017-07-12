@@ -1,3 +1,4 @@
+import EventDetail from './EventDetail';
 import Login from './Login';
 import Separator from './common/Separator';
 import BaseComponent from './common/BaseComponent';
@@ -14,7 +15,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-// TODO
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     //flexGrow: 1,
     padding: 10,
   },
-  itemTitle: {
+  itemName: {
     paddingBottom: 5,
     fontSize: 18,
     color: '#1558c4',
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class EventView extends BaseComponent {
+class Events extends BaseComponent {
 
   constructor(props) {
     super(props);
@@ -88,7 +88,7 @@ class EventView extends BaseComponent {
       eventListViewDataSource: this.listViewDataSource.cloneWithRows([]),
       newEvent: '',
     };
-    this._bind('_handleLogout', '_handleClick', '_handleChange');
+    this._bind('_handleLogout', '_handleClick', '_handleChange', '_renderEvent', '_checkoutEventDetail');
   }
 
   static propTypes = {
@@ -121,7 +121,7 @@ class EventView extends BaseComponent {
         <ListView
           style={ styles.main }
           dataSource={ this.state.eventListViewDataSource }
-          renderRow={ EventView._renderEvent }
+          renderRow={ this._renderEvent }
           enableEmptySections={ true }
           renderHeader={ () => null }
         />
@@ -152,6 +152,52 @@ class EventView extends BaseComponent {
     );
   }
 
+  _renderEvent(event) {
+    return (
+      <View>
+        <View style={ styles.rowContainer }>
+          <TouchableHighlight
+            onPress={ this._checkoutEventDetail.bind(this, event) }
+            underlayColor="transparent"
+          >
+            <Text style={ styles.itemName }>{ event.name }</Text>
+          </TouchableHighlight>
+          <Text style={ styles.itemText }>{ event.address }</Text>
+          <Text style={ styles.itemText }>{ new Date(event.startDate).toDateString() } - { new Date(event.endDate).toDateString() }</Text>
+        </View>
+        <Separator />
+      </View>
+    );
+  }
+
+  _handleClick() {
+    this.dataRef
+      .push({
+        name: this.state.newEvent,
+        address: '123 42nd street, New York, NY',
+        startDate: Date.now(),
+        endDate: Date.now() + 2 * 24 * 60 * 60 * 1000,
+        type: 'Sports',
+        description: 'Here is some detail...',
+        cost: 0,
+        externalLink: 'https://www.timeout.com/newyork/things-to-do/sunset-sail-happy-hour',
+      })
+      .then(() => {
+        this.setState({
+          newEvent: '',
+        });
+      })
+      .catch((err) => {
+        alert(JSON.stringify(err, null, 2));
+      });
+  }
+
+  _handleChange(event) {
+    this.setState({
+      newEvent: event.nativeEvent.text,
+    });
+  }
+
   async _handleLogout() {
     this.setState({
       isLoading: true,
@@ -179,51 +225,14 @@ class EventView extends BaseComponent {
     }
   }
 
-  _handleClick() {
-    this.dataRef
-      .push({
-        title: this.state.newEvent,
-        address: '123 42nd street, New York, NY',
-        startDate: Date.now(),
-        endDate: Date.now() + 2 * 24 * 60 * 60 * 1000,
-        type: 'Sports',
-        description: 'Here is some detail...',
-        cost: 0,
-      })
-      .then(() => {
-        this.setState({
-          newEvent: '',
-        });
-      })
-      .catch((err) => {
-        alert(JSON.stringify(err, null, 2));
-      });
-  }
-
-  _handleChange(event) {
-    this.setState({
-      newEvent: event.nativeEvent.text,
+  _checkoutEventDetail(event) {
+    this.props.navigator.push({
+      title: 'Event Detail',
+      component: EventDetail,
+      passProps: { event },
     });
-  }
-
-  static _renderEvent(event) {
-    return (
-      <View>
-        <View style={ styles.rowContainer }>
-          <TouchableHighlight
-            onPress={ () => {} }
-            underlayColor="transparent"
-          >
-            <Text style={ styles.itemTitle }>{ event.title }</Text>
-          </TouchableHighlight>
-          <Text style={ styles.itemText }>{ event.address }</Text>
-          <Text style={ styles.itemText }>{ new Date(event.startDate).toDateString() } - { new Date(event.endDate).toDateString() }</Text>
-        </View>
-        <Separator />
-      </View>
-    );
   }
 
 }
 
-export default EventView;
+export { Events as default };

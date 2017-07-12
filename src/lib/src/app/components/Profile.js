@@ -74,4 +74,4 @@ class Profile extends BaseComponent {
 
 }
 
-export default Profile;
+export { Profile as default };

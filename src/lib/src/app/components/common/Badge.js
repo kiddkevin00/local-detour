@@ -52,4 +52,4 @@ Badge.defaultProps = {
   name: '',
 };
 
-export default Badge;
+export { Badge as default };
