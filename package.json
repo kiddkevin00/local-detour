@@ -2,7 +2,13 @@
   "name": "localDetour",
   "version": "0.0.1",
   "description": "",
-  "main": "./app/components/Main.js",
+  "main": "./src/lib/src/app/components/Landing.js",
+  "bin": {
+    "remap-rn-packager-port": "remap-rn-packager-port.sh",
+    "update-test-coverage": "./bin/update-test-coverage.js",
+    "version-bump": "./bin/version-bump.js",
+    "restrict-branches-no-push": "./bin/restrict-branches-no-push.sh"
+  },
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
@@ -13,6 +19,10 @@
     "preset": "react-native",
     "verbose": true,
     "coverageDirectory": "spec/coverage/"
+  },
+  "engines": {
+    "node": "6.11.1",
+    "npm": ">=3.10.9"
   },
   "dependencies": {
     "firebase": "4.1.2",
@@ -36,6 +46,8 @@
     "eslint-plugin-jsx-a11y": "5.0.3",
     "eslint-plugin-react": "7.0.1"
   },
+  "author": "Marcus Hsu",
+  "license": "ISC",
   "repository": {
     "type": "git",
     "url": "git@github.com:kiddkevin00/spiritual-guide.git"
