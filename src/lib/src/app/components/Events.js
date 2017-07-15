@@ -93,7 +93,7 @@ class Events extends BaseComponent {
 
   static propTypes = {
     userInfo: PropTypes.object.isRequired,
-  }
+  };
 
   componentDidMount() {
     this.dataRef.on('value', (eventsSnapshot) => {

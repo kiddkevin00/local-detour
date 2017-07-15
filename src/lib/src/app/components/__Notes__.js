@@ -1,4 +1,4 @@
-import Badge from './common/Badge';
+import Badge from './common/__Badge__';
 import Separator from './common/Separator';
 import BaseComponent from './common/BaseComponent';
 import { firebaseDb } from '../proxies/FirebaseProxy';

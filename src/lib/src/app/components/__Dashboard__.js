@@ -1,6 +1,6 @@
 import Profile from './Profile';
-import Repositories from './Repositories';
-import Notes from './Notes';
+import Repositories from './__Repositories__';
+import Notes from './__Notes__';
 import BaseComponent from './common/BaseComponent';
 import {
   StyleSheet,
