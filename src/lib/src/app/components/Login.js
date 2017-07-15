@@ -10,7 +10,6 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
-//import { connect } from 'react-redux';
 import React from 'react';
 
 
