@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flexGrow: 70,
-    marginTop: 65,
+    marginTop: 64,
     padding: 30,
     backgroundColor: '#23cfb9',
   },

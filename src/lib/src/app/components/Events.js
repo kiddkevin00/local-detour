@@ -4,12 +4,28 @@ import Separator from './common/Separator';
 import BaseComponent from './common/BaseComponent';
 import { firebaseAuth, firebaseDb } from '../proxies/FirebaseProxy';
 import {
-  StyleSheet,
+  Container,
+  Header,
+  Content,
+  List,
+  ListItem,
+  Card,
+  CardItem,
+  Left,
+  Body,
+  Thumbnail,
+  Button,
+  Icon,
   Text,
+} from 'native-base';
+import {
+  StyleSheet,
+  //Text,
   View,
   TextInput,
   TouchableHighlight,
   ListView,
+  Image,
 } from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -85,6 +101,7 @@ class Events extends BaseComponent {
     this.dataRef = firebaseDb.ref('/nyc').child('events');
 
     this.state = {
+      events: [],
       eventListViewDataSource: this.listViewDataSource.cloneWithRows([]),
       newEvent: '',
     };
@@ -92,7 +109,7 @@ class Events extends BaseComponent {
   }
 
   static propTypes = {
-    userInfo: PropTypes.object.isRequired,
+    userInfo: PropTypes.object//.isRequired,
   };
 
   componentDidMount() {
@@ -104,6 +121,7 @@ class Events extends BaseComponent {
       });
 
       this.setState({
+        events,
         eventListViewDataSource: this.listViewDataSource.cloneWithRows(events),
       });
     });
@@ -114,7 +132,20 @@ class Events extends BaseComponent {
   }
 
   render() {
-    const userInfo = this.props.userInfo;
+    //const userInfo = this.props.userInfo;
+
+    return (
+      <Container>
+        <Header style={ { height: 64, backgroundColor: '#f4f7f9', } } />
+        <Content>
+          <List
+            dataArray={ this.state.events }
+            renderRow={ this._renderEvent }
+          >
+          </List>
+        </Content>
+      </Container>
+    );
 
     return (
       <View style={ styles.container }>
@@ -154,6 +185,41 @@ class Events extends BaseComponent {
 
   _renderEvent(event) {
     return (
+      <ListItem onPress={ this._checkoutEventDetail.bind(this, event) }>
+        <Card>
+          <CardItem>
+            <Left>
+              <Thumbnail source={ require('../../../static/assets/images/v4_background.png') } />
+              <Body>
+                <Text>{ event.name }</Text>
+                <Text note>{ event.address }</Text>
+              </Body>
+            </Left>
+          </CardItem>
+          <CardItem cardBody>
+            <Image source={ require('../../../static/assets/images/v3_background.png') } style={ { height: 200, width: null, flex: 1 } } />
+          </CardItem>
+          <CardItem>
+            <Left>
+              <Button transparent onPress={ () => alert('Added to your calender!') }>
+                <Icon active name="chatbubbles" />
+                <Text>Going</Text>
+              </Button>
+              <Button transparent onPress={ () => alert('Saved!') }>
+                <Icon active name="thumbs-up" />
+                <Text>Save</Text>
+              </Button>
+            </Left>
+            <Body>
+              <Text note>{ new Date(event.startDate).toDateString() }</Text>
+              <Text note>~ { new Date(event.endDate).toDateString() }</Text>
+            </Body>
+          </CardItem>
+        </Card>
+      </ListItem>
+    );
+
+    return (
       <View>
         <View style={ styles.rowContainer }>
           <TouchableHighlight
@@ -177,10 +243,11 @@ class Events extends BaseComponent {
         address: '123 42nd street, New York, NY',
         startDate: Date.now(),
         endDate: Date.now() + 2 * 24 * 60 * 60 * 1000,
-        type: 'Sports',
+        type: 'General',
         description: 'Here is some detail...',
         cost: 0,
         externalLink: 'https://www.timeout.com/newyork/things-to-do/sunset-sail-happy-hour',
+        photoUrls: [],
       })
       .then(() => {
         this.setState({

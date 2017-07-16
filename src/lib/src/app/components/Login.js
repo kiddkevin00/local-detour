@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flexGrow: 70,
-    marginTop: 65,
+    marginTop: 64,
     padding: 30,
     backgroundColor: '#23cfb9',
   },
@@ -28,10 +28,6 @@ const styles = StyleSheet.create({
     flexGrow: 3,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  footerText: {
-    color: '#a3a7b2',
-    fontSize: 14,
   },
   title: {
     alignSelf: 'center',
@@ -60,10 +56,6 @@ const styles = StyleSheet.create({
     height: 45,
     backgroundColor: 'white',
   },
-  loginButtonText: {
-    color: '#111',
-    fontSize: 18,
-  },
   signupButton: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -74,6 +66,14 @@ const styles = StyleSheet.create({
     borderColor: 'orange',
     height: 45,
     backgroundColor: 'orange',
+  },
+  footerText: {
+    color: '#a3a7b2',
+    fontSize: 14,
+  },
+  loginButtonText: {
+    color: '#111',
+    fontSize: 18,
   },
   signupButtonText: {
     color: 'white',

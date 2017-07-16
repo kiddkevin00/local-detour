@@ -1,4 +1,4 @@
-import Profile from './Profile';
+import Profile from './__Profile__';
 import Repositories from './__Repositories__';
 import Notes from './__Notes__';
 import BaseComponent from './common/BaseComponent';

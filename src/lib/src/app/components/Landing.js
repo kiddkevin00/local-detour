@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    resizeMode: 'stretch'
+    resizeMode: 'stretch',
   },
   heading: {
     color: '#fff',
