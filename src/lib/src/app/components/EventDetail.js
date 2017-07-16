@@ -1,10 +1,10 @@
 import WebViewWrapper from './common/WebViewWrapper';
 import Separator from './common/Separator';
 import BaseComponent from './common/BaseComponent';
-import GithubProxy from '../proxies/GithubProxy';
+import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
 import {
   StyleSheet,
-  Text,
+  //Text,
   View,
   ScrollView,
   TouchableHighlight,
@@ -39,7 +39,7 @@ class EventDetail extends BaseComponent {
 
   static propTypes = {
     event: PropTypes.object.isRequired,
-  }
+  };
 
   render() {
     const event = this.props.event;
@@ -78,9 +78,21 @@ class EventDetail extends BaseComponent {
     });
 
     return (
-      <ScrollView style={ styles.container }>
-        { list }
-      </ScrollView>
+      <Container>
+        <Header style={ { height: 64, backgroundColor: '#f4f7f9', } } />
+        <Content>
+          <ScrollView style={ styles.container }>
+            { list }
+          </ScrollView>
+        </Content>
+        <Footer>
+          <FooterTab>
+            <Button full onPress={ () => alert('Saved!') }>
+              <Text>Save</Text>
+            </Button>
+          </FooterTab>
+        </Footer>
+      </Container>
     );
   }
 

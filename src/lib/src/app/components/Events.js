@@ -189,7 +189,7 @@ class Events extends BaseComponent {
         <Card>
           <CardItem>
             <Left>
-              <Thumbnail source={ require('../../../static/assets/images/v4_background.png') } />
+              <Thumbnail square source={ require('../../../static/assets/images/calendar-date.png') } />
               <Body>
                 <Text>{ event.name }</Text>
                 <Text note>{ event.address }</Text>
