@@ -7,6 +7,7 @@ import {
   View,
   Text,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -18,12 +19,15 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
+    marginTop: '195%',
   },
   backgroundImage: {
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     resizeMode: 'stretch',
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
   heading: {
     color: '#fff',

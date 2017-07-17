@@ -141,8 +141,7 @@ class Events extends BaseComponent {
           <List
             dataArray={ this.state.events }
             renderRow={ this._renderEvent }
-          >
-          </List>
+          />
         </Content>
       </Container>
     );
@@ -210,10 +209,6 @@ class Events extends BaseComponent {
                 <Text>Save</Text>
               </Button>
             </Left>
-            <Body>
-              <Text note>{ new Date(event.startDate).toDateString() }</Text>
-              <Text note>~ { new Date(event.endDate).toDateString() }</Text>
-            </Body>
           </CardItem>
         </Card>
       </ListItem>
