@@ -49,18 +49,18 @@ class EventDetail extends BaseComponent {
         <Content padder>
           <Card>
             <CardItem cardBody>
-              <Image source={ require('../../../static/assets/images/v3_background.png') } style={ { height: 200, width: null, flex: 1 } } />
+              <Image style={ { height: 200, width: null, flex: 1 } } source={ require('../../../static/assets/images/v3_background.png') } />
             </CardItem>
-            <CardItem>
+            <CardItem bordered>{/* [TBD] */}
               <Left>
                 <Thumbnail square source={ require('../../../static/assets/images/calendar-date.png') } />
                 <Body>
-                  <Text>Happy Hour</Text>
-                  <Text note>Public</Text>
+                  <Text>{ event.name }</Text>
+                  <Text note>{ event.type }</Text>
                 </Body>
               </Left>
             </CardItem>
-            <CardItem>
+            <CardItem bordered>{/* [TBD] */}
               <Left>
                 <Button iconLeft transparent>
                   <Icon name="navigate" />
@@ -74,27 +74,27 @@ class EventDetail extends BaseComponent {
             </CardItem>
             <CardItem>
               <Body>
-                <Text>April 28 - April 30</Text>
-                <Text note>from 6 PM to 9 PM</Text>
+                <Text>{ event.startDate } - { event.endDate }</Text>
+                <Text note>from { event.startTime } to { event.endTime }</Text>
               </Body>
             </CardItem>
             <CardItem>
               <Body>
-                <Text>Time Square</Text>
-                <Text note>123 W 42th st</Text>
+                <Text>{ event.venue }</Text>
+                <Text note>{ event.address }</Text>
               </Body>
             </CardItem>
-            <CardItem>
+            <CardItem bordered>{/* [TBD] */}
               <Body>
                 <Text>More Info</Text>
-                <Text note onPress={ this._openPage.bind(this, 'https://www.timeout.com/newyork/things-to-do/sunset-sail-happy-hour') }>https://www.timeout.com/newyork/things-to-do/sunset-sail-happy-hour</Text>
+                <Text note onPress={ this._openPage.bind(this, event.externalLink) }>{ event.externalLink }</Text>
               </Body>
             </CardItem>
-            <CardItem>
+            <CardItem bordered>{/* [TBD] */}
               <Body>
                 <Text>Details</Text>
                 <Text note>
-                  Arts Brookfield’s annual summer music festival, the Lowdown Hudson Music Fest, returns to the heart of downtown New York for its seventh summer. Bringing fun, lively, world-class musical talent to the picturesque Waterfront Plaza at Brookfield Place, this year’s festival will be headlined by quirky veteran rockers OK GO. The show is free to attend and open to the public.Free to attend, no tickets required.PLEASE NOTE: In keeping with the summer concert vibe, this year’s festival will be standing room only on a first come, first served basis.Event is rain or shine, except for extreme weather conditions.
+                  { event.description }
                 </Text>
               </Body>
             </CardItem>
