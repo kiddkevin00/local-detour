@@ -1,33 +1,32 @@
 import WebViewWrapper from './common/WebViewWrapper';
-import Separator from './common/Separator';
 import BaseComponent from './common/BaseComponent';
-import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
+import {
+  Container,
+  Header,
+  Content,
+  Footer,
+  FooterTab,
+  Card,
+  CardItem,
+  Left,
+  Body,
+  Grid,
+  Col,
+  Thumbnail,
+  Button,
+  Text,
+  Icon,
+} from 'native-base';
 import {
   StyleSheet,
-  //Text,
   View,
   ScrollView,
   TouchableHighlight,
+  Image,
 } from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-  },
-  rowContainer: {
-    padding: 10,
-  },
-  rowTitle: {
-    color: '#48BBEC',
-    fontSize: 16,
-  },
-  rowContent: {
-    fontSize: 19,
-  },
-});
 
 class EventDetail extends BaseComponent {
 
@@ -38,52 +37,81 @@ class EventDetail extends BaseComponent {
   }
 
   static propTypes = {
-    event: PropTypes.object.isRequired,
+    event: PropTypes.object//.isRequired,
   };
 
   render() {
     const event = this.props.event;
-    const shownTitles = [
-      { key: 'name', title: 'Name' },
-      { key: 'address', title: 'Address' },
-      { key: 'startDate', title: 'Start Date' },
-      { key: 'endDate', title: 'End Date' },
-      { key: 'type', title: 'Type' },
-      { key: 'description', title: 'Description' },
-      { key: 'cost', title: 'Cost' },
-      { key: 'externalLink', title: 'External Resource' },
-    ];
-
-    const list = shownTitles.map((titleObj, index) => {
-      const content = event[titleObj.key];
-
-      return (
-        <View key={ `repo-${index}` }>
-          <View style={ styles.rowContainer }>
-            <Text style={ styles.rowTitle }>{ titleObj.title }</Text>
-            { titleObj.key === 'externalLink' ? (
-              <TouchableHighlight
-                onPress={ this._openPage.bind(this, content) }
-                underlayColor="transparent"
-              >
-                <Text style={ styles.rowContent }>{ content || 'N/A' }</Text>
-              </TouchableHighlight>
-            ) : (
-              <Text style={ styles.rowContent }>{ content || 'N/A' }</Text>
-            ) }
-          </View>
-          <Separator />
-        </View>
-      );
-    });
 
     return (
       <Container>
         <Header style={ { height: 64, backgroundColor: '#f4f7f9', } } />
-        <Content>
-          <ScrollView style={ styles.container }>
-            { list }
-          </ScrollView>
+        <Content padder>
+          <Card>
+            <CardItem cardBody>
+              <Image source={ require('../../../static/assets/images/v3_background.png') } style={ { height: 200, width: null, flex: 1 } } />
+            </CardItem>
+            <CardItem>
+              <Left>
+                <Thumbnail square source={ require('../../../static/assets/images/calendar-date.png') } />
+                <Body>
+                  <Text>Happy Hour</Text>
+                  <Text note>Public</Text>
+                </Body>
+              </Left>
+            </CardItem>
+            <CardItem>
+              <Left>
+                <Button iconLeft transparent>
+                  <Icon name="navigate" />
+                  <Text>201 going</Text>
+                </Button>
+                <Button iconLeft transparent>
+                  <Icon name="thumbs-up" />
+                  <Text>302 interested</Text>
+                </Button>
+              </Left>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Text>April 28 - April 30</Text>
+                <Text note>from 6 PM to 9 PM</Text>
+              </Body>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Text>Time Square</Text>
+                <Text note>123 W 42th st</Text>
+              </Body>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Text>More Info</Text>
+                <Text note onPress={ this._openPage.bind(this, 'https://www.timeout.com/newyork/things-to-do/sunset-sail-happy-hour') }>https://www.timeout.com/newyork/things-to-do/sunset-sail-happy-hour</Text>
+              </Body>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Text>Details</Text>
+                <Text note>
+                  Arts Brookfield’s annual summer music festival, the Lowdown Hudson Music Fest, returns to the heart of downtown New York for its seventh summer. Bringing fun, lively, world-class musical talent to the picturesque Waterfront Plaza at Brookfield Place, this year’s festival will be headlined by quirky veteran rockers OK GO. The show is free to attend and open to the public.Free to attend, no tickets required.PLEASE NOTE: In keeping with the summer concert vibe, this year’s festival will be standing room only on a first come, first served basis.Event is rain or shine, except for extreme weather conditions.
+                </Text>
+              </Body>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Text>Photos</Text>
+                <Grid>
+                  <Col>
+                    <Thumbnail style={ { width: '100%', height: 100 } } square source={ require('../../../static/assets/images/v4_background.png') } />
+                  </Col>
+                  <Col>
+                    <Thumbnail style={ { width: '100%', height: 100 } } square source={ require('../../../static/assets/images/v3_background.png') } />
+                  </Col>
+                </Grid>
+              </Body>
+            </CardItem>
+          </Card>
         </Content>
         <Footer>
           <FooterTab>

@@ -59,7 +59,7 @@ class Landing extends BaseComponent {
 
   static propTypes = {
     navigator: PropTypes.object.isRequired,
-  }
+  };
 
   render() {
     return (
