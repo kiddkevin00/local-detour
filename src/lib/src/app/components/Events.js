@@ -1,5 +1,6 @@
 import EventDetail from './EventDetail';
 import Login from './Login';
+import MapView from './MapView'
 import Separator from './common/Separator';
 import BaseComponent from './common/BaseComponent';
 import { firebaseAuth, firebaseDb } from '../proxies/FirebaseProxy';
@@ -88,6 +89,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
   },
+  tabs: {
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 8,
+  }
 });
 
 class Events extends BaseComponent {
@@ -105,7 +112,7 @@ class Events extends BaseComponent {
       eventListViewDataSource: this.listViewDataSource.cloneWithRows([]),
       newEvent: '',
     };
-    this._bind('_handleLogout', '_handleClick', '_handleChange', '_renderEvent', '_checkoutEventDetail');
+    this._bind('_handleLogout', '_handleClick', '_handleChange', '_renderEvent', '_checkoutEventDetail', 'toMapView');
   }
 
   static propTypes = {
@@ -137,6 +144,11 @@ class Events extends BaseComponent {
     return (
       <Container>
         <Header style={ { height: 64, backgroundColor: '#f4f7f9', } } />
+          <View style={styles.tabs}>
+            <Button rounded info small onPress={ this.toMapView.bind(this) }>
+                <Text style={{ color: '#FFFFFF' }}>Map View</Text>
+              </Button>
+          </View>
         <Content>
           <List
             dataArray={ this.state.events }
@@ -258,6 +270,13 @@ class Events extends BaseComponent {
     this.setState({
       newEvent: event.nativeEvent.text,
     });
+  }
+
+  toMapView() {
+    this.props.navigator.push({
+      title: 'Map View',
+      component: MapView
+    })
   }
 
   async _handleLogout() {
