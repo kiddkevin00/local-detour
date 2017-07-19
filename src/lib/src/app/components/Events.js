@@ -100,10 +100,10 @@ class Events extends BaseComponent {
               </Body>
             </Left>
           </CardItem>
-          <CardItem cardBody button onPress={ this._checkoutEventDetail.bind(this, event) }>{/* [TBD] */}
+          <CardItem cardBody button onPress={ this._checkoutEventDetail.bind(this, event) }>
             <Image style={ { height: 200, width: null, flex: 1 } } source={ require('../../../static/assets/images/v3_background.png') } />
           </CardItem>
-          <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>{/* [TBD] */}
+          <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
             <Left>
               <Button iconLeft transparent onPress={ () => alert('Added to your calender!') }>
                 <Icon name="navigate" />

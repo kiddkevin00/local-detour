@@ -41,7 +41,21 @@ class EventDetail extends BaseComponent {
   };
 
   render() {
-    const event = this.props.event;
+    const event = this.props.event || {
+        name: 'Test Event',
+        venue: 'Time Square',
+        address: '123 42nd street, New York, NY',
+        startDate: 'April 28',
+        endDate: 'April 30',
+        startTime: '6 PM',
+        endTime: '9 PM',
+        type: 'Public',
+        description: 'Arts Brookfield’s annual summer music festival, the Lowdown Hudson Music Fest, returns to the heart of downtown New York for its seventh summer. Bringing fun, lively, world-class musical talent to the picturesque Waterfront Plaza at Brookfield Place, this year’s festival will be headlined by quirky veteran rockers OK GO. The show is free to attend and open to the public.Free to attend, no tickets required.PLEASE NOTE: In keeping with the summer concert vibe, this year’s festival will be standing room only on a first come, first served basis.Event is rain or shine, except for extreme weather conditions.',
+        cost: 0,
+        externalLink: 'https://www.timeout.com/newyork/things-to-do/sunset-sail-happy-hour',
+        photoUrls: [],
+        tags: {},
+      };
 
     return (
       <Container>
@@ -51,7 +65,7 @@ class EventDetail extends BaseComponent {
             <CardItem cardBody>
               <Image style={ { height: 200, width: null, flex: 1 } } source={ require('../../../static/assets/images/v3_background.png') } />
             </CardItem>
-            <CardItem bordered>{/* [TBD] */}
+            <CardItem bordered>
               <Left>
                 <Thumbnail square source={ require('../../../static/assets/images/calendar-date.png') } />
                 <Body>
@@ -60,15 +74,19 @@ class EventDetail extends BaseComponent {
                 </Body>
               </Left>
             </CardItem>
-            <CardItem bordered>{/* [TBD] */}
+            <CardItem bordered>
               <Left>
                 <Button iconLeft transparent>
                   <Icon name="navigate" />
-                  <Text>201 going</Text>
+                  <Text>54 going</Text>
                 </Button>
                 <Button iconLeft transparent>
                   <Icon name="thumbs-up" />
-                  <Text>302 interested</Text>
+                  <Text>76 liked</Text>
+                </Button>
+                <Button iconLeft transparent>
+                  <Icon name="share" />
+                  <Text>37 Shared</Text>
                 </Button>
               </Left>
             </CardItem>
@@ -84,13 +102,13 @@ class EventDetail extends BaseComponent {
                 <Text note>{ event.address }</Text>
               </Body>
             </CardItem>
-            <CardItem bordered>{/* [TBD] */}
+            <CardItem bordered>
               <Body>
                 <Text>More Info</Text>
                 <Text note onPress={ this._openPage.bind(this, event.externalLink) }>{ event.externalLink }</Text>
               </Body>
             </CardItem>
-            <CardItem bordered>{/* [TBD] */}
+            <CardItem bordered>
               <Body>
                 <Text>Details</Text>
                 <Text note>
