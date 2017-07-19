@@ -1,33 +1,32 @@
 import WebViewWrapper from './common/WebViewWrapper';
-import Separator from './common/Separator';
 import BaseComponent from './common/BaseComponent';
-import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
+import {
+  Container,
+  Header,
+  Content,
+  Footer,
+  FooterTab,
+  Card,
+  CardItem,
+  Left,
+  Body,
+  Grid,
+  Col,
+  Thumbnail,
+  Button,
+  Text,
+  Icon,
+} from 'native-base';
 import {
   StyleSheet,
-  //Text,
   View,
   ScrollView,
   TouchableHighlight,
+  Image,
 } from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-  },
-  rowContainer: {
-    padding: 10,
-  },
-  rowTitle: {
-    color: '#48BBEC',
-    fontSize: 16,
-  },
-  rowContent: {
-    fontSize: 19,
-  },
-});
 
 class EventDetail extends BaseComponent {
 
@@ -38,52 +37,81 @@ class EventDetail extends BaseComponent {
   }
 
   static propTypes = {
-    event: PropTypes.object.isRequired,
+    event: PropTypes.object//.isRequired,
   };
 
   render() {
     const event = this.props.event;
-    const shownTitles = [
-      { key: 'name', title: 'Name' },
-      { key: 'address', title: 'Address' },
-      { key: 'startDate', title: 'Start Date' },
-      { key: 'endDate', title: 'End Date' },
-      { key: 'type', title: 'Type' },
-      { key: 'description', title: 'Description' },
-      { key: 'cost', title: 'Cost' },
-      { key: 'externalLink', title: 'External Resource' },
-    ];
-
-    const list = shownTitles.map((titleObj, index) => {
-      const content = event[titleObj.key];
-
-      return (
-        <View key={ `repo-${index}` }>
-          <View style={ styles.rowContainer }>
-            <Text style={ styles.rowTitle }>{ titleObj.title }</Text>
-            { titleObj.key === 'externalLink' ? (
-              <TouchableHighlight
-                onPress={ this._openPage.bind(this, content) }
-                underlayColor="transparent"
-              >
-                <Text style={ styles.rowContent }>{ content || 'N/A' }</Text>
-              </TouchableHighlight>
-            ) : (
-              <Text style={ styles.rowContent }>{ content || 'N/A' }</Text>
-            ) }
-          </View>
-          <Separator />
-        </View>
-      );
-    });
 
     return (
       <Container>
         <Header style={ { height: 64, backgroundColor: '#f4f7f9', } } />
-        <Content>
-          <ScrollView style={ styles.container }>
-            { list }
-          </ScrollView>
+        <Content padder>
+          <Card>
+            <CardItem cardBody>
+              <Image style={ { height: 200, width: null, flex: 1 } } source={ require('../../../static/assets/images/v3_background.png') } />
+            </CardItem>
+            <CardItem bordered>{/* [TBD] */}
+              <Left>
+                <Thumbnail square source={ require('../../../static/assets/images/calendar-date.png') } />
+                <Body>
+                  <Text>{ event.name }</Text>
+                  <Text note>{ event.type }</Text>
+                </Body>
+              </Left>
+            </CardItem>
+            <CardItem bordered>{/* [TBD] */}
+              <Left>
+                <Button iconLeft transparent>
+                  <Icon name="navigate" />
+                  <Text>201 going</Text>
+                </Button>
+                <Button iconLeft transparent>
+                  <Icon name="thumbs-up" />
+                  <Text>302 interested</Text>
+                </Button>
+              </Left>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Text>{ event.startDate } - { event.endDate }</Text>
+                <Text note>from { event.startTime } to { event.endTime }</Text>
+              </Body>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Text>{ event.venue }</Text>
+                <Text note>{ event.address }</Text>
+              </Body>
+            </CardItem>
+            <CardItem bordered>{/* [TBD] */}
+              <Body>
+                <Text>More Info</Text>
+                <Text note onPress={ this._openPage.bind(this, event.externalLink) }>{ event.externalLink }</Text>
+              </Body>
+            </CardItem>
+            <CardItem bordered>{/* [TBD] */}
+              <Body>
+                <Text>Details</Text>
+                <Text note>
+                  { event.description }
+                </Text>
+              </Body>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Text>Photos</Text>
+                <Grid>
+                  <Col>
+                    <Thumbnail style={ { width: '100%', height: 100 } } square source={ require('../../../static/assets/images/v4_background.png') } />
+                  </Col>
+                  <Col>
+                    <Thumbnail style={ { width: '100%', height: 100 } } square source={ require('../../../static/assets/images/v3_background.png') } />
+                  </Col>
+                </Grid>
+              </Body>
+            </CardItem>
+          </Card>
         </Content>
         <Footer>
           <FooterTab>

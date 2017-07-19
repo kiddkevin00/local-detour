@@ -1,36 +1,19 @@
 import EventDetail from './EventDetail';
 import Login from './Login';
-import MapView from './MapView'
 import Separator from './common/Separator';
 import BaseComponent from './common/BaseComponent';
-import { firebaseDb } from '../proxies/FirebaseProxy';
-import {
-  Container,
-  Header,
-  Content,
-  List,
-  ListItem,
-  Card,
-  CardItem,
-  Left,
-  Body,
-  Right,
-  Thumbnail,
-  Button,
-  Text,
-  Icon,
-} from 'native-base';
+import { firebaseAuth, firebaseDb } from '../proxies/FirebaseProxy';
 import {
   StyleSheet,
-  //Text,
+  Text,
   View,
   TextInput,
   TouchableHighlight,
   ListView,
-  Image,
 } from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
+
 
 const styles = StyleSheet.create({
   container: {
@@ -89,12 +72,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
   },
-  tabs: {
-    backgroundColor: 'white',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    padding: 8,
-  }
 });
 
 class Events extends BaseComponent {
@@ -108,11 +85,10 @@ class Events extends BaseComponent {
     this.dataRef = firebaseDb.ref('/nyc').child('events');
 
     this.state = {
-      events: [],
       eventListViewDataSource: this.listViewDataSource.cloneWithRows([]),
       newEvent: '',
     };
-    this._bind('_handleLogout', '_handleClick', '_handleChange', '_renderEvent', '_checkoutEventDetail', 'toMapView');
+    this._bind('_handleLogout', '_handleClick', '_handleChange', '_renderEvent', '_checkoutEventDetail');
   }
 
   static propTypes = {
@@ -128,7 +104,6 @@ class Events extends BaseComponent {
       });
 
       this.setState({
-        events,
         eventListViewDataSource: this.listViewDataSource.cloneWithRows(events),
       });
     });
@@ -139,61 +114,45 @@ class Events extends BaseComponent {
   }
 
   render() {
-    //const userInfo = this.props.userInfo;
+    const userInfo = this.props.userInfo;
 
     return (
-      <Container>
-        <Header style={ { height: 64, backgroundColor: '#f4f7f9', } } />
-          <View style={styles.tabs}>
-            <Button rounded info small onPress={ this.toMapView.bind(this) }>
-                <Text style={{ color: '#FFFFFF' }}>Map View</Text>
-              </Button>
-          </View>
-        <Content>
-          <List
-            dataArray={ this.state.events }
-            renderRow={ this._renderEvent }
+      <View style={ styles.container }>
+        <ListView
+          style={ styles.main }
+          dataSource={ this.state.eventListViewDataSource }
+          renderRow={ this._renderEvent }
+          enableEmptySections={ true }
+          renderHeader={ () => null }
+        />
+        <View style={ styles.footer }>
+          <TextInput
+            style={ styles.eventInput }
+            value={ this.state.newEvent }
+            onChange={ this._handleChange }
+            placeholder="Submit an event here..."
+            placeholderTextColor="white"
           />
-        </Content>
-      </Container>
+          <TouchableHighlight
+            style={ styles.submitEventButton }
+            onPress={ this._handleClick }
+            underlayColor="#88D4F5"
+          >
+            <Text style={ styles.submitEventButtonText }>Submit</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            style={ styles.logoutButton }
+            onPress={ this._handleLogout }
+            underlayColor="#ffcc00"
+          >
+            <Text style={ styles.logoutButtonText }>Logout</Text>
+          </TouchableHighlight>
+        </View>
+      </View>
     );
   }
 
   _renderEvent(event) {
-    return (
-      <ListItem style={ { borderBottomWidth: 0 } } >
-        <Card>
-          <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
-            <Left>
-              <Thumbnail square source={ require('../../../static/assets/images/calendar-date.png') } />
-              <Body>
-                <Text>{ event.name }</Text>
-                <Text note>{ event.address }</Text>
-              </Body>
-            </Left>
-          </CardItem>
-          <CardItem cardBody button onPress={ this._checkoutEventDetail.bind(this, event) }>{/* [TBD] */}
-            <Image style={ { height: 200, width: null, flex: 1 } } source={ require('../../../static/assets/images/v3_background.png') } />
-          </CardItem>
-          <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>{/* [TBD] */}
-            <Left>
-              <Button iconLeft transparent onPress={ () => alert('Added to your calender!') }>
-                <Icon name="navigate" />
-                <Text>Going</Text>
-              </Button>
-              <Button iconLeft transparent onPress={ () => alert('Saved!') }>
-                <Icon name="bookmark" />
-                <Text>Save</Text>
-              </Button>
-            </Left>
-            <Right>
-              <Icon name="arrow-forward" />
-            </Right>
-          </CardItem>
-        </Card>
-      </ListItem>
-    );
-
     return (
       <View>
         <View style={ styles.rowContainer }>
@@ -204,25 +163,37 @@ class Events extends BaseComponent {
             <Text style={ styles.itemName }>{ event.name }</Text>
           </TouchableHighlight>
           <Text style={ styles.itemText }>{ event.address }</Text>
-          <Text style={ styles.itemText }>{ new Date(event.startDate).toDateString() } - { new Date(event.endDate).toDateString() }</Text>
+          <Text style={ styles.itemText }>{ event.startDate } - { event.endDate }</Text>
         </View>
         <Separator />
       </View>
     );
   }
 
+  _checkoutEventDetail(event) {
+    this.props.navigator.push({
+      title: 'Event Detail',
+      component: EventDetail,
+      passProps: { event },
+    });
+  }
+
   _handleClick() {
     this.dataRef
       .push({
         name: this.state.newEvent,
+        venue: 'Time Square',
         address: '123 42nd street, New York, NY',
-        startDate: Date.now(),
-        endDate: Date.now() + 2 * 24 * 60 * 60 * 1000,
-        type: 'General',
-        description: 'Here is some detail...',
+        startDate: 'April 28',
+        endDate: 'April 30',
+        startTime: '6 PM',
+        endTime: '9 PM',
+        type: 'Public',
+        description: 'Arts Brookfield’s annual summer music festival, the Lowdown Hudson Music Fest, returns to the heart of downtown New York for its seventh summer. Bringing fun, lively, world-class musical talent to the picturesque Waterfront Plaza at Brookfield Place, this year’s festival will be headlined by quirky veteran rockers OK GO. The show is free to attend and open to the public.Free to attend, no tickets required.PLEASE NOTE: In keeping with the summer concert vibe, this year’s festival will be standing room only on a first come, first served basis.Event is rain or shine, except for extreme weather conditions.',
         cost: 0,
         externalLink: 'https://www.timeout.com/newyork/things-to-do/sunset-sail-happy-hour',
         photoUrls: [],
+        tags: {},
       })
       .then(() => {
         this.setState({
@@ -238,13 +209,6 @@ class Events extends BaseComponent {
     this.setState({
       newEvent: event.nativeEvent.text,
     });
-  }
-
-  toMapView() {
-    this.props.navigator.push({
-      title: 'Map View',
-      component: MapView
-    })
   }
 
   async _handleLogout() {
@@ -264,7 +228,7 @@ class Events extends BaseComponent {
         isLoading: false,
       });
     } catch (error) {
-      const errorMessage = error.message;
+      const errorMessage = error.message || 'Something went wrong.';
 
       alert(errorMessage);
 
@@ -272,14 +236,6 @@ class Events extends BaseComponent {
         isLoading: false,
       });
     }
-  }
-
-  _checkoutEventDetail(event) {
-    this.props.navigator.push({
-      title: 'Event Detail',
-      component: EventDetail,
-      passProps: { event },
-    });
   }
 
 }
