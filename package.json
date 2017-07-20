@@ -13,7 +13,8 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "map-packager-port": "APP_ROOT=$PWD sh bin/remap-rn-packager-port.sh",
-    "map-adb-ports": "adb reverse tcp:8085 tcp:8085; adb reverse tcp:7007 tcp:7007; adb reverse tcp:3000 tcp:3000; adb reverse tcp:8097 tcp:8097"
+    "map-adb-ports": "adb reverse tcp:8085 tcp:8085; adb reverse tcp:7007 tcp:7007; adb reverse tcp:3000 tcp:3000; adb reverse tcp:8097 tcp:8097",
+    "debugger": "open 'rndebugger://set-debugger-loc?host=localhost&port=8085'"
   },
   "jest": {
     "preset": "react-native",
@@ -30,6 +31,7 @@
     "prop-types": "15.5.10",
     "react": "16.0.0-alpha.12",
     "react-native": "0.46.1",
+    "react-native-maps": "^0.15.3",
     "react-native-swiper": "1.5.4"
   },
   "devDependencies": {

@@ -1,3 +1,4 @@
+import EventMapView from './EventMapView'
 import EventDetail from './EventDetail';
 import BaseComponent from './common/BaseComponent';
 import { firebaseDb } from '../proxies/FirebaseProxy';
@@ -12,6 +13,8 @@ import {
   Left,
   Body,
   Right,
+  Grid,
+  Row,
   Thumbnail,
   Button,
   Text,
@@ -45,7 +48,7 @@ class Events extends BaseComponent {
       eventListViewDataSource: this.listViewDataSource.cloneWithRows([]),
       newEvent: '',
     };
-    this._bind('_renderEvent', '_checkoutEventDetail');
+    this._bind('_renderEvent', '_checkoutEventDetail', '_gotoMapView');
   }
 
   static propTypes = {
@@ -78,10 +81,21 @@ class Events extends BaseComponent {
       <Container>
         <Header style={ { height: 64, backgroundColor: '#f4f7f9', } } />
         <Content>
-          <List
-            dataArray={ this.state.events }
-            renderRow={ this._renderEvent }
-          />
+          <Grid>
+            <Row>
+              <Body>
+                <Button info small full onPress={ this._gotoMapView }>
+                  <Text>Map View</Text>
+                </Button>
+              </Body>
+            </Row>
+            <Row>
+              <List
+                dataArray={ this.state.events }
+                renderRow={ this._renderEvent }
+              />
+            </Row>
+          </Grid>
         </Content>
       </Container>
     );
@@ -129,6 +143,13 @@ class Events extends BaseComponent {
       component: EventDetail,
       passProps: { event },
     });
+  }
+
+  _gotoMapView() {
+    this.props.navigator.push({
+      title: 'Map View',
+      component: EventMapView
+    })
   }
 
 }
