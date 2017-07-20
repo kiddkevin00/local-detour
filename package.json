@@ -10,13 +10,16 @@
     "restrict-branches-no-push": "./bin/restrict-branches-no-push.sh"
   },
   "scripts": {
+    "-------------- EXPOSED --------------": "",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "lint": "npm run eslint",
     "unit-test": "jest",
     "map-packager-port": "APP_ROOT=$PWD sh bin/remap-rn-packager-port.sh",
     "map-adb-ports": "adb reverse tcp:8085 tcp:8085; adb reverse tcp:7007 tcp:7007; adb reverse tcp:3000 tcp:3000; adb reverse tcp:8097 tcp:8097",
-    "debugger": "open 'rndebugger://set-debugger-loc?host=localhost&port=8085'",
+    "-------------- INTERNAL -------------": "",
     "eslint": "eslint --format 'node_modules/eslint-friendly-formatter' --ext .js,.jsx src/lib/src/ src/spec/ bin/"
+    "-------------- LOCAL DEV ------------": "",
+    "debugger": "open 'rndebugger://set-debugger-loc?host=localhost&port=8085'",
   },
   "jest": {
     "preset": "react-native",
@@ -37,6 +40,7 @@
     "react-native-swiper": "1.5.4"
   },
   "devDependencies": {
+    "babel-eslint": "7.2.3",
     "babel-jest": "20.0.3",
     "babel-preset-react-native": "1.9.2",
     "bluebird": "3.5.0",
