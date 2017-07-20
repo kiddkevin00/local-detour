@@ -1,7 +1,7 @@
 import Events from './Events';
 import Login from './Login';
 import BaseComponent from './common/BaseComponent';
-import { firebaseAuth, firebaseGoogleAuthProvider } from '../proxies/FirebaseProxy';
+import { firebaseAuth } from '../proxies/FirebaseProxy';
 import {
   ActivityIndicator,
   TouchableHighlight,
@@ -204,15 +204,15 @@ class Signup extends BaseComponent {
       const errorMessage = error.message;
 
       if (errorCode === 'auth/weak-password') {
-        alert('The password is too weak.');
+        global.alert('The password is too weak.');
       } else if (errorCode === 'auth/email-already-in-use') {
-        alert('The email is already in use.');
+        global.alert('The email is already in use.');
       } else if (errorCode === 'auth/invalid-email') {
-        alert('The email is invalid.');
+        global.alert('The email is invalid.');
       } else if (errorCode === 'auth/operation-not-allowed') {
-        alert('You must enable Email/Password auth in the Firebase Console.');
+        global.alert('You must enable Email/Password auth in the Firebase Console.');
       } else {
-        alert(errorMessage);
+        global.alert(errorMessage);
       }
 
       this.setState({
@@ -261,9 +261,9 @@ class Signup extends BaseComponent {
       const errorMessage = error.message;
 
       if (errorCode === 'auth/operation-not-allowed') {
-        alert('You must enable Anonymous auth in the Firebase Console.');
+        global.alert('You must enable Anonymous auth in the Firebase Console.');
       } else {
-        alert(errorMessage);
+        global.alert(errorMessage);
       }
 
       this.setState({

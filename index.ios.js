@@ -1,5 +1,9 @@
 import Landing from './src/lib/src/app/components/Landing';
-import { AppRegistry, StyleSheet, NavigatorIOS } from 'react-native';
+import {
+  AppRegistry,
+  StyleSheet,
+  NavigatorIOS,
+} from 'react-native';
 import React, { Component } from 'react';
 
 
