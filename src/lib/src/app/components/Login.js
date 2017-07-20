@@ -1,7 +1,7 @@
 import Events from './Events';
 import Signup from './Signup';
 import BaseComponent from './common/BaseComponent';
-import { firebaseAuth, firebaseGoogleAuthProvider } from '../proxies/FirebaseProxy';
+import { firebaseAuth } from '../proxies/FirebaseProxy';
 import {
   ActivityIndicator,
   TouchableHighlight,
@@ -171,9 +171,9 @@ class Login extends BaseComponent {
       const errorMessage = error.message;
 
       if (errorCode === 'auth/wrong-password') {
-        alert('Wrong password.');
+        global.alert('Wrong password.');
       } else {
-        alert(errorMessage);
+        global.alert(errorMessage);
       }
 
       this.setState({
