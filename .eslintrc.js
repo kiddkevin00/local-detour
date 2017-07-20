@@ -35,7 +35,7 @@ module.exports = {
     'new-cap': [2, { capIsNew: false }],
     'react/jsx-filename-extension': 0,
     'react/jsx-curly-spacing': [2, 'always'],
-    'react/jsx-boolean-value': [2, 'always'],
+    'react/jsx-boolean-value': [1, 'always'],
     'react/jsx-no-bind': [1],
     'jsx-quotes': [2, 'prefer-double'],
     'import/first': 0,
@@ -45,5 +45,6 @@ module.exports = {
     'arrow-parens': [2, 'always'],
     'newline-after-var': [2, 'always'],
     'no-multi-assign': 1,
+    'global-require': 1,
   },
 };
