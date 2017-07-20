@@ -36,7 +36,7 @@ class Profile extends BaseComponent {
   }
 
   static propTypes = {
-    userInfo: PropTypes.object.isRequired,
+    userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   }
 
   render() {

@@ -92,7 +92,7 @@ class Events extends BaseComponent {
   }
 
   static propTypes = {
-    userInfo: PropTypes.object//.isRequired,
+    userInfo: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   };
 
   componentDidMount() {
@@ -114,8 +114,6 @@ class Events extends BaseComponent {
   }
 
   render() {
-    const userInfo = this.props.userInfo;
-
     return (
       <View style={ styles.container }>
         <ListView
@@ -201,7 +199,7 @@ class Events extends BaseComponent {
         });
       })
       .catch((err) => {
-        alert(JSON.stringify(err, null, 2));
+        global.alert(JSON.stringify(err, null, 2));
       });
   }
 
@@ -230,7 +228,7 @@ class Events extends BaseComponent {
     } catch (error) {
       const errorMessage = error.message || 'Something went wrong.';
 
-      alert(errorMessage);
+      global.alert(errorMessage);
 
       this.setState({
         isLoading: false,

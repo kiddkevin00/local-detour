@@ -58,7 +58,7 @@ class Landing extends BaseComponent {
   }
 
   static propTypes = {
-    navigator: PropTypes.object.isRequired,
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
   render() {

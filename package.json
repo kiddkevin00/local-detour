@@ -17,9 +17,9 @@
     "map-packager-port": "APP_ROOT=$PWD sh bin/remap-rn-packager-port.sh",
     "map-adb-ports": "adb reverse tcp:8085 tcp:8085; adb reverse tcp:7007 tcp:7007; adb reverse tcp:3000 tcp:3000; adb reverse tcp:8097 tcp:8097",
     "-------------- INTERNAL -------------": "",
-    "eslint": "eslint --format 'node_modules/eslint-friendly-formatter' --ext .js,.jsx src/lib/src/ src/spec/ bin/"
+    "eslint": "eslint --format 'node_modules/eslint-friendly-formatter' --ext .js,.jsx src/lib/src/ src/spec/ bin/",
     "-------------- LOCAL DEV ------------": "",
-    "debugger": "open 'rndebugger://set-debugger-loc?host=localhost&port=8085'",
+    "debugger": "open 'rndebugger://set-debugger-loc?host=localhost&port=8085'"
   },
   "jest": {
     "preset": "react-native",

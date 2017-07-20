@@ -25,25 +25,25 @@ const styles = StyleSheet.create({
   footer: {
     backgroundColor: '#E3E3E3',
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   noteInput: {
     height: 60,
     padding: 10,
     fontSize: 18,
     color: '#111',
-    flexGrow: 10
+    flexGrow: 10,
   },
   button: {
     height: 60,
     backgroundColor: '#48BBEC',
     flexGrow: 3,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   buttonText: {
     fontSize: 18,
-    color: 'white'
+    color: 'white',
   },
 });
 
@@ -66,7 +66,7 @@ class Notes extends BaseComponent {
   }
 
   static propTypes = {
-    userInfo: PropTypes.object.isRequired,
+    userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   }
 
   componentDidMount() {

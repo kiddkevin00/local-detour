@@ -38,11 +38,11 @@ class Dashboard extends BaseComponent {
       isLoading: false,
       error: '',
     };
-    this._bind('_goToProfile', '_goToRepos', '_goToNotes', '_makeBackground');
+    this._bind('_goToProfile', '_goToRepos', '_goToNotes');
   }
 
   static propTypes = {
-    userInfo: PropTypes.object.isRequired,
+    userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   }
 
   render() {
@@ -107,25 +107,6 @@ class Dashboard extends BaseComponent {
         userInfo: this.props.userInfo,
       },
     });
-  }
-
-  _makeBackground(btn) {
-    const obj = {
-      flexDirection: 'row',
-      alignSelf: 'stretch',
-      justifyContent: 'center',
-      flexGrow: 1,
-    };
-
-    if (btn === 0) {
-      obj.backgroundColor = '#48BBEC';
-    } else if (btn === 1) {
-      obj.backgroundColor = '#E77AAE';
-    } else {
-      obj.backgroundColor = '#758BF4';
-    }
-
-    return obj;
   }
 
 }

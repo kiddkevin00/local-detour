@@ -18,10 +18,6 @@ import {
   Icon,
 } from 'native-base';
 import {
-  StyleSheet,
-  View,
-  ScrollView,
-  TouchableHighlight,
   Image,
 } from 'react-native';
 import React from 'react';
@@ -37,29 +33,29 @@ class EventDetail extends BaseComponent {
   }
 
   static propTypes = {
-    event: PropTypes.object//.isRequired,
+    event: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   };
 
   render() {
     const event = this.props.event || {
-        name: 'Test Event',
-        venue: 'Time Square',
-        address: '123 42nd street, New York, NY',
-        startDate: 'April 28',
-        endDate: 'April 30',
-        startTime: '6 PM',
-        endTime: '9 PM',
-        type: 'Public',
-        description: 'Arts Brookfield’s annual summer music festival, the Lowdown Hudson Music Fest, returns to the heart of downtown New York for its seventh summer. Bringing fun, lively, world-class musical talent to the picturesque Waterfront Plaza at Brookfield Place, this year’s festival will be headlined by quirky veteran rockers OK GO. The show is free to attend and open to the public.Free to attend, no tickets required.PLEASE NOTE: In keeping with the summer concert vibe, this year’s festival will be standing room only on a first come, first served basis.Event is rain or shine, except for extreme weather conditions.',
-        cost: 0,
-        externalLink: 'https://www.timeout.com/newyork/things-to-do/sunset-sail-happy-hour',
-        photoUrls: [],
-        tags: {},
-      };
+      name: 'Test Event',
+      venue: 'Time Square',
+      address: '123 42nd street, New York, NY',
+      startDate: 'April 28',
+      endDate: 'April 30',
+      startTime: '6 PM',
+      endTime: '9 PM',
+      type: 'Public',
+      description: 'Arts Brookfield’s annual summer music festival, the Lowdown Hudson Music Fest, returns to the heart of downtown New York for its seventh summer. Bringing fun, lively, world-class musical talent to the picturesque Waterfront Plaza at Brookfield Place, this year’s festival will be headlined by quirky veteran rockers OK GO. The show is free to attend and open to the public.Free to attend, no tickets required.PLEASE NOTE: In keeping with the summer concert vibe, this year’s festival will be standing room only on a first come, first served basis.Event is rain or shine, except for extreme weather conditions.',
+      cost: 0,
+      externalLink: 'https://www.timeout.com/newyork/things-to-do/sunset-sail-happy-hour',
+      photoUrls: [],
+      tags: {},
+    };
 
     return (
       <Container>
-        <Header style={ { height: 64, backgroundColor: '#f4f7f9', } } />
+        <Header style={ { height: 64, backgroundColor: '#f4f7f9' } } />
         <Content padder>
           <Card>
             <CardItem cardBody>
@@ -105,7 +101,9 @@ class EventDetail extends BaseComponent {
             <CardItem bordered>
               <Body>
                 <Text>More Info</Text>
-                <Text note onPress={ this._openPage.bind(this, event.externalLink) }>{ event.externalLink }</Text>
+                <Text note onPress={ this._openPage.bind(this, event.externalLink) }>
+                  { event.externalLink }
+                </Text>
               </Body>
             </CardItem>
             <CardItem bordered>
@@ -133,7 +131,7 @@ class EventDetail extends BaseComponent {
         </Content>
         <Footer>
           <FooterTab>
-            <Button full onPress={ () => alert('Saved!') }>
+            <Button full onPress={ () => global.alert('Saved!') }>
               <Text>Save</Text>
             </Button>
           </FooterTab>

@@ -21,21 +21,21 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'column',
     flexGrow: 1,
-    padding: 10
+    padding: 10,
   },
   name: {
     color: '#48BBEC',
     fontSize: 18,
-    paddingBottom: 5
+    paddingBottom: 5,
   },
   stars: {
     color: '#48BBEC',
     fontSize: 14,
-    paddingBottom: 5
+    paddingBottom: 5,
   },
   description: {
     fontSize: 14,
-    paddingBottom: 5
+    paddingBottom: 5,
   },
 });
 
@@ -52,7 +52,7 @@ class Repositories extends BaseComponent {
   }
 
   static propTypes = {
-    userInfo: PropTypes.object.isRequired,
+    userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   }
 
   componentDidMount() {
@@ -65,12 +65,13 @@ class Repositories extends BaseComponent {
       })
       .catch((err) => {
         this.setState({ error: JSON.stringify(err, null, 2) });
-      })
+      });
   }
 
   render() {
     const userInfo = this.props.userInfo;
     const list = this.state.repos.map((item, index) => (
+      // eslint-disable-next-line react/no-array-index-key
       <View key={ `repo-${index}` }>
         <View style={ styles.rowContainer }>
           <TouchableHighlight

@@ -1,4 +1,4 @@
-import EventMapView from './EventMapView'
+import EventMapView from './EventMapView';
 import EventDetail from './EventDetail';
 import BaseComponent from './common/BaseComponent';
 import { firebaseDb } from '../proxies/FirebaseProxy';
@@ -21,11 +21,6 @@ import {
   Icon,
 } from 'native-base';
 import {
-  StyleSheet,
-  //Text,
-  View,
-  TextInput,
-  TouchableHighlight,
   ListView,
   Image,
 } from 'react-native';
@@ -52,7 +47,7 @@ class Events extends BaseComponent {
   }
 
   static propTypes = {
-    userInfo: PropTypes.object//.isRequired,
+    userInfo: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   };
 
   componentDidMount() {
@@ -79,7 +74,7 @@ class Events extends BaseComponent {
 
     return (
       <Container>
-        <Header style={ { height: 64, backgroundColor: '#f4f7f9', } } />
+        <Header style={ { height: 64, backgroundColor: '#f4f7f9' } } />
         <Content>
           <Grid>
             <Row>
@@ -119,11 +114,11 @@ class Events extends BaseComponent {
           </CardItem>
           <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
             <Left>
-              <Button iconLeft transparent onPress={ () => alert('Added to your calender!') }>
+              <Button iconLeft transparent onPress={ () => global.alert('Added to your calender!') }>
                 <Icon name="navigate" />
                 <Text>Going</Text>
               </Button>
-              <Button iconLeft transparent onPress={ () => alert('Saved!') }>
+              <Button iconLeft transparent onPress={ () => global.alert('Saved!') }>
                 <Icon name="bookmark" />
                 <Text>Save</Text>
               </Button>
@@ -148,8 +143,8 @@ class Events extends BaseComponent {
   _gotoMapView() {
     this.props.navigator.push({
       title: 'Map View',
-      component: EventMapView
-    })
+      component: EventMapView,
+    });
   }
 
 }
