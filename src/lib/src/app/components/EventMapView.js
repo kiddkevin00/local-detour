@@ -1,10 +1,11 @@
-import React from 'react';
-import BaseComponent from './common/BaseComponent';
 import Map from 'react-native-maps';
+import BaseComponent from './common/BaseComponent';
 import {
   StyleSheet,
   View,
-} from 'react-native'
+} from 'react-native';
+import React from 'react';
+
 
 const styles = StyleSheet.create({
   container: {
@@ -15,7 +16,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'row',
     justifyContent: 'center',
-    padding: 10
+    padding: 10,
   },
   title: {
     marginBottom: 20,
@@ -33,7 +34,8 @@ const styles = StyleSheet.create({
   },
 })
 
-class MapView extends BaseComponent {
+class EventMapView extends BaseComponent {
+
   constructor(props) {
     super(props);
   }
@@ -43,19 +45,19 @@ class MapView extends BaseComponent {
       <View style={ styles.container } >
         <Map
           style={ styles.container }
-          showsUserLocation
-          initialRegion={{
+          showsUserLocation={ true }
+          initialRegion={ {
             latitude: 40.7554778,
             longitude: -73.981885,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
-          }}
-        >
-        </Map>
+          } }
+        />
       </View>
     )
   }
+
 }
 
 
-export default MapView
+export default EventMapView
