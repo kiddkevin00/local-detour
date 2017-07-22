@@ -1,6 +1,5 @@
 import Badge from './common/__Badge__';
 import Separator from './common/Separator';
-import BaseComponent from './common/BaseComponent';
 import { firebaseDb } from '../proxies/FirebaseProxy';
 import {
   StyleSheet,
@@ -10,7 +9,7 @@ import {
   TouchableHighlight,
   ListView,
 } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class Notes extends BaseComponent {
+class Notes extends Component {
 
   static propTypes = {
     userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types

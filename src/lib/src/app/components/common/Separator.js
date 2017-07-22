@@ -1,9 +1,8 @@
-import BaseComponent from './BaseComponent';
 import {
   StyleSheet,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 
 
 const styles = StyleSheet.create({
@@ -16,7 +15,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class Separator extends BaseComponent {
+class Separator extends Component {
 
   render() {
     return (

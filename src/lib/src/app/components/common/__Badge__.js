@@ -1,6 +1,5 @@
-import BaseComponent from './BaseComponent';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -30,7 +29,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class Badge extends BaseComponent {
+class Badge extends Component {
 
   render() {
     return (

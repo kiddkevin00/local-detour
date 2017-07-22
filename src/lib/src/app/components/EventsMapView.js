@@ -1,10 +1,9 @@
-import BaseComponent from './common/BaseComponent';
 import MapView from 'react-native-maps';
 import {
   StyleSheet,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 
 
 const styles = StyleSheet.create({
@@ -34,7 +33,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class EventMapView extends BaseComponent {
+class EventMapView extends Component {
 
   render() {
     return (

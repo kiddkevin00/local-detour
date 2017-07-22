@@ -1,13 +1,12 @@
 import Badge from './common/__Badge__';
 import Separator from './common/Separator';
-import BaseComponent from './common/BaseComponent';
 import {
   StyleSheet,
   Text,
   View,
   ScrollView,
 } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -27,7 +26,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class Profile extends BaseComponent {
+class Profile extends Component {
 
   constructor(props) {
     super(props);

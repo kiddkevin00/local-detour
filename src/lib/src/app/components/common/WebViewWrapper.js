@@ -1,6 +1,5 @@
-import BaseComponent from './BaseComponent';
 import { StyleSheet, View, WebView } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -12,7 +11,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class WebViewWrapper extends BaseComponent {
+class WebViewWrapper extends Component {
 
   render() {
     return (

@@ -1,5 +1,4 @@
 import WebViewWrapper from './common/WebViewWrapper';
-import BaseComponent from './common/BaseComponent';
 import {
   Container,
   Header,
@@ -20,11 +19,11 @@ import {
 import {
   Image,
 } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
-class EventDetail extends BaseComponent {
+class EventDetail extends Component {
 
   static propTypes = {
     event: PropTypes.object, // eslint-disable-line react/forbid-prop-types

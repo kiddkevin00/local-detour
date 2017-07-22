@@ -1,7 +1,6 @@
 import Profile from './__Profile__';
 import Repositories from './__Repositories__';
 import Notes from './__Notes__';
-import BaseComponent from './common/BaseComponent';
 import {
   StyleSheet,
   Text,
@@ -9,7 +8,7 @@ import {
   TouchableHighlight,
   Image,
 } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -28,7 +27,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class Dashboard extends BaseComponent {
+class Dashboard extends Component {
 
   static propTypes = {
     userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types

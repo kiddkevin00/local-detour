@@ -1,5 +1,4 @@
 import Events from './Events';
-import BaseComponent from './common/BaseComponent';
 import Swiper from 'react-native-swiper';
 import {
   TouchableOpacity,
@@ -9,7 +8,7 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -51,7 +50,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class Landing extends BaseComponent {
+class Landing extends Component {
 
   static propTypes = {
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types

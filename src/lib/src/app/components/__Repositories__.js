@@ -1,7 +1,6 @@
 import Badge from './common/__Badge__';
 import WebViewWrapper from './common/WebViewWrapper';
 import Separator from './common/Separator';
-import BaseComponent from './common/BaseComponent';
 import GithubProxy from '../proxies/GithubProxy';
 import {
   StyleSheet,
@@ -10,7 +9,7 @@ import {
   ScrollView,
   TouchableHighlight,
 } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -39,7 +38,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class Repositories extends BaseComponent {
+class Repositories extends Component {
 
   static propTypes = {
     userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types

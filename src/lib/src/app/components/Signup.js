@@ -1,6 +1,5 @@
 import Events from './Events';
 import Login from './Login';
-import BaseComponent from './common/BaseComponent';
 import { firebaseAuth } from '../proxies/FirebaseProxy';
 import {
   ActivityIndicator,
@@ -10,7 +9,7 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 
 
 const styles = StyleSheet.create({
@@ -96,7 +95,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class Signup extends BaseComponent {
+class Signup extends Component {
 
   state = {
     formFullName: '',

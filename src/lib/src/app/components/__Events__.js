@@ -1,7 +1,6 @@
 import EventDetail from './EventDetail';
 import Login from './Login';
 import Separator from './common/Separator';
-import BaseComponent from './common/BaseComponent';
 import { firebaseAuth, firebaseDb } from '../proxies/FirebaseProxy';
 import {
   StyleSheet,
@@ -11,7 +10,7 @@ import {
   TouchableHighlight,
   ListView,
 } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -74,7 +73,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class Events extends BaseComponent {
+class Events extends Component {
 
   static propTypes = {
     userInfo: PropTypes.object, // eslint-disable-line react/forbid-prop-types

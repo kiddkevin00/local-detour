@@ -1,6 +1,5 @@
 import EventMapView from './EventsMapView';
 import EventDetail from './EventDetail';
-import BaseComponent from './common/BaseComponent';
 import { firebaseDb } from '../proxies/FirebaseProxy';
 import {
   Container,
@@ -25,11 +24,11 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
-class Events extends BaseComponent {
+class Events extends Component {
 
   static propTypes = {
     userInfo: PropTypes.object, // eslint-disable-line react/forbid-prop-types
