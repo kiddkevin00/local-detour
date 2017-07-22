@@ -76,24 +76,20 @@ const styles = StyleSheet.create({
 
 class Events extends BaseComponent {
 
-  constructor(props) {
-    super(props);
-
-    this.listViewDataSource = new ListView.DataSource({
-      rowHasChanged: (originalRow, newRow) => newRow._id !== originalRow._id,
-    });
-    this.dataRef = firebaseDb.ref('/nyc').child('events');
-
-    this.state = {
-      eventListViewDataSource: this.listViewDataSource.cloneWithRows([]),
-      newEvent: '',
-    };
-    this._bind('_handleLogout', '_handleClick', '_handleChange', '_renderEvent', '_checkoutEventDetail');
-  }
-
   static propTypes = {
     userInfo: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   };
+
+  state = {
+    eventListViewDataSource: this.listViewDataSource.cloneWithRows([]),
+    newEvent: '',
+  };
+
+  listViewDataSource = new ListView.DataSource({
+    rowHasChanged: (originalRow, newRow) => newRow._id !== originalRow._id,
+  });
+
+  dataRef = firebaseDb.ref('/nyc').child('events');
 
   componentDidMount() {
     this.dataRef.on('value', (eventsSnapshot) => {
@@ -150,25 +146,23 @@ class Events extends BaseComponent {
     );
   }
 
-  _renderEvent(event) {
-    return (
-      <View>
-        <View style={ styles.rowContainer }>
-          <TouchableHighlight
-            onPress={ this._checkoutEventDetail.bind(this, event) }
-            underlayColor="transparent"
-          >
-            <Text style={ styles.itemName }>{ event.name }</Text>
-          </TouchableHighlight>
-          <Text style={ styles.itemText }>{ event.address }</Text>
-          <Text style={ styles.itemText }>{ event.startDate } - { event.endDate }</Text>
-        </View>
-        <Separator />
+  _renderEvent = (event) => (
+    <View>
+      <View style={ styles.rowContainer }>
+        <TouchableHighlight
+          onPress={ this._checkoutEventDetail.bind(this, event) }
+          underlayColor="transparent"
+        >
+          <Text style={ styles.itemName }>{ event.name }</Text>
+        </TouchableHighlight>
+        <Text style={ styles.itemText }>{ event.address }</Text>
+        <Text style={ styles.itemText }>{ event.startDate } - { event.endDate }</Text>
       </View>
-    );
-  }
+      <Separator />
+    </View>
+  )
 
-  _checkoutEventDetail(event) {
+  _checkoutEventDetail = (event) => {
     this.props.navigator.push({
       title: 'Event Detail',
       component: EventDetail,
@@ -176,7 +170,7 @@ class Events extends BaseComponent {
     });
   }
 
-  _handleClick() {
+  _handleClick = () => {
     this.dataRef
       .push({
         name: this.state.newEvent,
@@ -203,13 +197,13 @@ class Events extends BaseComponent {
       });
   }
 
-  _handleChange(event) {
+  _handleChange = (event) => {
     this.setState({
       newEvent: event.nativeEvent.text,
     });
   }
 
-  async _handleLogout() {
+  _handleLogout = async () => {
     this.setState({
       isLoading: true,
     });

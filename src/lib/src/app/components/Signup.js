@@ -98,18 +98,13 @@ const styles = StyleSheet.create({
 
 class Signup extends BaseComponent {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      formFullName: '',
-      formEmail: '',
-      formPassword: '',
-      isLoading: false,
-      error: '',
-    };
-    this._bind('_handleChange', '_handleSignup', '_gotoLogin', '_signinAnonymously');
-  }
+  state = {
+    formFullName: '',
+    formEmail: '',
+    formPassword: '',
+    isLoading: false,
+    error: '',
+  };
 
   render() {
     return (
@@ -175,7 +170,7 @@ class Signup extends BaseComponent {
     );
   }
 
-  async _handleSignup() {
+  _handleSignup = async () => {
     this.setState({
       isLoading: true,
     });
@@ -222,20 +217,20 @@ class Signup extends BaseComponent {
     }
   }
 
-  _handleChange(field, event) {
+  _handleChange = (field, event) => {
     this.setState({
       [`form${field}`]: event.nativeEvent.text,
     });
   }
 
-  _gotoLogin() {
+  _gotoLogin = () => {
     this.props.navigator.push({
       title: 'Log In',
       component: Login,
     });
   }
 
-  async _signinAnonymously() {
+  _signinAnonymously = async () => {
     this.setState({
       isLoading: true,
     });

@@ -26,12 +26,6 @@ import PropTypes from 'prop-types';
 
 class EventDetail extends BaseComponent {
 
-  constructor(props) {
-    super(props);
-
-    this._bind('_openPage');
-  }
-
   static propTypes = {
     event: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   };
@@ -140,7 +134,7 @@ class EventDetail extends BaseComponent {
     );
   }
 
-  _openPage(url) {
+  _openPage = (url) => {
     this.props.navigator.push({
       title: 'Web Page',
       component: WebViewWrapper,

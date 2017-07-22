@@ -49,25 +49,21 @@ const styles = StyleSheet.create({
 
 class Notes extends BaseComponent {
 
-  constructor(props) {
-    super(props);
-
-    this.listViewDataSource = new ListView.DataSource({
-      rowHasChanged: (originalRow, newRow) => newRow !== originalRow,
-    });
-    this.dataRef = firebaseDb.ref(this.props.userInfo.login).child('notes');
-
-    this.state = {
-      noteListViewDataSource: this.listViewDataSource.cloneWithRows([]),
-      newNote: '',
-      error: '',
-    };
-    this._bind('_handleClick', '_handleChange');
-  }
-
   static propTypes = {
     userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  }
+  };
+
+  listViewDataSource = new ListView.DataSource({
+    rowHasChanged: (originalRow, newRow) => newRow !== originalRow,
+  });
+
+  dataRef = firebaseDb.ref(this.props.userInfo.login).child('notes');
+
+  state = {
+    noteListViewDataSource: this.listViewDataSource.cloneWithRows([]),
+    newNote: '',
+    error: '',
+  };
 
   componentDidMount() {
     this.dataRef.on('value', (notesSnapshot) => {
@@ -119,7 +115,18 @@ class Notes extends BaseComponent {
     );
   }
 
-  _handleClick() {
+  static _renderNote(note) {
+    return (
+      <View>
+        <View style={ styles.rowContainer }>
+          <Text>{ note }</Text>
+        </View>
+        <Separator />
+      </View>
+    );
+  }
+
+  _handleClick = () => {
     this.dataRef.push(this.state.newNote)
       .then(() => {
         this.setState({
@@ -132,21 +139,10 @@ class Notes extends BaseComponent {
       });
   }
 
-  _handleChange(event) {
+  _handleChange = (event) => {
     this.setState({
       newNote: event.nativeEvent.text,
     });
-  }
-
-  static _renderNote(note) {
-    return (
-      <View>
-        <View style={ styles.rowContainer }>
-          <Text>{ note }</Text>
-        </View>
-        <Separator />
-      </View>
-    );
   }
 
 }

@@ -1,4 +1,4 @@
-import Signup from './Signup';
+import Events from './Events';
 import BaseComponent from './common/BaseComponent';
 import Swiper from 'react-native-swiper';
 import {
@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginTop: '195%',
+    marginTop: 731,
+    //marginTop: '200%',
   },
   backgroundImage: {
     flexGrow: 1,
@@ -51,11 +52,6 @@ const styles = StyleSheet.create({
 });
 
 class Landing extends BaseComponent {
-  constructor(props) {
-    super(props);
-
-    this._bind('_signup');
-  }
 
   static propTypes = {
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -96,7 +92,7 @@ class Landing extends BaseComponent {
   _signup = () => {
     this.props.navigator.push({
       title: 'Sign Up',
-      component: Signup,
+      component: Events,
     });
   }
 

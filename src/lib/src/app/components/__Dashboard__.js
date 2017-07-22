@@ -30,20 +30,15 @@ const styles = StyleSheet.create({
 
 class Dashboard extends BaseComponent {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      username: '',
-      isLoading: false,
-      error: '',
-    };
-    this._bind('_goToProfile', '_goToRepos', '_goToNotes');
-  }
-
   static propTypes = {
     userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  }
+  };
+
+  state = {
+    username: '',
+    isLoading: false,
+    error: '',
+  };
 
   render() {
     const buttonStyleBase = {
@@ -81,7 +76,7 @@ class Dashboard extends BaseComponent {
     );
   }
 
-  _goToProfile() {
+  _goToProfile = () => {
     this.props.navigator.push({
       title: 'Profile',
       component: Profile,
@@ -89,7 +84,7 @@ class Dashboard extends BaseComponent {
     });
   }
 
-  _goToRepos() {
+  _goToRepos = () => {
     this.props.navigator.push({
       title: 'Repositories',
       component: Repositories,
@@ -99,7 +94,7 @@ class Dashboard extends BaseComponent {
     });
   }
 
-  _goToNotes() {
+  _goToNotes = () => {
     this.props.navigator.push({
       title: 'Notes',
       component: Notes,

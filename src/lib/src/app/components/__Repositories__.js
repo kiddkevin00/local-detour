@@ -41,19 +41,14 @@ const styles = StyleSheet.create({
 
 class Repositories extends BaseComponent {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      repos: [],
-      error: '',
-    };
-    this._bind('_openPage');
-  }
-
   static propTypes = {
     userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  }
+  };
+
+  state = {
+    repos: [],
+    error: '',
+  };
 
   componentDidMount() {
     GithubProxy.getRepos(this.props.userInfo.login)
@@ -103,7 +98,7 @@ class Repositories extends BaseComponent {
     );
   }
 
-  _openPage(url) {
+  _openPage = (url) => {
     this.props.navigator.push({
       title: 'Web Page',
       component: WebViewWrapper,

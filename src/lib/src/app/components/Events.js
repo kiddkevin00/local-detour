@@ -23,6 +23,7 @@ import {
 import {
   ListView,
   Image,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -30,24 +31,20 @@ import PropTypes from 'prop-types';
 
 class Events extends BaseComponent {
 
-  constructor(props) {
-    super(props);
-
-    this.listViewDataSource = new ListView.DataSource({
-      rowHasChanged: (originalRow, newRow) => newRow._id !== originalRow._id,
-    });
-    this.dataRef = firebaseDb.ref('/nyc').child('events');
-
-    this.state = {
-      events: [],
-      eventListViewDataSource: this.listViewDataSource.cloneWithRows([]),
-      newEvent: '',
-    };
-    this._bind('_renderEvent', '_checkoutEventDetail', '_gotoMapView');
-  }
-
   static propTypes = {
     userInfo: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  };
+
+  listViewDataSource = new ListView.DataSource({
+    rowHasChanged: (originalRow, newRow) => newRow._id !== originalRow._id,
+  });
+
+  dataRef = firebaseDb.ref('/nyc').child('events');
+
+  state = {
+    events: [],
+    eventListViewDataSource: this.listViewDataSource.cloneWithRows([]),
+    newEvent: '',
   };
 
   componentDidMount() {
@@ -96,43 +93,41 @@ class Events extends BaseComponent {
     );
   }
 
-  _renderEvent(event) {
-    return (
-      <ListItem style={ { borderBottomWidth: 0 } } >
-        <Card>
-          <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
-            <Left>
-              <Thumbnail square source={ require('../../../static/assets/images/calendar-date.png') } />
-              <Body>
-                <Text>{ event.name }</Text>
-                <Text note>{ event.address }</Text>
-              </Body>
-            </Left>
-          </CardItem>
-          <CardItem cardBody button onPress={ this._checkoutEventDetail.bind(this, event) }>
-            <Image style={ { height: 200, width: null, flex: 1 } } source={ require('../../../static/assets/images/v3_background.png') } />
-          </CardItem>
-          <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
-            <Left>
-              <Button iconLeft transparent onPress={ () => global.alert('Added to your calender!') }>
-                <Icon name="navigate" />
-                <Text>Going</Text>
-              </Button>
-              <Button iconLeft transparent onPress={ () => global.alert('Saved!') }>
-                <Icon name="bookmark" />
-                <Text>Save</Text>
-              </Button>
-            </Left>
-            <Right>
-              <Icon name="arrow-forward" />
-            </Right>
-          </CardItem>
-        </Card>
-      </ListItem>
-    );
-  }
+  _renderEvent = (event) => (
+    <ListItem style={ { borderBottomWidth: 0 } } >
+      <Card>
+        <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
+          <Left>
+            <Thumbnail square source={ require('../../../static/assets/images/calendar-date.png') } />
+            <Body>
+              <Text>{ event.name }</Text>
+              <Text note>{ event.address }</Text>
+            </Body>
+          </Left>
+        </CardItem>
+        <CardItem cardBody button onPress={ this._checkoutEventDetail.bind(this, event) }>
+          <Image style={ { height: 200, width: null, flex: 1 } } source={ require('../../../static/assets/images/v3_background.png') } />
+        </CardItem>
+        <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
+          <Left>
+            <Button iconLeft transparent onPress={ () => Alert.alert('Success', 'Posted on your Facebook and added to your calender!') }>
+              <Icon name="navigate" />
+              <Text>Going</Text>
+            </Button>
+            <Button iconLeft transparent onPress={ () => Alert.alert('Success', 'Added to your calender!') }>
+              <Icon name="bookmark" />
+              <Text>Save</Text>
+            </Button>
+          </Left>
+          <Right>
+            <Icon name="arrow-forward" />
+          </Right>
+        </CardItem>
+      </Card>
+    </ListItem>
+  )
 
-  _checkoutEventDetail(event) {
+  _checkoutEventDetail = (event) => {
     this.props.navigator.push({
       title: 'Event Detail',
       component: EventDetail,
@@ -140,7 +135,7 @@ class Events extends BaseComponent {
     });
   }
 
-  _gotoMapView() {
+  _gotoMapView = () => {
     this.props.navigator.push({
       title: 'Map View',
       component: EventMapView,
