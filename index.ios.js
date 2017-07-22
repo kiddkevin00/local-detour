@@ -7,6 +7,9 @@ import {
 import React, { Component } from 'react';
 
 
+// [TODO] Removes this line after adding Redux integration.
+global.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
