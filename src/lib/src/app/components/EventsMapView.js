@@ -1,5 +1,5 @@
 import BaseComponent from './common/BaseComponent';
-import Map from 'react-native-maps';
+import MapView from 'react-native-maps';
 import {
   StyleSheet,
   View,
@@ -39,7 +39,7 @@ class EventMapView extends BaseComponent {
   render() {
     return (
       <View style={ styles.container } >
-        <Map
+        <MapView
           style={ styles.container }
           showsUserLocation={ true }
           initialRegion={ {

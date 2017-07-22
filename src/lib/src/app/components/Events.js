@@ -1,4 +1,4 @@
-import EventMapView from './EventMapView';
+import EventMapView from './EventsMapView';
 import EventDetail from './EventDetail';
 import BaseComponent from './common/BaseComponent';
 import { firebaseDb } from '../proxies/FirebaseProxy';
