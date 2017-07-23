@@ -15,9 +15,10 @@ import moment from 'moment';
 
 
 const styles = StyleSheet.create({
-  container: {
+  mapContainer: {
     flex: 1,
     backgroundColor: '#ebeef0',
+    paddingTop: 50,
   },
   filterbar: {
     backgroundColor: 'white',
@@ -25,16 +26,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 80,
     paddingBottom: 20
-  },
-  title: {
-    marginBottom: 20,
-    fontSize: 25,
-    textAlign: 'center',
-    color: '#4169E1',
-  },
-  map: {
-    width: 100,
-    height: 200,
   },
   labelView: {
     width: 140,
@@ -46,6 +37,8 @@ class EventsMapView extends Component {
 
   state = {
     events: [],
+    filterEvents: [],
+    useFilter: false,
     filters: [{
       name: 'Today',
       selected: false
@@ -113,37 +106,51 @@ class EventsMapView extends Component {
   )
   /* TODO: Weekend, RESET events when click again */
   onSelectFilter = (filter, index) => {
-    let { filters, events } = this.state;
-
-    filters = this.state.filters.map((f, i) => {
-      if (i === index) f.selected = !f.selected;
+    let useFilter = this.state.useFilter;
+    const filters = this.state.filters.map((f, i) => {
+      if (i === index) {
+        if (f.selected === true) useFilter = false;
+        else useFilter = true;
+        f.selected = !f.selected;
+      }
       else f.selected = false;
-      return f
-    })
-    events = this.state.events.filter((e) => {
-      if (!e.endDate) return true;
+      return f;
+    });
+    let filterEvents = [];
 
-      if (filter.name === 'Today') {
-        const today = moment();
+    if (useFilter) {
+      filterEvents = this.state.events.filter((e) => {
+        if (!e.endDate) return true;
 
-        return today.isSame(e.endDate, 'year') && today.isSame(e.endDate, 'month') && today.isSame(e.endDate, 'day');
-      } else if (filter.name === 'This Week') {
-        const currentDay = moment().day();
-        const weekStart = moment().subtract(currentDay || 7, 'day');
-        const weekEnd = moment().add(7 - (currentDay || 7), 'day');
+        if (filter.name === 'Today') {
+          const today = moment();
 
-        return moment(e.endDate).isBetween(weekStart, weekEnd);
-      } else if (filter.name === 'This Weekend') {
-        return true
-      } else return true;
-    })
+          return today.isSame(e.endDate, 'year') && today.isSame(e.endDate, 'month') && today.isSame(e.endDate, 'day');
+        } else if (filter.name === 'This Week') {
+          const currentDay = moment().day();
+          const weekStart = moment().subtract(currentDay || 7, 'day');
+          const weekEnd = moment().add(7 - (currentDay || 7), 'day');
+
+          return moment(e.endDate).isBetween(weekStart, weekEnd);
+        } else if (filter.name === 'This Weekend') {
+          const currentDay = moment().day() || 7;
+          const weekendStart = (currentDay >= 5) ? moment().subtract(currentDay - 5, 'day') : moment().add(5 - currentDay, 'day');
+          const weekendEnd = (currentDay >= 7) ? moment().subtract(currentDay - 7, 'day') : moment().add(7 - currentDay, 'day');
+
+          return moment(e.endDate).isBetween(weekendStart, weekendEnd);
+        } else return true;
+      })
+    }
     this.setState({
       filters,
-      events
+      filterEvents,
+      useFilter
     })
   }
 
   render() {
+
+    const events = this.state.useFilter ? this.state.filterEvents : this.state.events
 
     return (
       <Container>
@@ -153,7 +160,7 @@ class EventsMapView extends Component {
           { this.state.filters.map((filter, index) => this._renderFilter(filter, index))}
         </View>
         <MapView
-          style={ styles.container }
+          style={ styles.mapContainer }
           showsUserLocation={ true }
           initialRegion={ {
             latitude: 40.7554778,
@@ -162,7 +169,7 @@ class EventsMapView extends Component {
             longitudeDelta: 0.0421,
           } }
         >
-          { this.state.events.map((event, index) => this._renderEvent(event, index)) }
+          { events.map((event, index) => this._renderEvent(event, index)) }
         </MapView>
       </Container>
     );
