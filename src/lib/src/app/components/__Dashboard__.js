@@ -31,6 +31,7 @@ class Dashboard extends Component {
 
   static propTypes = {
     userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
   state = {
@@ -38,6 +39,34 @@ class Dashboard extends Component {
     isLoading: false,
     error: '',
   };
+
+  _goToProfile = () => {
+    this.props.navigator.push({
+      title: 'Profile',
+      component: Profile,
+      passProps: { userInfo: this.props.userInfo },
+    });
+  }
+
+  _goToRepos = () => {
+    this.props.navigator.push({
+      title: 'Repositories',
+      component: Repositories,
+      passProps: {
+        userInfo: this.props.userInfo,
+      },
+    });
+  }
+
+  _goToNotes = () => {
+    this.props.navigator.push({
+      title: 'Notes',
+      component: Notes,
+      passProps: {
+        userInfo: this.props.userInfo,
+      },
+    });
+  }
 
   render() {
     const buttonStyleBase = {
@@ -73,34 +102,6 @@ class Dashboard extends Component {
         </TouchableHighlight>
       </View>
     );
-  }
-
-  _goToProfile = () => {
-    this.props.navigator.push({
-      title: 'Profile',
-      component: Profile,
-      passProps: { userInfo: this.props.userInfo },
-    });
-  }
-
-  _goToRepos = () => {
-    this.props.navigator.push({
-      title: 'Repositories',
-      component: Repositories,
-      passProps: {
-        userInfo: this.props.userInfo,
-      },
-    });
-  }
-
-  _goToNotes = () => {
-    this.props.navigator.push({
-      title: 'Notes',
-      component: Notes,
-      passProps: {
-        userInfo: this.props.userInfo,
-      },
-    });
   }
 
 }

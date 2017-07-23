@@ -56,6 +56,13 @@ class Landing extends Component {
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
+  _signup = () => {
+    this.props.navigator.push({
+      title: 'Sign Up',
+      component: Events,
+    });
+  }
+
   render() {
     return (
       <Swiper showsButtons={ true }>
@@ -86,13 +93,6 @@ class Landing extends Component {
         </View>
       </Swiper>
     );
-  }
-
-  _signup = () => {
-    this.props.navigator.push({
-      title: 'Sign Up',
-      component: Events,
-    });
   }
 
 }

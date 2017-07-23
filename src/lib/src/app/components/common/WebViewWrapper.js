@@ -1,5 +1,5 @@
 import { StyleSheet, View, WebView } from 'react-native';
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -11,16 +11,12 @@ const styles = StyleSheet.create({
   },
 });
 
-class WebViewWrapper extends Component {
-
-  render() {
-    return (
-      <View style={ styles.container }>
-        <WebView source={ { uri: this.props.url } } />
-      </View>
-    );
-  }
-
+function WebViewWrapper(props) {
+  return (
+    <View style={ styles.container }>
+      <WebView source={ { uri: props.url } } />
+    </View>
+  );
 }
 WebViewWrapper.propTypes = {
   url: PropTypes.string.isRequired,

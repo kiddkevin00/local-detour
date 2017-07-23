@@ -42,6 +42,7 @@ class Repositories extends Component {
 
   static propTypes = {
     userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
   state = {
@@ -60,6 +61,14 @@ class Repositories extends Component {
       .catch((err) => {
         this.setState({ error: JSON.stringify(err, null, 2) });
       });
+  }
+
+  _openPage = (url) => {
+    this.props.navigator.push({
+      title: 'Web Page',
+      component: WebViewWrapper,
+      passProps: { url },
+    });
   }
 
   render() {
@@ -95,14 +104,6 @@ class Repositories extends Component {
         { list }
       </ScrollView>
     );
-  }
-
-  _openPage = (url) => {
-    this.props.navigator.push({
-      title: 'Web Page',
-      component: WebViewWrapper,
-      passProps: { url },
-    });
   }
 
 }

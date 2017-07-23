@@ -10,6 +10,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 
 const styles = StyleSheet.create({
@@ -97,6 +98,10 @@ const styles = StyleSheet.create({
 
 class Signup extends Component {
 
+  static propTypes = {
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  };
+
   state = {
     formFullName: '',
     formEmail: '',
@@ -104,70 +109,6 @@ class Signup extends Component {
     isLoading: false,
     error: '',
   };
-
-  render() {
-    return (
-      <View style={ styles.container }>
-        <View style={ styles.main }>
-          <Text style={ styles.title }>NYCorner</Text>
-          <TextInput
-            style={ styles.formInput }
-            value={ this.state.formFullName }
-            onChange={ this._handleChange.bind(this, 'FullName') }
-            placeholder="Full Name"
-            placeholderTextColor="#a3a7b2"
-          />
-          <TextInput
-            style={ styles.formInput }
-            value={ this.state.formEmail }
-            onChange={ this._handleChange.bind(this, 'Email') }
-            placeholder="Email Address"
-            placeholderTextColor="#a3a7b2"
-          />
-          <TextInput
-            style={ styles.formInput }
-            value={ this.state.formPassword }
-            onChange={ this._handleChange.bind(this, 'Password') }
-            placeholder="Password"
-            placeholderTextColor="#a3a7b2"
-            secureTextEntry={ true }
-          />
-          <TouchableHighlight
-            style={ styles.signupButton }
-            onPress={ this._handleSignup }
-            underlayColor="#f2f2f2"
-          >
-            <Text style={ styles.signupButtonText }>SIGN UP</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            style={ styles.loginButton }
-            onPress={ this._gotoLogin }
-            underlayColor="#ffcc00"
-          >
-            <Text style={ styles.loginButtonText }>LOGIN</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            style={ styles.signupLaterButton }
-            onPress={ this._signinAnonymously }
-            underlayColor="#ffcc00"
-          >
-            <Text style={ styles.signupLaterButtonText }>SIGN UP LATER</Text>
-          </TouchableHighlight>
-          <ActivityIndicator
-            animating={ this.state.isLoading }
-            color="#111"
-            size="large"
-          />
-          <Text>{ this.state.error }</Text>
-        </View>
-        <View style={ styles.footer }>
-          <Text style={ styles.footerText }>
-            By signing in, you agree to our Terms & Privacy Policy
-          </Text>
-        </View>
-      </View>
-    );
-  }
 
   _handleSignup = async () => {
     this.setState({
@@ -265,6 +206,70 @@ class Signup extends Component {
         error: errorMessage,
       });
     }
+  }
+
+  render() {
+    return (
+      <View style={ styles.container }>
+        <View style={ styles.main }>
+          <Text style={ styles.title }>NYCorner</Text>
+          <TextInput
+            style={ styles.formInput }
+            value={ this.state.formFullName }
+            onChange={ this._handleChange.bind(this, 'FullName') }
+            placeholder="Full Name"
+            placeholderTextColor="#a3a7b2"
+          />
+          <TextInput
+            style={ styles.formInput }
+            value={ this.state.formEmail }
+            onChange={ this._handleChange.bind(this, 'Email') }
+            placeholder="Email Address"
+            placeholderTextColor="#a3a7b2"
+          />
+          <TextInput
+            style={ styles.formInput }
+            value={ this.state.formPassword }
+            onChange={ this._handleChange.bind(this, 'Password') }
+            placeholder="Password"
+            placeholderTextColor="#a3a7b2"
+            secureTextEntry={ true }
+          />
+          <TouchableHighlight
+            style={ styles.signupButton }
+            onPress={ this._handleSignup }
+            underlayColor="#f2f2f2"
+          >
+            <Text style={ styles.signupButtonText }>SIGN UP</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            style={ styles.loginButton }
+            onPress={ this._gotoLogin }
+            underlayColor="#ffcc00"
+          >
+            <Text style={ styles.loginButtonText }>LOGIN</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            style={ styles.signupLaterButton }
+            onPress={ this._signinAnonymously }
+            underlayColor="#ffcc00"
+          >
+            <Text style={ styles.signupLaterButtonText }>SIGN UP LATER</Text>
+          </TouchableHighlight>
+          <ActivityIndicator
+            animating={ this.state.isLoading }
+            color="#111"
+            size="large"
+          />
+          <Text>{ this.state.error }</Text>
+        </View>
+        <View style={ styles.footer }>
+          <Text style={ styles.footerText }>
+            By signing in, you agree to our Terms & Privacy Policy
+          </Text>
+        </View>
+      </View>
+    );
   }
 
 }

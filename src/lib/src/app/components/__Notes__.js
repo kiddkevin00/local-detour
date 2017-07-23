@@ -52,11 +52,16 @@ class Notes extends Component {
     userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
-  listViewDataSource = new ListView.DataSource({
-    rowHasChanged: (originalRow, newRow) => newRow !== originalRow,
-  });
-
-  dataRef = firebaseDb.ref(this.props.userInfo.login).child('notes');
+  static _renderNote(note) {
+    return (
+      <View>
+        <View style={ styles.rowContainer }>
+          <Text>{ note }</Text>
+        </View>
+        <Separator />
+      </View>
+    );
+  }
 
   state = {
     noteListViewDataSource: this.listViewDataSource.cloneWithRows([]),
@@ -75,6 +80,31 @@ class Notes extends Component {
       this.setState({
         noteListViewDataSource: this.listViewDataSource.cloneWithRows(notes),
       });
+    });
+  }
+
+  listViewDataSource = new ListView.DataSource({
+    rowHasChanged: (originalRow, newRow) => newRow !== originalRow,
+  });
+
+  dataRef = firebaseDb.ref(this.props.userInfo.login).child('notes');
+
+  _handleClick = () => {
+    this.dataRef.push(this.state.newNote)
+      .then(() => {
+        this.setState({
+          newNote: '',
+          error: '',
+        });
+      })
+      .catch((err) => {
+        this.setState({ error: JSON.stringify(err, null, 2) });
+      });
+  }
+
+  _handleChange = (event) => {
+    this.setState({
+      newNote: event.nativeEvent.text,
     });
   }
 
@@ -112,36 +142,6 @@ class Notes extends Component {
         </View>
       </View>
     );
-  }
-
-  static _renderNote(note) {
-    return (
-      <View>
-        <View style={ styles.rowContainer }>
-          <Text>{ note }</Text>
-        </View>
-        <Separator />
-      </View>
-    );
-  }
-
-  _handleClick = () => {
-    this.dataRef.push(this.state.newNote)
-      .then(() => {
-        this.setState({
-          newNote: '',
-          error: '',
-        });
-      })
-      .catch((err) => {
-        this.setState({ error: JSON.stringify(err, null, 2) });
-      });
-  }
-
-  _handleChange = (event) => {
-    this.setState({
-      newNote: event.nativeEvent.text,
-    });
   }
 
 }

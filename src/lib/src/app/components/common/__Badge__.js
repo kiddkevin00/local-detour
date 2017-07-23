@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -29,19 +29,16 @@ const styles = StyleSheet.create({
   },
 });
 
-class Badge extends Component {
-
-  render() {
-    return (
-      <View style={ styles.container }>
-        <Image style={ styles.image } source={ { uri: this.props.avatarUrl } } />
-        <Text style={ styles.name }>{ this.props.name }</Text>
-        <Text style={ styles.handle }>{ this.props.login }</Text>
-      </View>
-    );
-  }
-
+function Badge(props) {
+  return (
+    <View style={ styles.container }>
+      <Image style={ styles.image } source={ { uri: props.avatarUrl } } />
+      <Text style={ styles.name }>{ props.name }</Text>
+      <Text style={ styles.handle }>{ props.login }</Text>
+    </View>
+  );
 }
+
 Badge.propTypes = {
   avatarUrl: PropTypes.string.isRequired,
   name: PropTypes.string,

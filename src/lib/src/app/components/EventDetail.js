@@ -26,8 +26,17 @@ import PropTypes from 'prop-types';
 class EventDetail extends Component {
 
   static propTypes = {
-    event: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    event: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
+
+  _openPage = (url) => {
+    this.props.navigator.push({
+      title: 'Web Page',
+      component: WebViewWrapper,
+      passProps: { url },
+    });
+  }
 
   render() {
     const event = this.props.event || {
@@ -131,14 +140,6 @@ class EventDetail extends Component {
         </Footer>
       </Container>
     );
-  }
-
-  _openPage = (url) => {
-    this.props.navigator.push({
-      title: 'Web Page',
-      component: WebViewWrapper,
-      passProps: { url },
-    });
   }
 
 }

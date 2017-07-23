@@ -28,15 +28,15 @@ const styles = StyleSheet.create({
 
 class Profile extends Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {};
-  }
-
   static propTypes = {
     userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  };
+
+  static _formatTitle(title) {
+    return title && `${title[0].toUpperCase()}${title.slice(1).replace('_', ' ')}`;
   }
+
+  state = {};
 
   render() {
     const userInfo = this.props.userInfo;
@@ -65,10 +65,6 @@ class Profile extends Component {
         { list }
       </ScrollView>
     );
-  }
-
-  static _formatTitle(title) {
-    return title && `${title[0].toUpperCase()}${title.slice(1).replace('_', ' ')}`;
   }
 
 }

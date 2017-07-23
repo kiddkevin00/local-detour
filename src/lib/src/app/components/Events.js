@@ -31,14 +31,9 @@ import PropTypes from 'prop-types';
 class Events extends Component {
 
   static propTypes = {
-    userInfo: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
-
-  listViewDataSource = new ListView.DataSource({
-    rowHasChanged: (originalRow, newRow) => newRow._id !== originalRow._id,
-  });
-
-  dataRef = firebaseDb.ref('/nyc').child('events');
 
   state = {
     events: [],
@@ -65,32 +60,11 @@ class Events extends Component {
     this.dataRef.off();
   }
 
-  render() {
-    //const userInfo = this.props.userInfo;
+  listViewDataSource = new ListView.DataSource({
+    rowHasChanged: (originalRow, newRow) => newRow._id !== originalRow._id,
+  });
 
-    return (
-      <Container>
-        <Header style={ { height: 64, backgroundColor: '#f4f7f9' } } />
-        <Content>
-          <Grid>
-            <Row>
-              <Body>
-                <Button info small full onPress={ this._gotoMapView }>
-                  <Text>Map View</Text>
-                </Button>
-              </Body>
-            </Row>
-            <Row>
-              <List
-                dataArray={ this.state.events }
-                renderRow={ this._renderEvent }
-              />
-            </Row>
-          </Grid>
-        </Content>
-      </Container>
-    );
-  }
+  dataRef = firebaseDb.ref('/nyc').child('events');
 
   _renderEvent = (event) => (
     <ListItem style={ { borderBottomWidth: 0 } } >
@@ -139,6 +113,33 @@ class Events extends Component {
       title: 'Map View',
       component: EventMapView,
     });
+  }
+
+  render() {
+    //const userInfo = this.props.userInfo;
+
+    return (
+      <Container>
+        <Header style={ { height: 64, backgroundColor: '#f4f7f9' } } />
+        <Content>
+          <Grid>
+            <Row>
+              <Body>
+                <Button info small full onPress={ this._gotoMapView }>
+                  <Text>Map View</Text>
+                </Button>
+              </Body>
+            </Row>
+            <Row>
+              <List
+                dataArray={ this.state.events }
+                renderRow={ this._renderEvent }
+              />
+            </Row>
+          </Grid>
+        </Content>
+      </Container>
+    );
   }
 
 }

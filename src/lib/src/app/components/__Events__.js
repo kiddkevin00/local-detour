@@ -76,19 +76,13 @@ const styles = StyleSheet.create({
 class Events extends Component {
 
   static propTypes = {
-    userInfo: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
   state = {
     eventListViewDataSource: this.listViewDataSource.cloneWithRows([]),
     newEvent: '',
   };
-
-  listViewDataSource = new ListView.DataSource({
-    rowHasChanged: (originalRow, newRow) => newRow._id !== originalRow._id,
-  });
-
-  dataRef = firebaseDb.ref('/nyc').child('events');
 
   componentDidMount() {
     this.dataRef.on('value', (eventsSnapshot) => {
@@ -108,42 +102,11 @@ class Events extends Component {
     this.dataRef.off();
   }
 
-  render() {
-    return (
-      <View style={ styles.container }>
-        <ListView
-          style={ styles.main }
-          dataSource={ this.state.eventListViewDataSource }
-          renderRow={ this._renderEvent }
-          enableEmptySections={ true }
-          renderHeader={ () => null }
-        />
-        <View style={ styles.footer }>
-          <TextInput
-            style={ styles.eventInput }
-            value={ this.state.newEvent }
-            onChange={ this._handleChange }
-            placeholder="Submit an event here..."
-            placeholderTextColor="white"
-          />
-          <TouchableHighlight
-            style={ styles.submitEventButton }
-            onPress={ this._handleClick }
-            underlayColor="#88D4F5"
-          >
-            <Text style={ styles.submitEventButtonText }>Submit</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            style={ styles.logoutButton }
-            onPress={ this._handleLogout }
-            underlayColor="#ffcc00"
-          >
-            <Text style={ styles.logoutButtonText }>Logout</Text>
-          </TouchableHighlight>
-        </View>
-      </View>
-    );
-  }
+  listViewDataSource = new ListView.DataSource({
+    rowHasChanged: (originalRow, newRow) => newRow._id !== originalRow._id,
+  });
+
+  dataRef = firebaseDb.ref('/nyc').child('events');
 
   _renderEvent = (event) => (
     <View>
@@ -227,6 +190,43 @@ class Events extends Component {
         isLoading: false,
       });
     }
+  }
+
+  render() {
+    return (
+      <View style={ styles.container }>
+        <ListView
+          style={ styles.main }
+          dataSource={ this.state.eventListViewDataSource }
+          renderRow={ this._renderEvent }
+          enableEmptySections={ true }
+          renderHeader={ () => null }
+        />
+        <View style={ styles.footer }>
+          <TextInput
+            style={ styles.eventInput }
+            value={ this.state.newEvent }
+            onChange={ this._handleChange }
+            placeholder="Submit an event here..."
+            placeholderTextColor="white"
+          />
+          <TouchableHighlight
+            style={ styles.submitEventButton }
+            onPress={ this._handleClick }
+            underlayColor="#88D4F5"
+          >
+            <Text style={ styles.submitEventButtonText }>Submit</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            style={ styles.logoutButton }
+            onPress={ this._handleLogout }
+            underlayColor="#ffcc00"
+          >
+            <Text style={ styles.logoutButtonText }>Logout</Text>
+          </TouchableHighlight>
+        </View>
+      </View>
+    );
   }
 
 }
