@@ -106,12 +106,12 @@ class EventsMapView extends Component {
     </MapView.Marker>
   );
 
-  _renderFilter = (filter, i) => (
-    <Button bordered info small key={ i } onPress={ () => this.onSelectFilter(filter, i) } style={ { borderColor: '#A9A9A9', backgroundColor: filter.selected ? '#00CED1' : 'white', marginRight: 5, padding: -8 } }>
+  _renderFilter = (filter, index) => (
+    <Button bordered info small key={ index } onPress={ () => this.onSelectFilter(filter, index) } style={ { borderColor: '#A9A9A9', backgroundColor: filter.selected ? '#00CED1' : 'white', marginRight: 5, padding: -8 } }>
       <Text style={ { color: '#A9A9A9' } }>{filter.name}</Text>
     </Button>
   )
-  /* TODO: RESET events when click again */
+  /* TODO: Weekend, RESET events when click again */
   onSelectFilter = (filter, index) => {
     let { filters, events } = this.state;
 
@@ -122,17 +122,19 @@ class EventsMapView extends Component {
     })
     events = this.state.events.filter((e) => {
       if (!e.endDate) return true;
-      const today = moment();
 
       if (filter.name === 'Today') {
+        const today = moment();
+
         return today.isSame(e.endDate, 'year') && today.isSame(e.endDate, 'month') && today.isSame(e.endDate, 'day');
       } else if (filter.name === 'This Week') {
         const currentDay = moment().day();
-        const weekStart = today.subtract(currentDay || 6, 'day');
-        const weekEnd = today.add(1, 'day');
+        const weekStart = moment().subtract(currentDay || 7, 'day');
+        const weekEnd = moment().add(7 - (currentDay || 7), 'day');
+
         return moment(e.endDate).isBetween(weekStart, weekEnd);
       } else if (filter.name === 'This Weekend') {
-
+        return true
       } else return true;
     })
     this.setState({
@@ -142,14 +144,13 @@ class EventsMapView extends Component {
   }
 
   render() {
-    const { filters } = this.state;
 
     return (
       <Container>
         <View
           style={ styles.filterbar }
         >
-          {filters.map((filter, i) => this._renderFilter(filter, i))}
+          { this.state.filters.map((filter, index) => this._renderFilter(filter, index))}
         </View>
         <MapView
           style={ styles.container }
