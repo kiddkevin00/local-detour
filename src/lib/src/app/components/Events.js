@@ -30,13 +30,12 @@ import PropTypes from 'prop-types';
 class Events extends Component {
 
   static propTypes = {
-    userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    //userInfo: PropTypes.object.isRequired,
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
   state = {
     events: [],
-    newEvent: '',
   };
 
   componentDidMount() {
@@ -109,8 +108,6 @@ class Events extends Component {
   }
 
   render() {
-    //const userInfo = this.props.userInfo;
-
     return (
       <Container>
         <Header style={ { height: 64, backgroundColor: '#f4f7f9' } } />
