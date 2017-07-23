@@ -1,8 +1,12 @@
+import EventsMapLabel from './EventsMapLabel';
+import { firebaseDb } from '../proxies/FirebaseProxy';
 import MapView from 'react-native-maps';
 import {
   StyleSheet,
-  View,
 } from 'react-native';
+import {
+  Container,
+} from 'native-base';
 import React, { Component } from 'react';
 
 
@@ -10,12 +14,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ebeef0',
-  },
-  filterbar: {
-    backgroundColor: 'white',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    padding: 10,
   },
   title: {
     marginBottom: 20,
@@ -35,9 +33,59 @@ const styles = StyleSheet.create({
 
 class EventMapView extends Component {
 
+  state = {
+    events: [],
+  };
+
+  componentDidMount() {
+    this.dataRef.on('value', (eventsSnapshot) => {
+      const events = [];
+
+      eventsSnapshot.forEach((eventSnapshot) => {
+        events.push(eventSnapshot.val());
+      });
+
+      this.setState({
+        events,
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    this.dataRef.off();
+  }
+
+  onMapPress = (index) => {
+    let events = this.state.events;
+
+    events = this.state.events.map((e, i) => {
+      if (i === index) e.color = 'orange'
+      else e.color = 'red'
+      return e
+    })
+    this.setState({
+      events,
+    })
+  }
+
+  dataRef = firebaseDb.ref('/nyc').child('events');
+
+  _renderEvent = (event, index) => (
+    <MapView.Marker
+      coordinate={ { latitude: event.lat, longitude: event.lng } }
+      key={ index }
+      onPress={ () => this.onMapPress(index) }
+      pinColor={ event.color || 'red' }
+    >
+      <MapView.Callout tooltip={ true } style={ styles.labelView }>
+        <EventsMapLabel event={ event } />
+      </MapView.Callout>
+    </MapView.Marker>
+    )
+
   render() {
     return (
-      <View style={ styles.container } >
+      <Container>
         <MapView
           style={ styles.container }
           showsUserLocation={ true }
@@ -47,8 +95,10 @@ class EventMapView extends Component {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           } }
-        />
-      </View>
+        >
+          {this.state.events.map((event, i) => this._renderEvent(event, i))}
+        </MapView>
+      </Container>
     );
   }
 
