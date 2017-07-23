@@ -20,7 +20,6 @@ import {
   Icon,
 } from 'native-base';
 import {
-  ListView,
   Image,
   Alert,
 } from 'react-native';
@@ -37,7 +36,6 @@ class Events extends Component {
 
   state = {
     events: [],
-    eventListViewDataSource: this.listViewDataSource.cloneWithRows([]),
     newEvent: '',
   };
 
@@ -51,7 +49,6 @@ class Events extends Component {
 
       this.setState({
         events,
-        eventListViewDataSource: this.listViewDataSource.cloneWithRows(events),
       });
     });
   }
@@ -59,10 +56,6 @@ class Events extends Component {
   componentWillUnmount() {
     this.dataRef.off();
   }
-
-  listViewDataSource = new ListView.DataSource({
-    rowHasChanged: (originalRow, newRow) => newRow._id !== originalRow._id,
-  });
 
   dataRef = firebaseDb.ref('/nyc').child('events');
 

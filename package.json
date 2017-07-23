@@ -12,18 +12,39 @@
   "scripts": {
     "-------------- EXPOSED --------------": "",
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "ios": "node node_modules/react-native/local-cli/cli.js run-ios",
     "lint": "npm run eslint",
-    "unit-test": "jest",
+    "unit-test": "npm run jest-unit-test",
+    "ui-test": "",
     "map-packager-port": "APP_ROOT=$PWD sh bin/remap-rn-packager-port.sh",
     "map-adb-ports": "adb reverse tcp:8085 tcp:8085; adb reverse tcp:7007 tcp:7007; adb reverse tcp:3000 tcp:3000; adb reverse tcp:8097 tcp:8097",
+    "precommit": "npm run lint && npm run coverage:unit-test",
+    "prepush": "npm run branch-check && npm run lint && npm run coverage:unit-test && npm run coverage:update-thresholds",
+    "version:bump": "npm run version:instruction && ./bin/version-bump.js",
     "-------------- INTERNAL -------------": "",
     "eslint": "eslint --format 'node_modules/eslint-friendly-formatter' --ext .js,.jsx src/lib/src/ src/spec/ bin/",
+    "jest-unit-test": "jest",
+    "coverage:unit-test": "npm run jest-unit-test -- --coverage",
+    "coverage:ui-test": "",
+    "coverage:update-thresholds": "echo 'disable `coverage:update-thresholds` for now' || ./bin/update-test-coverage.js",
+    "branch-check": "./bin/restrict-branches-to-push.sh",
+    "version:instruction": "echo 'Please specify full version number after `npm run version:bump`.  E.g. $ npm run version:bump 0.0.1'",
     "-------------- LOCAL DEV ------------": "",
-    "debugger": "open 'rndebugger://set-debugger-loc?host=localhost&port=8085'"
+    "debugger": "open 'rndebugger://set-debugger-loc?host=localhost&port=8085'",
+    "local-unit-test": "",
+    "local-ui-test": "",
+    "coverage:report": "",
+    "coverage:html-report": "open spec/coverage/index.html",
+    "jest:dev": "npm run jest-unit-test -- --watch=all",
+    "jest:update": "npm run jest-unit-test -- -u",
+    "jest:no-cache": "npm run jest-unit-test -- --no-cache"
   },
   "jest": {
     "preset": "react-native",
     "verbose": true,
+    "testMatch": [
+      "**/unit/**/*.(spec|test).js?(x)"
+    ],
     "coverageDirectory": "spec/coverage/"
   },
   "engines": {
@@ -54,13 +75,14 @@
     "eslint-plugin-prefer-object-spread": "1.2.1",
     "eslint-plugin-react": "7.0.1",
     "jest": "20.0.4",
-    "react-test-renderer": "16.0.0-alpha.6"
+    "react-test-renderer": "16.0.0-alpha.6",
+    "husky": "0.11.9"
   },
   "author": "Marcus Hsu",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git@github.com:kiddkevin00/spiritual-guide.git"
+    "url": "git@github.com:kiddkevin00/local-detour.git"
   },
   "private": true
 }
