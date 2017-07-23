@@ -1,4 +1,4 @@
-import EventsMapLabel from './EventsMapLabel';
+import EventMapLabel from './EventMapLabel';
 import { firebaseDb } from '../proxies/FirebaseProxy';
 import MapView from 'react-native-maps';
 import {
@@ -15,23 +15,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ebeef0',
   },
-  title: {
-    marginBottom: 20,
-    fontSize: 25,
-    textAlign: 'center',
-    color: '#4169E1',
-  },
-  map: {
-    width: 100,
-    height: 200,
-  },
   labelView: {
     width: 140,
     height: 100,
   },
 });
 
-class EventMapView extends Component {
+class EventsMapView extends Component {
 
   state = {
     events: [],
@@ -55,33 +45,33 @@ class EventMapView extends Component {
     this.dataRef.off();
   }
 
-  onMapPress = (index) => {
-    let events = this.state.events;
+  dataRef = firebaseDb.ref('/nyc').child('events');
 
-    events = this.state.events.map((e, i) => {
-      if (i === index) e.color = 'orange'
-      else e.color = 'red'
-      return e
-    })
+  _onMapPress = (index) => {
+    const events = this.state.events.map((event, i) => {
+      if (i === index) {
+        return Object.assign({}, event, { color: 'orange' });
+      }
+      return Object.assign({}, event, { color: 'red' });
+    });
+
     this.setState({
       events,
-    })
+    });
   }
-
-  dataRef = firebaseDb.ref('/nyc').child('events');
 
   _renderEvent = (event, index) => (
     <MapView.Marker
       coordinate={ { latitude: event.lat, longitude: event.lng } }
       key={ index }
-      onPress={ () => this.onMapPress(index) }
+      onPress={ () => this._onMapPress(index) }
       pinColor={ event.color || 'red' }
     >
-      <MapView.Callout tooltip={ true } style={ styles.labelView }>
-        <EventsMapLabel event={ event } />
+      <MapView.Callout style={ styles.labelView } tooltip={ true }>
+        <EventMapLabel event={ event } />
       </MapView.Callout>
     </MapView.Marker>
-    )
+  );
 
   render() {
     return (
@@ -96,7 +86,7 @@ class EventMapView extends Component {
             longitudeDelta: 0.0421,
           } }
         >
-          {this.state.events.map((event, i) => this._renderEvent(event, i))}
+          { this.state.events.map((event, index) => this._renderEvent(event, index)) }
         </MapView>
       </Container>
     );
@@ -105,4 +95,4 @@ class EventMapView extends Component {
 }
 
 
-export { EventMapView as default };
+export { EventsMapView as default };
