@@ -1,4 +1,5 @@
 import EventMapLabel from './EventMapLabel';
+import EventMapLabel2 from './EventMapLabel2';
 import { firebaseDb } from '../proxies/FirebaseProxy';
 import MapView from 'react-native-maps';
 import {
