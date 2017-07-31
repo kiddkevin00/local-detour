@@ -1,4 +1,4 @@
-import Events from './Walkthrough';
+import Walkthrough from './Walkthrough';
 import Swiper from 'react-native-swiper';
 import {
   TouchableOpacity,
@@ -19,11 +19,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     //marginTop: 731,
-    marginTop: '195%',
+    //marginTop: '195%',
   },
   backgroundImage: {
     flexGrow: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     resizeMode: 'stretch',
   },
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 40,
+    marginBottom: 200,
     borderWidth: 1,
     borderRadius: 8,
     borderColor: 'white',
@@ -56,8 +56,9 @@ class Landing extends Component {
 
   _checkoutWalkthrough = () => {
     this.props.navigator.push({
-      title: 'Events List',
-      component: Events,
+      title: 'Get Started',
+      component: Walkthrough,
+      passProps: { updateNavbarVisibility: this.props.updateNavbarVisibility },
     });
   }
 

@@ -40,6 +40,8 @@ class Events extends Component {
   };
 
   componentDidMount() {
+    this.props.updateNavbarVisibility(false);
+
     this.dataRef.on('value', (eventsSnapshot) => {
       const events = [];
 

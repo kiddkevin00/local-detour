@@ -19,11 +19,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     //marginTop: 731,
-    marginTop: '195%',
+    //marginTop: '195%',
   },
   backgroundImage: {
     flexGrow: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     resizeMode: 'stretch',
   },
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 40,
+    marginBottom: 100,
     borderWidth: 1,
     borderRadius: 8,
     borderColor: 'white',
@@ -58,9 +58,10 @@ class Walkthrough extends Component {
     this.props.navigator.push({
       title: 'Events List',
       component: Events,
+      passProps: { updateNavbarVisibility: this.props.updateNavbarVisibility },
     });
   }
-
+  
   render() {
     const backgroundImageInlineStyle = {
       width: Dimensions.get('window').width,

@@ -20,11 +20,24 @@ const styles = StyleSheet.create({
 
 class LocalDetour extends Component {
 
+  state = {
+    isNavbarHidden: true,
+  };
+
+  updateNavbarVisibility = (isNavbarHidden) => {
+    this.setState({ isNavbarHidden });
+  }
+
   render() {
     return (
       <NavigatorIOS
         style={ styles.container }
-        initialRoute={ { title: 'Welcome', component: Landing } }
+        navigationBarHidden={ this.state.isNavbarHidden }
+        initialRoute={ {
+          title: 'Welcome',
+          component: Landing,
+          passProps: { updateNavbarVisibility: this.updateNavbarVisibility },
+        } }
       />
     );
   }
