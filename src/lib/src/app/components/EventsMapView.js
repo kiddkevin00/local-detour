@@ -121,7 +121,7 @@ class EventsMapView extends Component {
         if (today.isAfter(event.when.endTimestamp)) {
           return false;
         }
-        
+
         if (targetFilter.name === 'Today') {
           return today.isBetween(moment(event.when.startTimestamp), moment(event.when.endTimestamp), null, '[]');
         } else if (targetFilter.name === 'This Week') {
@@ -203,7 +203,7 @@ class EventsMapView extends Component {
               bordered
               info
               small
-              style={ { borderColor: '#A9A9A9', backgroundColor: this.state.filters[2].selected ? '#00CED1' : 'white', marginRight: 5 } }
+              style={ { borderColor: '#A9A9A9', backgroundColor: this.state.filters[2].selected ? '#00CED1' : 'white' } }
               onPress={ this._onSelectFilter.bind(this, this.state.filters[2]) }
             >
               <Text style={ { color: '#A9A9A9' } }>{ this.state.filters[2].name }</Text>
