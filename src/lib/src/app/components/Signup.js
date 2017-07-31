@@ -122,7 +122,7 @@ class Signup extends Component {
       userInfo.sendEmailVerification();
 
       this.props.navigator.push({
-        title: 'All Events',
+        title: 'Events List',
         component: Events,
         passProps: { userInfo },
       });
@@ -179,7 +179,7 @@ class Signup extends Component {
       const userInfo = await firebaseAuth.signInAnonymously();
 
       this.props.navigator.push({
-        title: 'All Events',
+        title: 'Events List',
         component: Events,
         passProps: { userInfo },
       });

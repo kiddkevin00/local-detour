@@ -63,7 +63,7 @@ class Events extends Component {
       <Card>
         <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
           <Left>
-            <Thumbnail square source={ require('../../../static/assets/images/calendar-date.png') } />
+            <Thumbnail square source={ require('../../../static/assets/images/sample-event_1.jpg') } />
             <Body>
               <Text>{ event.name }</Text>
               <Text note>{ event.where.address }</Text>
@@ -71,7 +71,7 @@ class Events extends Component {
           </Left>
         </CardItem>
         <CardItem cardBody button onPress={ this._checkoutEventDetail.bind(this, event) }>
-          <Image style={ { height: 200, width: null, flex: 1 } } source={ require('../../../static/assets/images/v3_background.png') } />
+          <Image style={ { height: 200, width: null, flex: 1 } } source={ require('../../../static/assets/images/sample-event_2.jpeg') } />
         </CardItem>
         <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
           <Left>
@@ -102,7 +102,7 @@ class Events extends Component {
 
   _gotoMapView = () => {
     this.props.navigator.push({
-      title: 'Map View',
+      title: 'Events Map',
       component: EventMapView,
     });
   }

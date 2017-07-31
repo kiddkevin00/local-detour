@@ -104,7 +104,7 @@ class Login extends Component {
         .signInWithEmailAndPassword(this.state.formEmail, this.state.formPassword);
 
       this.props.navigator.push({
-        title: 'All Events',
+        title: 'Events List',
         component: Events,
         passProps: { userInfo },
       });

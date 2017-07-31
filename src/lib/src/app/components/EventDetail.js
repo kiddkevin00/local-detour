@@ -33,7 +33,7 @@ class EventDetail extends Component {
 
   _openPage = (url) => {
     this.props.navigator.push({
-      title: 'Web Page',
+      title: 'Source',
       component: WebViewWrapper,
       passProps: { url },
     });
@@ -68,7 +68,7 @@ class EventDetail extends Component {
         <Content padder>
           <Card>
             <CardItem cardBody>
-              <Image style={ { height: 200, width: null, flex: 1 } } source={ require('../../../static/assets/images/v3_background.png') } />
+              <Image style={ { height: 200, width: null, flex: 1 } } source={ require('../../../static/assets/images/sample-event_1.jpg') } />
             </CardItem>
             <CardItem bordered>
               <Left>
@@ -128,10 +128,10 @@ class EventDetail extends Component {
                 <Text>Photos</Text>
                 <Grid>
                   <Col>
-                    <Thumbnail style={ { width: '100%', height: 100 } } square source={ require('../../../static/assets/images/v4_background.png') } />
+                    <Thumbnail style={ { width: '100%', height: 100 } } square source={ require('../../../static/assets/images/sample-event_1.jpg') } />
                   </Col>
                   <Col>
-                    <Thumbnail style={ { width: '100%', height: 100 } } square source={ require('../../../static/assets/images/v3_background.png') } />
+                    <Thumbnail style={ { width: '100%', height: 100 } } square source={ require('../../../static/assets/images/sample-event_2.jpeg') } />
                   </Col>
                 </Grid>
               </Body>

@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class localDetour extends Component {
+class LocalDetour extends Component {
 
   render() {
     return (
@@ -31,6 +31,6 @@ class localDetour extends Component {
 
 }
 
-AppRegistry.registerComponent('localDetour', () => localDetour);
+AppRegistry.registerComponent('localDetour', () => LocalDetour);
 
-export default localDetour;
+export default LocalDetour;

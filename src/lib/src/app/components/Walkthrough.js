@@ -1,4 +1,4 @@
-import Events from './Walkthrough';
+import Events from './Events';
 import Swiper from 'react-native-swiper';
 import {
   TouchableOpacity,
@@ -48,13 +48,13 @@ const styles = StyleSheet.create({
   },
 });
 
-class Landing extends Component {
+class Walkthrough extends Component {
 
   static propTypes = {
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
-  _checkoutWalkthrough = () => {
+  _checkoutEvents = () => {
     this.props.navigator.push({
       title: 'Events List',
       component: Events,
@@ -71,11 +71,23 @@ class Landing extends Component {
       <Swiper showsButtons={ false }>
         <View style={ styles.slide }>
           <Image
-            source={ require('../../../static/assets/images/home.jpg') }
+            source={ require('../../../static/assets/images/walkthrough_1.jpg') }
+            style={ [styles.backgroundImage, backgroundImageInlineStyle] }
+          />
+        </View>
+        <View style={ styles.slide }>
+          <Image
+            source={ require('../../../static/assets/images/walkthrough_2.jpg') }
+            style={ [styles.backgroundImage, backgroundImageInlineStyle] }
+          />
+        </View>
+        <View style={ styles.slide }>
+          <Image
+            source={ require('../../../static/assets/images/walkthrough_3.jpg') }
             style={ [styles.backgroundImage, backgroundImageInlineStyle] }
           >
-            <TouchableOpacity style={ styles.button } onPress={ this._checkoutWalkthrough }>
-              <Text style={ styles.buttonText }>GET STARTED</Text>
+            <TouchableOpacity style={ styles.button } onPress={ this._checkoutEvents }>
+              <Text style={ styles.buttonText }>GO VENTURE</Text>
             </TouchableOpacity>
           </Image>
         </View>
@@ -85,4 +97,4 @@ class Landing extends Component {
 
 }
 
-export { Landing as default };
+export { Walkthrough as default };
