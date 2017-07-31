@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 100,
+    marginBottom: 80,
     borderWidth: 1,
     borderRadius: 8,
     borderColor: 'white',
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
 class Walkthrough extends Component {
 
   static propTypes = {
+    updateNavbarVisibility: PropTypes.func.isRequired,
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
@@ -61,7 +62,7 @@ class Walkthrough extends Component {
       passProps: { updateNavbarVisibility: this.props.updateNavbarVisibility },
     });
   }
-  
+
   render() {
     const backgroundImageInlineStyle = {
       width: Dimensions.get('window').width,

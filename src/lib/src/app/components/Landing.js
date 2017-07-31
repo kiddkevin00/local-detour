@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 200,
+    marginBottom: 150,
     borderWidth: 1,
     borderRadius: 8,
     borderColor: 'white',
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
 class Landing extends Component {
 
   static propTypes = {
+    updateNavbarVisibility: PropTypes.func.isRequired,
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 

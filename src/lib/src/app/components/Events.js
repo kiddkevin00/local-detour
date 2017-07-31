@@ -32,6 +32,7 @@ class Events extends Component {
 
   static propTypes = {
     //userInfo: PropTypes.object.isRequired,
+    updateNavbarVisibility: PropTypes.func.isRequired,
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 

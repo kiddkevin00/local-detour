@@ -98,7 +98,7 @@ class EventsMapView extends Component {
         pinColor={ event.color || 'red' }
         title={ event.name }
         description={ event.description }
-        onCalloutPress={ this._checkoutEventDetail }
+        onCalloutPress={ this._checkoutEventDetail.bind(this, event) }
       />
     );
   }
@@ -181,7 +181,6 @@ class EventsMapView extends Component {
   render() {
     const events = this.state.useFilter ? this.state.filteredEvents : this.state.events;
     const { width, height } = Dimensions.get('window');
-    const ratio = width / height;
 
     return (
       <Container>
