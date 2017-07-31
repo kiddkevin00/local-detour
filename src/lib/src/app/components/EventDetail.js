@@ -1,4 +1,5 @@
 import WebViewWrapper from './common/WebViewWrapper';
+import moment from 'moment';
 import {
   Container,
   Header,
@@ -32,18 +33,24 @@ class EventDetail extends Component {
   render() {
     const event = this.props.event || {
       name: 'Test Event',
-      venue: 'Time Square',
-      address: '123 42nd street, New York, NY',
-      startDate: 'April 28',
-      endDate: 'April 30',
-      startTime: '6 PM',
-      endTime: '9 PM',
       type: 'Public',
       description: 'Arts Brookfield’s annual summer music festival, the Lowdown Hudson Music Fest, returns to the heart of downtown New York for its seventh summer. Bringing fun, lively, world-class musical talent to the picturesque Waterfront Plaza at Brookfield Place, this year’s festival will be headlined by quirky veteran rockers OK GO. The show is free to attend and open to the public.Free to attend, no tickets required.PLEASE NOTE: In keeping with the summer concert vibe, this year’s festival will be standing room only on a first come, first served basis.Event is rain or shine, except for extreme weather conditions.',
       cost: 0,
+      where: {
+        venue: 'Time Square',
+        address: '123 42nd street, New York, NY',
+        coordinate: {
+          latitude: 40.7582904,
+          longitude: -73.9668905,
+        },
+      },
+      when: {
+        startTimestamp: moment('2017-07-02 18:00', 'YYYY-MM-DD HH:mm').valueOf(),
+        endTimestamp: moment('2017-08-28 21:00', 'YYYY-MM-DD HH:mm').valueOf(),
+      },
       externalLink: 'https://www.timeout.com/newyork/things-to-do/sunset-sail-happy-hour',
       photoUrls: [],
-      tags: {},
+      tags: [],
     };
 
     return (
@@ -81,14 +88,14 @@ class EventDetail extends Component {
             </CardItem>
             <CardItem>
               <Body>
-                <Text>{ event.startDate } - { event.endDate }</Text>
-                <Text note>from { event.startTime } to { event.endTime }</Text>
+                <Text>{ moment(event.when.startTimestamp).format('MMM D') } - { moment(event.when.endTimestamp).format('MMM D') }</Text>
+                <Text note>from { moment(event.when.startTimestamp).format('h A') } to { moment(event.when.endTimestamp).format('h A') }</Text>
               </Body>
             </CardItem>
             <CardItem>
               <Body>
-                <Text>{ event.venue }</Text>
-                <Text note>{ event.address }</Text>
+                <Text>{ event.where.venue }</Text>
+                <Text note>{ event.where.address }</Text>
               </Body>
             </CardItem>
             <CardItem bordered>

@@ -2,6 +2,7 @@ import EventDetail from './EventDetail';
 import Login from './Login';
 import Separator from './common/Separator';
 import { firebaseAuth, firebaseDb } from '../proxies/FirebaseProxy';
+import moment from 'moment';
 import {
   StyleSheet,
   Text,
@@ -79,16 +80,16 @@ class Events extends Component {
     userInfo: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   };
 
-  state = {
-    eventListViewDataSource: this.listViewDataSource.cloneWithRows([]),
-    newEvent: '',
-  };
-
   listViewDataSource = new ListView.DataSource({
     rowHasChanged: (originalRow, newRow) => newRow._id !== originalRow._id,
   });
 
   dataRef = firebaseDb.ref('/nyc').child('events');
+
+  state = {
+    eventListViewDataSource: this.listViewDataSource.cloneWithRows([]),
+    newEvent: '',
+  };
 
   componentDidMount() {
     this.dataRef.on('value', (eventsSnapshot) => {
@@ -154,8 +155,8 @@ class Events extends Component {
         >
           <Text style={ styles.itemName }>{ event.name }</Text>
         </TouchableHighlight>
-        <Text style={ styles.itemText }>{ event.address }</Text>
-        <Text style={ styles.itemText }>{ event.startDate } - { event.endDate }</Text>
+        <Text style={ styles.itemText }>{ event.where.address }</Text>
+        <Text style={ styles.itemText }>{ moment(event.when.startTimestamp).format('MMM D h A') } - { moment(event.when.endTimestamp).format('MMM D h A') }</Text>
       </View>
       <Separator />
     </View>
@@ -173,18 +174,25 @@ class Events extends Component {
     this.dataRef
       .push({
         name: this.state.newEvent,
-        venue: 'Time Square',
-        address: '123 42nd street, New York, NY',
-        startDate: 'April 28',
-        endDate: 'April 30',
-        startTime: '6 PM',
-        endTime: '9 PM',
         type: 'Public',
         description: 'Arts Brookfield’s annual summer music festival, the Lowdown Hudson Music Fest, returns to the heart of downtown New York for its seventh summer. Bringing fun, lively, world-class musical talent to the picturesque Waterfront Plaza at Brookfield Place, this year’s festival will be headlined by quirky veteran rockers OK GO. The show is free to attend and open to the public.Free to attend, no tickets required.PLEASE NOTE: In keeping with the summer concert vibe, this year’s festival will be standing room only on a first come, first served basis.Event is rain or shine, except for extreme weather conditions.',
         cost: 0,
+        where: {
+          venue: 'Time Square',
+          address: '123 42nd street, New York, NY',
+          coordinate: {
+            latitude: 40.7582904,
+            longitude: -73.9668905,
+          },
+        },
+        when: {
+          startTimestamp: moment('2017-07-28T18:00').valueOf(),
+          endTimestamp: moment('2017-08-28T21:00').valueOf(),
+        },
+
         externalLink: 'https://www.timeout.com/newyork/things-to-do/sunset-sail-happy-hour',
         photoUrls: [],
-        tags: {},
+        tags: [],
       })
       .then(() => {
         this.setState({

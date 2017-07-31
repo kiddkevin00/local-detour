@@ -33,12 +33,6 @@ class Dashboard extends Component {
     userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
-  state = {
-    username: '',
-    isLoading: false,
-    error: '',
-  };
-
   render() {
     const buttonStyleBase = {
       flexDirection: 'row',

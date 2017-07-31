@@ -1,47 +1,48 @@
 import EventDetail from './EventDetail';
-import React, { Component } from 'react';
 import {
   Container,
-  Text
+  Text,
 } from 'native-base';
-import PropTypes from 'prop-types';
 import {
-  StyleSheet,
   View,
-} from 'react-native'
+  StyleSheet,
+} from 'react-native';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 
 const styles = StyleSheet.create({
   bubble: {
-    width: 140,
     flexDirection: 'row',
     alignSelf: 'flex-start',
-    backgroundColor: '#f4f7f9',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
+    borderWidth: 0.5,
     borderRadius: 6,
     borderColor: '#007a87',
-    borderWidth: 0.5,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    width: 140,
+    backgroundColor: '#f4f7f9',
   },
   amount: {
     flex: 1,
   },
-  arrow: {
-    backgroundColor: 'transparent',
-    borderWidth: 16,
-    borderColor: 'transparent',
-    borderTopColor: '#f4f7f9',
-    alignSelf: 'center',
-    marginTop: -32,
-  },
   arrowBorder: {
-    backgroundColor: 'transparent',
+    alignSelf: 'center',
+    marginTop: -0.5,
     borderWidth: 16,
     borderColor: 'transparent',
     borderTopColor: '#007a87',
-    alignSelf: 'center',
-    marginTop: -0.5,
+    backgroundColor: 'transparent',
   },
-})
+  arrow: {
+    alignSelf: 'center',
+    marginTop: -32,
+    borderWidth: 16,
+    borderColor: 'transparent',
+    borderTopColor: '#f4f7f9',
+    backgroundColor: 'transparent',
+  },
+});
 
 
 class EventMapLabel2 extends Component {
@@ -50,6 +51,14 @@ class EventMapLabel2 extends Component {
     event: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
+  _checkoutEventDetail = (event) => {
+    this.props.navigator.push({
+      title: 'Event Detail',
+      component: EventDetail,
+      passProps: { event },
+    });
+  }
+
   render() {
     const event = this.props.event;
 
@@ -57,21 +66,13 @@ class EventMapLabel2 extends Component {
       <Container>
         <View style={ styles.bubble }>
           <View style={ styles.amount }>
-            <Text style={ { color: '#23cfb9' } }>{event.name}</Text>
+            <Text style={ { color: '#23cfb9' } }>{ event.name }</Text>
           </View>
         </View>
         <View style={ styles.arrowBorder } />
         <View style={ styles.arrow } />
       </Container>
     );
-  }
-
-  _checkoutEventDetail = (event) => {
-    this.props.navigator.push({
-      title: 'Event Detail',
-      component: EventDetail,
-      passProps: { event },
-    });
   }
 
 }

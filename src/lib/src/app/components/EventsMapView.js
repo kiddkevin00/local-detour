@@ -1,57 +1,56 @@
-import EventMapLabel from './EventMapLabel';
-import EventMapLabel2 from './EventMapLabel2';
+import EventDetail from './EventDetail';
 import { firebaseDb } from '../proxies/FirebaseProxy';
 import MapView from 'react-native-maps';
+import moment from 'moment';
 import {
-  StyleSheet,
   View,
-  Text
+  StyleSheet,
+  Dimensions,
 } from 'react-native';
 import {
   Container,
-  Button
+  Header,
+  Content,
+  Left,
+  Body,
+  Right,
+  Button,
+  Text,
 } from 'native-base';
 import React, { Component } from 'react';
-import moment from 'moment';
 
 
 const styles = StyleSheet.create({
-  mapContainer: {
-    flex: 1,
-    backgroundColor: '#ebeef0',
-    paddingTop: 50,
+  map: {
+    ...StyleSheet.absoluteFillObject,
   },
-  filterbar: {
-    backgroundColor: 'white',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingTop: 80,
-    paddingBottom: 20
-  },
-  labelView: {
-    width: 140,
-    height: 100,
-  },
+  /// Uncomments the lines below when using custom callout.
+  //eventMapCallout: {
+  //  width: 140,
+  //  height: 100,
+  //},
 });
 
 class EventsMapView extends Component {
 
   state = {
     events: [],
-    filterEvents: [],
+    filteredEvents: [],
     useFilter: false,
-    filters: [{
-      name: 'Today',
-      selected: false
-    },
-    {
-      name: 'This Week',
-      selected: false
-    },
-    {
-      name: 'This Weekend',
-      selected: false
-    }]
+    filters: [
+      {
+        name: 'This Week',
+        selected: false,
+      },
+      {
+        name: 'Today',
+        selected: false,
+      },
+      {
+        name: 'This Weekend',
+        selected: false,
+      },
+    ],
   };
 
   componentDidMount() {
@@ -74,9 +73,69 @@ class EventsMapView extends Component {
 
   dataRef = firebaseDb.ref('/nyc').child('events');
 
-  _onMapPress = (index) => {
-    const events = this.state.events.map((event, i) => {
-      if (i === index) {
+  _renderEvent(event, index) {
+    return (
+      <MapView.Marker
+        key={ index }
+        coordinate={ event.where.coordinate }
+        onPress={ this._onMarkerPress.bind(this, event) }
+        pinColor={ event.color || 'red' }
+        title={ event.name }
+        description={ event.description }
+        onCalloutPress={ this._checkoutEventDetail }
+      />
+    );
+  }
+
+  _onSelectFilter(targetFilter) {
+    let useFilter = this.state.useFilter;
+    const filters = this.state.filters.map((filter) => {
+      if (filter === targetFilter) {
+        if (filter.selected === true) {
+          useFilter = false;
+        } else {
+          useFilter = true;
+        }
+
+        return Object.assign({}, filter, { selected: !filter.selected });
+      }
+      return Object.assign({}, filter, { selected: false });
+    });
+    let filteredEvents = [];
+
+    if (useFilter) {
+      filteredEvents = this.state.events.filter((event) => {
+        const today = moment();
+
+        // Filters out past events.
+        if (today.isAfter(event.endTimestamp)) {
+          return false;
+        }
+
+        if (targetFilter.name === 'Today') {
+          return today.isBetween(moment(event.when.startTimestamp), moment(event.when.endTimestamp), null, '[]');
+        } else if (targetFilter.name === 'This Week') {
+          // Filters out the start date of the event after end of the week.
+          return !moment(event.when.startTimestamp).isAfter(today, 'week');
+        } else if (targetFilter.name === 'This Weekend') {
+          // Filters out the start date of the event after end of the weekend.
+          return !moment().week(today.isoWeek()).day('Saturday').hour(0).minute(0).second(0).isAfter(event.when.endTimestamp) &&
+            !moment(event.when.startTimestamp).isAfter(today, 'week');
+        }
+        return false;
+      });
+    }
+
+    this.setState({
+      useFilter,
+      filters,
+      filteredEvents,
+    });
+  }
+
+  _onMarkerPress(targetEvent) {
+    const events = this.state.events.map((event) => {
+      if (event === targetEvent) {
         return Object.assign({}, event, { color: 'orange' });
       }
       return Object.assign({}, event, { color: 'red' });
@@ -87,91 +146,81 @@ class EventsMapView extends Component {
     });
   }
 
-  _renderEvent = (event, index) => (
-    <MapView.Marker
-      coordinate={ { latitude: event.lat, longitude: event.lng } }
-      key={ index }
-      onPress={ () => this._onMapPress(index) }
-      pinColor={ event.color || 'red' }
-    >
-      <MapView.Callout style={ styles.labelView } tooltip={ true }>
-        <EventMapLabel event={ event } />
-      </MapView.Callout>
-    </MapView.Marker>
-  );
-
-  _renderFilter = (filter, index) => (
-    <Button bordered info small key={ index } onPress={ () => this.onSelectFilter(filter, index) } style={ { borderColor: '#A9A9A9', backgroundColor: filter.selected ? '#00CED1' : 'white', marginRight: 5, padding: -8 } }>
-      <Text style={ { color: '#A9A9A9' } }>{filter.name}</Text>
-    </Button>
-  )
-  /* TODO: Weekend, RESET events when click again */
-  onSelectFilter = (filter, index) => {
-    let useFilter = this.state.useFilter;
-    const filters = this.state.filters.map((f, i) => {
-      if (i === index) {
-        if (f.selected === true) useFilter = false;
-        else useFilter = true;
-        f.selected = !f.selected;
-      }
-      else f.selected = false;
-      return f;
+  _checkoutEventDetail = (event) => {
+    this.props.navigator.push({
+      title: 'Event Detail',
+      component: EventDetail,
+      passProps: { event },
     });
-    let filterEvents = [];
-
-    if (useFilter) {
-      filterEvents = this.state.events.filter((e) => {
-        if (!e.endDate) return true;
-
-        if (filter.name === 'Today') {
-          const today = moment();
-
-          return today.isSame(e.endDate, 'year') && today.isSame(e.endDate, 'month') && today.isSame(e.endDate, 'day');
-        } else if (filter.name === 'This Week') {
-          const currentDay = moment().day();
-          const weekStart = moment().subtract(currentDay || 7, 'day');
-          const weekEnd = moment().add(7 - (currentDay || 7), 'day');
-
-          return moment(e.endDate).isBetween(weekStart, weekEnd);
-        } else if (filter.name === 'This Weekend') {
-          const currentDay = moment().day() || 7;
-          const weekendStart = (currentDay >= 5) ? moment().subtract(currentDay - 5, 'day') : moment().add(5 - currentDay, 'day');
-          const weekendEnd = (currentDay >= 7) ? moment().subtract(currentDay - 7, 'day') : moment().add(7 - currentDay, 'day');
-
-          return moment(e.endDate).isBetween(weekendStart, weekendEnd);
-        } else return true;
-      })
-    }
-    this.setState({
-      filters,
-      filterEvents,
-      useFilter
-    })
   }
 
   render() {
-
-    const events = this.state.useFilter ? this.state.filterEvents : this.state.events
+    const events = this.state.useFilter ? this.state.filteredEvents : this.state.events;
+    const { width, height } = Dimensions.get('window');
+    const ratio = width / height;
 
     return (
       <Container>
-        <View
-          style={ styles.filterbar }
-        >
-          { this.state.filters.map((filter, index) => this._renderFilter(filter, index))}
-        </View>
-        <MapView
-          style={ styles.mapContainer }
-          showsUserLocation={ true }
-          initialRegion={ {
-            latitude: 40.7554778,
-            longitude: -73.981885,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          } }
-        >
-          { events.map((event, index) => this._renderEvent(event, index)) }
-        </MapView>
+        <Header style={ { marginTop: 64, paddingTop: -15, backgroundColor: '#f4f7f9' } }>
+          <Left>
+            <Button
+              bordered
+              info
+              small
+              style={ { borderColor: '#A9A9A9', backgroundColor: this.state.filters[0].selected ? '#00CED1' : 'white', marginRight: 5 } }
+              onPress={ this._onSelectFilter.bind(this, this.state.filters[0]) }
+            >
+              <Text style={ { color: '#A9A9A9' } }>{ this.state.filters[0].name }</Text>
+            </Button>
+          </Left>
+          <Body>
+            <Button
+              bordered
+              info
+              small
+              style={ { borderColor: '#A9A9A9', backgroundColor: this.state.filters[1].selected ? '#00CED1' : 'white', marginRight: 5 } }
+              onPress={ this._onSelectFilter.bind(this, this.state.filters[1]) }
+            >
+              <Text style={ { color: '#A9A9A9' } }>{ this.state.filters[1].name }</Text>
+            </Button>
+          </Body>
+          <Right>
+            <Button
+              bordered
+              info
+              small
+              style={ { borderColor: '#A9A9A9', backgroundColor: this.state.filters[2].selected ? '#00CED1' : 'white', marginRight: 5 } }
+              onPress={ this._onSelectFilter.bind(this, this.state.filters[2]) }
+            >
+              <Text style={ { color: '#A9A9A9' } }>{ this.state.filters[2].name }</Text>
+            </Button>
+          </Right>
+        </Header>
+        <Content scrollEnabled={ false }>
+          <View style={ { width, height } }>
+            <MapView
+              style={ styles.map }
+              provider={ null }
+              followsUserLocation={ false }
+              showsScale={ true }
+              showsCompass={ true }
+              zoomEnabled={ true }
+              rotateEnabled={ true }
+              scrollEnabled={ true }
+              loadingEnabled={ true }
+              loadingBackgroundColor={ 'orange' }
+              showsUserLocation={ true }
+              region={ {
+                latitude: 40.7554778,
+                longitude: -73.981885,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0922 * ratio,
+              } }
+            >
+              { events.map((event, index) => this._renderEvent(event, index)) }
+            </MapView>
+          </View>
+        </Content>
       </Container>
     );
   }
