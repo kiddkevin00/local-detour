@@ -66,7 +66,7 @@ class Events extends Component {
             <Thumbnail square source={ require('../../../static/assets/images/calendar-date.png') } />
             <Body>
               <Text>{ event.name }</Text>
-              <Text note>{ event.address }</Text>
+              <Text note>{ event.where.address }</Text>
             </Body>
           </Left>
         </CardItem>

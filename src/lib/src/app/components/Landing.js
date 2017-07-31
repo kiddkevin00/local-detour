@@ -26,8 +26,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     resizeMode: 'stretch',
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
   },
   heading: {
     color: '#fff',
@@ -64,12 +62,17 @@ class Landing extends Component {
   }
 
   render() {
+    const backgroundImageInlineStyle = {
+      width: Dimensions.get('window').width,
+      height: Dimensions.get('window').height,
+    };
+
     return (
       <Swiper showsButtons={ true }>
         <View style={ styles.slide }>
           <Image
             source={ require('../../../static/assets/images/v4_background.png') }
-            style={ styles.backgroundImage }
+            style={ [styles.backgroundImage, backgroundImageInlineStyle] }
           >
             <Text style={ styles.heading }>
               Let go venture!
@@ -82,13 +85,13 @@ class Landing extends Component {
         <View style={ styles.slide }>
           <Image
             source={ require('../../../static/assets/images/v3_background.png') }
-            style={ styles.backgroundImage }
+            style={ [styles.backgroundImage, backgroundImageInlineStyle] }
           />
         </View>
         <View style={ styles.slide }>
           <Image
             source={ require('../../../static/assets/images/v2_background.png') }
-            style={ styles.backgroundImage }
+            style={ [styles.backgroundImage, backgroundImageInlineStyle] }
           />
         </View>
       </Swiper>
