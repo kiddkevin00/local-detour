@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginTop: 731,
-    //marginTop: '200%',
+    //marginTop: 731,
+    marginTop: '195%',
   },
   backgroundImage: {
     flexGrow: 1,
