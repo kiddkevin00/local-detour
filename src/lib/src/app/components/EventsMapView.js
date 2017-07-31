@@ -18,6 +18,7 @@ import {
   Text,
 } from 'native-base';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 
 const styles = StyleSheet.create({
@@ -32,6 +33,10 @@ const styles = StyleSheet.create({
 });
 
 class EventsMapView extends Component {
+
+  static propTypes = {
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  };
 
   state = {
     events: [],
@@ -119,6 +124,8 @@ class EventsMapView extends Component {
           return !moment(event.when.startTimestamp).isAfter(today, 'week');
         } else if (targetFilter.name === 'This Weekend') {
           // Filters out the start date of the event after end of the weekend.
+
+          // eslint-disable-next-line newline-per-chained-call
           return !moment().week(today.isoWeek()).day('Saturday').hour(0).minute(0).second(0).isAfter(event.when.endTimestamp) &&
             !moment(event.when.startTimestamp).isAfter(today, 'week');
         }

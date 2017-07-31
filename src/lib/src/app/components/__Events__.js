@@ -80,11 +80,10 @@ class Events extends Component {
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
+  // eslint-disable-next-line react/sort-comp
   listViewDataSource = new ListView.DataSource({
     rowHasChanged: (originalRow, newRow) => newRow._id !== originalRow._id,
   });
-
-  dataRef = firebaseDb.ref('/nyc').child('events');
 
   state = {
     eventListViewDataSource: this.listViewDataSource.cloneWithRows([]),
@@ -109,10 +108,6 @@ class Events extends Component {
     this.dataRef.off();
   }
 
-  listViewDataSource = new ListView.DataSource({
-    rowHasChanged: (originalRow, newRow) => newRow._id !== originalRow._id,
-  });
-
   dataRef = firebaseDb.ref('/nyc').child('events');
 
   _renderEvent = (event) => (
@@ -125,7 +120,7 @@ class Events extends Component {
           <Text style={ styles.itemName }>{ event.name }</Text>
         </TouchableHighlight>
         <Text style={ styles.itemText }>{ event.where.address }</Text>
-        <Text style={ styles.itemText }>{ moment(event.when.startTimestamp).format('MMM D h A') } - { moment(event.when.endTimestamp).format('MMM D h A') }</Text>
+        <Text style={ styles.itemText }>{ moment(event.when.startTimestamp).format('MMM Do h A') } - { moment(event.when.endTimestamp).format('MMM Do h A') }</Text>
       </View>
       <Separator />
     </View>

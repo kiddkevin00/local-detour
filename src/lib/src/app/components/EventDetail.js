@@ -97,7 +97,7 @@ class EventDetail extends Component {
             </CardItem>
             <CardItem>
               <Body>
-                <Text>{ moment(event.when.startTimestamp).format('MMM D') } - { moment(event.when.endTimestamp).format('MMM D') }</Text>
+                <Text>{ moment(event.when.startTimestamp).format('MMM Do') } - { moment(event.when.endTimestamp).format('MMM Do') }</Text>
                 <Text note>from { moment(event.when.startTimestamp).format('h A') } to { moment(event.when.endTimestamp).format('h A') }</Text>
               </Body>
             </CardItem>
