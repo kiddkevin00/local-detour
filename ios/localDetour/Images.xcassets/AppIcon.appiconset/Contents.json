@@ -3,49 +3,49 @@
     {
       "size" : "20x20",
       "idiom" : "iphone",
-      "filename" : "LD_1-small-40.png",
+      "filename" : "LocalDetour_AppIcon-small-40.png",
       "scale" : "2x"
     },
     {
       "size" : "20x20",
       "idiom" : "iphone",
-      "filename" : "LD_1-60.png",
+      "filename" : "LocalDetour_AppIcon-60.png",
       "scale" : "3x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "LD_1-small@2x.png",
+      "filename" : "LocalDetour_AppIcon-small@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "LD_1-small@3x.png",
+      "filename" : "LocalDetour_AppIcon-small@3x.png",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "LD_1-small-40@2x.png",
+      "filename" : "LocalDetour_AppIcon-small-40@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "LD_1-small-40@3x.png",
+      "filename" : "LocalDetour_AppIcon-small-40@3x.png",
       "scale" : "3x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "LD_1-small-40@3x-1.png",
+      "filename" : "LocalDetour_AppIcon-small-40@3x-1.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "LD_1-60@3x.png",
+      "filename" : "LocalDetour_AppIcon-60@3x.png",
       "scale" : "3x"
     }
   ],
