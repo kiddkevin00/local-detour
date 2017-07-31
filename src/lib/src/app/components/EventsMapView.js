@@ -56,6 +56,12 @@ class EventsMapView extends Component {
         selected: false,
       },
     ],
+    mapRegion: {
+      latitude: 40.7554778,
+      longitude: -73.981885,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0922 * (Dimensions.get('window').width / Dimensions.get('window').height),
+    },
   };
 
   componentDidMount() {
@@ -168,6 +174,10 @@ class EventsMapView extends Component {
     });
   }
 
+  _onMapRegionChange = (mapRegion) => {
+    this.setState({ mapRegion });
+  }
+
   render() {
     const events = this.state.useFilter ? this.state.filteredEvents : this.state.events;
     const { width, height } = Dimensions.get('window');
@@ -181,7 +191,7 @@ class EventsMapView extends Component {
               bordered
               info
               small
-              style={ { borderColor: '#A9A9A9', backgroundColor: this.state.filters[0].selected ? '#00CED1' : 'white', marginRight: 5 } }
+              style={ { borderColor: '#A9A9A9', backgroundColor: this.state.filters[0].selected ? '#00CED1' : 'white' } }
               onPress={ this._onSelectFilter.bind(this, this.state.filters[0]) }
             >
               <Text style={ { color: '#A9A9A9' } }>{ this.state.filters[0].name }</Text>
@@ -192,7 +202,7 @@ class EventsMapView extends Component {
               bordered
               info
               small
-              style={ { borderColor: '#A9A9A9', backgroundColor: this.state.filters[1].selected ? '#00CED1' : 'white', marginRight: 5 } }
+              style={ { borderColor: '#A9A9A9', backgroundColor: this.state.filters[1].selected ? '#00CED1' : 'white' } }
               onPress={ this._onSelectFilter.bind(this, this.state.filters[1]) }
             >
               <Text style={ { color: '#A9A9A9' } }>{ this.state.filters[1].name }</Text>
@@ -206,7 +216,7 @@ class EventsMapView extends Component {
               style={ { borderColor: '#A9A9A9', backgroundColor: this.state.filters[2].selected ? '#00CED1' : 'white' } }
               onPress={ this._onSelectFilter.bind(this, this.state.filters[2]) }
             >
-              <Text style={ { color: '#A9A9A9' } }>{ this.state.filters[2].name }</Text>
+              <Text style={ { color: '#A9A9A9', fontSize: 13 } }>{ this.state.filters[2].name }</Text>
             </Button>
           </Right>
         </Header>
@@ -224,12 +234,8 @@ class EventsMapView extends Component {
               loadingEnabled={ true }
               loadingBackgroundColor={ 'orange' }
               showsUserLocation={ true }
-              region={ {
-                latitude: 40.7554778,
-                longitude: -73.981885,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0922 * ratio,
-              } }
+              region={ this.state.mapRegion }
+              onRegionChange={ this._onMapRegionChange }
             >
               { events.map((event, index) => this._renderEvent(event, index)) }
             </MapView>
