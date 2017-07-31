@@ -1,6 +1,7 @@
 import EventMapView from './EventsMapView';
 import EventDetail from './EventDetail';
 import { firebaseDb } from '../proxies/FirebaseProxy';
+import moment from 'moment';
 import {
   Container,
   Header,
@@ -43,7 +44,12 @@ class Events extends Component {
       const events = [];
 
       eventsSnapshot.forEach((eventSnapshot) => {
-        events.push(eventSnapshot.val());
+        const event = eventSnapshot.val();
+        const today = moment();
+
+        if (today.isBefore(event.when.endTimestamp)) {
+          events.push(event);
+        }
       });
 
       this.setState({

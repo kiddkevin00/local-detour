@@ -63,7 +63,12 @@ class EventsMapView extends Component {
       const events = [];
 
       eventsSnapshot.forEach((eventSnapshot) => {
-        events.push(eventSnapshot.val());
+        const event = eventSnapshot.val();
+        const today = moment();
+
+        if (today.isBefore(event.when.endTimestamp)) {
+          events.push(event);
+        }
       });
 
       this.setState({
@@ -113,21 +118,23 @@ class EventsMapView extends Component {
         const today = moment();
 
         // Filters out past events.
-        if (today.isAfter(event.endTimestamp)) {
+        if (today.isAfter(event.when.endTimestamp)) {
           return false;
         }
-
+        
         if (targetFilter.name === 'Today') {
           return today.isBetween(moment(event.when.startTimestamp), moment(event.when.endTimestamp), null, '[]');
         } else if (targetFilter.name === 'This Week') {
           // Filters out the start date of the event after end of the week.
-          return !moment(event.when.startTimestamp).isAfter(today, 'week');
+          return !moment(event.when.startTimestamp).isAfter(today, 'isoweek');
         } else if (targetFilter.name === 'This Weekend') {
           // Filters out the start date of the event after end of the weekend.
 
           // eslint-disable-next-line newline-per-chained-call
-          return !moment().week(today.isoWeek()).day('Saturday').hour(0).minute(0).second(0).isAfter(event.when.endTimestamp) &&
-            !moment(event.when.startTimestamp).isAfter(today, 'week');
+          const thisSaturday = moment().week(today.isoWeek()).day('Saturday').hour(0).minute(0).second(0);
+
+          return !thisSaturday.isAfter(event.when.endTimestamp) &&
+            !moment(event.when.startTimestamp).isAfter(today, 'isoweek');
         }
         return false;
       });
