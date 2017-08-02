@@ -2,6 +2,7 @@ import EventMapView from './EventsMapView';
 import EventDetail from './EventDetail';
 import { firebaseDb } from '../proxies/FirebaseProxy';
 import moment from 'moment';
+import RNCalendarEvents from 'react-native-calendar-events';
 import {
   Container,
   Header,
@@ -23,6 +24,7 @@ import {
 import {
   Image,
   Alert,
+  Linking
 } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -88,7 +90,7 @@ class Events extends Component {
               <Icon name="navigate" />
               <Text>Going</Text>
             </Button>
-            <Button iconLeft transparent onPress={ () => Alert.alert('Success', 'Added to your calender!') }>
+            <Button iconLeft transparent onPress={ this._addToCalender.bind(this, event) }>
               <Icon name="bookmark" />
               <Text>Save</Text>
             </Button>
@@ -115,6 +117,28 @@ class Events extends Component {
       component: EventMapView,
     });
   }
+
+  _addToCalender = async (event) => {
+    const authorize = await RNCalendarEvents.authorizeEventStore();
+
+    if (authorize === 'authorized') {
+      const calendars = await RNCalendarEvents.findCalendars();
+      // use default calendar
+
+      RNCalendarEvents.saveEvent('test123', {
+           location:'New York, NY',
+           startDate: '2017-08-19T19:26:00.000Z', //use ISO date
+           description: event.name,
+           endDate: '2017-08-20T19:26:00.000Z',
+           calendarId: calendars[0].id
+      }).then(savedEvent => {
+          Linking.openURL(`calshow:${new Date().getTime()}`);
+      }).catch(e => {
+        console.log('errr', e)
+      })
+    }
+}
+
 
   render() {
     return (
