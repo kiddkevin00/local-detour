@@ -1,10 +1,13 @@
 import Events from './Events';
 import Swiper from 'react-native-swiper';
 import {
-  TouchableOpacity,
-  Image,
-  View,
+  Container,
+  Content,
+  Button,
   Text,
+} from 'native-base';
+import {
+  Image,
   StyleSheet,
   Dimensions,
 } from 'react-native';
@@ -14,37 +17,11 @@ import PropTypes from 'prop-types';
 
 // [TODO] Check the sample styles on GitHub.
 const styles = StyleSheet.create({
-  slide: {
-    flexGrow: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    //marginTop: 731,
-    //marginTop: '195%',
-  },
   backgroundImage: {
-    flexGrow: 1,
+    //flexGrow: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center',
-    resizeMode: 'stretch',
-  },
-  heading: {
-    color: '#fff',
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  button: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 80,
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: 'white',
-    padding: 8,
-    backgroundColor: '#fff',
-  },
-  buttonText: {
-    color: '#111',
-    fontSize: 12,
+    //alignItems: 'center',
+    //resizeMode: 'stretch',
   },
 });
 
@@ -70,29 +47,28 @@ class Walkthrough extends Component {
     };
 
     return (
-      <Swiper showsButtons={ false }>
-        <View style={ styles.slide }>
-          <Image
-            source={ require('../../../static/assets/images/walkthrough_1.jpg') }
-            style={ [styles.backgroundImage, backgroundImageInlineStyle] }
-          />
-        </View>
-        <View style={ styles.slide }>
-          <Image
-            source={ require('../../../static/assets/images/walkthrough_2.jpg') }
-            style={ [styles.backgroundImage, backgroundImageInlineStyle] }
-          />
-        </View>
-        <View style={ styles.slide }>
-          <Image
-            source={ require('../../../static/assets/images/walkthrough_3.jpg') }
-            style={ [styles.backgroundImage, backgroundImageInlineStyle] }
+      <Swiper showsButtons={ false } loop={ false } index={ 0 } activeDotColor="white">
+        <Image
+          style={ [styles.backgroundImage, backgroundImageInlineStyle] }
+          source={ require('../../../static/assets/images/walkthrough_1.jpg') }
+        />
+        <Image
+          style={ [styles.backgroundImage, backgroundImageInlineStyle] }
+          source={ require('../../../static/assets/images/walkthrough_2.jpg') }
+        />
+        <Image
+          style={ [styles.backgroundImage, backgroundImageInlineStyle] }
+          source={ require('../../../static/assets/images/walkthrough_3.jpg') }
+        >
+          <Button
+            block
+            light
+            style={ { marginBottom: 80, marginLeft: 20, marginRight: 20, paddingTop: 25, paddingBottom: 25 } }
+            onPress={ this._checkoutEvents }
           >
-            <TouchableOpacity style={ styles.button } onPress={ this._checkoutEvents }>
-              <Text style={ styles.buttonText }>GO VENTURE</Text>
-            </TouchableOpacity>
-          </Image>
-        </View>
+            <Text style={ { fontSize: 15 } }>Explore now</Text>
+          </Button>
+        </Image>
       </Swiper>
     );
   }

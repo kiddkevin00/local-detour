@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     backgroundColor: '#F6F6EF',
-    flexDirection: 'column',
   },
 });
 
