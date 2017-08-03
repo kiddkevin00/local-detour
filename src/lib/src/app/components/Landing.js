@@ -52,7 +52,7 @@ class Landing extends Component {
           <Swiper showsButtons={ false }>
             <Image
               style={ [styles.backgroundImage, backgroundImageInlineStyle] }
-              source={ require('../../../static/assets/images/home.jpg') }
+              source={ require('../../../static/assets/images/splash-screen.jpg') }
               resizeMode="stretch"
             >
               <Button

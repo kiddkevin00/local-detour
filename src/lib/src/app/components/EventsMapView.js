@@ -184,7 +184,7 @@ class EventsMapView extends Component {
 
     return (
       <Container>
-        <Header style={ { marginTop: 64, paddingTop: -15, backgroundColor: '#f4f7f9' } }>
+        <Header style={ { marginTop: 64, paddingTop: 0, backgroundColor: '#f4f7f9' } }>
           <Left>
             <Button
               bordered
