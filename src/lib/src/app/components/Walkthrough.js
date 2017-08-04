@@ -28,15 +28,12 @@ const styles = StyleSheet.create({
 class Walkthrough extends Component {
 
   static propTypes = {
-    updateNavbarVisibility: PropTypes.func.isRequired,
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
   _checkoutEvents = () => {
     this.props.navigator.push({
-      title: 'Events List',
       component: Events,
-      passProps: { updateNavbarVisibility: this.props.updateNavbarVisibility },
     });
   }
 

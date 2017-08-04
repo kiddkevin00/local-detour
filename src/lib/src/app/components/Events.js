@@ -5,6 +5,7 @@ import moment from 'moment';
 import {
   Container,
   Header,
+  Segment,
   Content,
   List,
   ListItem,
@@ -13,8 +14,7 @@ import {
   Left,
   Body,
   Right,
-  Grid,
-  Row,
+  Title,
   Thumbnail,
   Button,
   Text,
@@ -32,17 +32,15 @@ class Events extends Component {
 
   static propTypes = {
     //userInfo: PropTypes.object.isRequired,
-    updateNavbarVisibility: PropTypes.func.isRequired,
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
   state = {
     events: [],
+    showListView: true,
   };
 
   componentDidMount() {
-    this.props.updateNavbarVisibility(false);
-
     this.dataRef.on('value', (eventsSnapshot) => {
       const events = [];
 
@@ -103,15 +101,15 @@ class Events extends Component {
 
   _checkoutEventDetail = (event) => {
     this.props.navigator.push({
-      title: 'Event Detail',
       component: EventDetail,
       passProps: { event },
     });
   }
 
   _gotoMapView = () => {
+    this.setState({ showListView: false });
+
     this.props.navigator.push({
-      title: 'Events Map',
       component: EventMapView,
     });
   }
@@ -119,23 +117,30 @@ class Events extends Component {
   render() {
     return (
       <Container>
-        <Header style={ { height: 64, backgroundColor: '#f4f7f9' } } />
+        <Header hasSegment>
+          <Left />
+          <Body>
+            <Title>Local Detour</Title>
+          </Body>
+          <Right>
+            <Button transparent>
+              <Icon name="settings" />
+            </Button>
+          </Right>
+        </Header>
+        <Segment>
+          <Button first active={ this.state.showListView }>
+            <Text>List View</Text>
+          </Button>
+          <Button last active={ !this.state.showListView } onPress={ this._gotoMapView }>
+            <Text>Map View</Text>
+          </Button>
+        </Segment>
         <Content>
-          <Grid>
-            <Row>
-              <Body>
-                <Button info small full onPress={ this._gotoMapView }>
-                  <Text>Map View</Text>
-                </Button>
-              </Body>
-            </Row>
-            <Row>
-              <List
-                dataArray={ this.state.events }
-                renderRow={ this._renderEvent }
-              />
-            </Row>
-          </Grid>
+          <List
+            dataArray={ this.state.events }
+            renderRow={ this._renderEvent }
+          />
         </Content>
       </Container>
     );

@@ -1,3 +1,4 @@
+import Events from './Events';
 import WebViewWrapper from './common/WebViewWrapper';
 import moment from 'moment';
 import {
@@ -10,6 +11,8 @@ import {
   CardItem,
   Left,
   Body,
+  Right,
+  Title,
   Grid,
   Col,
   Thumbnail,
@@ -33,9 +36,14 @@ class EventDetail extends Component {
 
   _openPage = (url) => {
     this.props.navigator.push({
-      title: 'Source',
       component: WebViewWrapper,
       passProps: { url },
+    });
+  }
+
+  _backToEventsList = () => {
+    this.props.navigator.push({
+      component: Events,
     });
   }
 
@@ -64,7 +72,21 @@ class EventDetail extends Component {
 
     return (
       <Container>
-        <Header style={ { height: 64, backgroundColor: '#f4f7f9' } } />
+        <Header>
+          <Left>
+            <Button transparent onPress={ this._backToEventsList }>
+              <Icon name="arrow-back" />
+            </Button>
+          </Left>
+          <Body>
+            <Title>Local Detour</Title>
+          </Body>
+          <Right>
+            <Button transparent>
+              <Icon name="settings" />
+            </Button>
+          </Right>
+        </Header>
         <Content padder>
           <Card>
             <CardItem cardBody>

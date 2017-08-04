@@ -104,7 +104,6 @@ class Login extends Component {
         .signInWithEmailAndPassword(this.state.formEmail, this.state.formPassword);
 
       this.props.navigator.push({
-        title: 'Events List',
         component: Events,
         passProps: { userInfo },
       });
@@ -140,7 +139,6 @@ class Login extends Component {
 
   _gotoSignup = () => {
     this.props.navigator.push({
-      title: 'Sign Up',
       component: Signup,
     });
   }

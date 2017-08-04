@@ -28,15 +28,12 @@ const styles = StyleSheet.create({
 class Landing extends Component {
 
   static propTypes = {
-    updateNavbarVisibility: PropTypes.func.isRequired,
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
   _checkoutWalkthrough = () => {
     this.props.navigator.push({
-      title: 'Get Started',
       component: Walkthrough,
-      passProps: { updateNavbarVisibility: this.props.updateNavbarVisibility },
     });
   }
 
