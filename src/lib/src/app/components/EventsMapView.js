@@ -219,7 +219,7 @@ class EventsMapView extends Component {
         </Segment>
         <Content scrollEnabled={ false }>
           <Grid>
-            <Row style={ { } }>
+            <Row>
               <Left>
                 <Button
                   full
@@ -259,7 +259,7 @@ class EventsMapView extends Component {
                 <MapView
                   style={ styles.map }
                   provider={ null }
-                  followsUserLocation={ false }
+                  followsUserLocation={ true }
                   showsScale={ true }
                   showsCompass={ true }
                   zoomEnabled={ true }

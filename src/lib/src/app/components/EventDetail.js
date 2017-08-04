@@ -21,6 +21,7 @@ import {
   Icon,
 } from 'native-base';
 import {
+  Alert,
   Image,
 } from 'react-native';
 import React, { Component } from 'react';
@@ -37,7 +38,10 @@ class EventDetail extends Component {
   _openPage = (url) => {
     this.props.navigator.push({
       component: WebViewWrapper,
-      passProps: { url },
+      passProps: {
+        url,
+        backToComponent: EventDetail,
+      },
     });
   }
 
@@ -162,7 +166,7 @@ class EventDetail extends Component {
         </Content>
         <Footer>
           <FooterTab>
-            <Button full onPress={ () => global.alert('Saved!') }>
+            <Button full onPress={ () => Alert.alert('Success', 'Added to your calender!') }>
               <Text>Save</Text>
             </Button>
           </FooterTab>
