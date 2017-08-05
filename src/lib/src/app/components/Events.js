@@ -1,5 +1,6 @@
 import EventMapView from './EventsMapView';
 import EventDetail from './EventDetail';
+import Setting from './Setting';
 import { firebaseDb } from '../proxies/FirebaseProxy';
 import moment from 'moment';
 import {
@@ -31,7 +32,6 @@ import PropTypes from 'prop-types';
 class Events extends Component {
 
   static propTypes = {
-    //userInfo: PropTypes.object.isRequired,
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
@@ -109,8 +109,14 @@ class Events extends Component {
   _gotoMapView = () => {
     this.setState({ showListView: false });
 
-    this.props.navigator.push({
+    this.props.navigator.replace({
       component: EventMapView,
+    });
+  }
+
+  _gotoSetting = () => {
+    this.props.navigator.push({
+      component: Setting,
     });
   }
 
@@ -120,10 +126,10 @@ class Events extends Component {
         <Header hasSegment>
           <Left />
           <Body>
-            <Title>Local Detour</Title>
+            <Title>localDetour</Title>
           </Body>
           <Right>
-            <Button transparent>
+            <Button transparent onPress={ this._gotoSetting }>
               <Icon name="settings" />
             </Button>
           </Right>

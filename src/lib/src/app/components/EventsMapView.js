@@ -1,5 +1,6 @@
 import Events from './Events';
 import EventDetail from './EventDetail';
+import Setting from './Setting';
 import { firebaseDb } from '../proxies/FirebaseProxy';
 import MapView from 'react-native-maps';
 import moment from 'moment';
@@ -187,8 +188,14 @@ class EventsMapView extends Component {
   _gotoListView = () => {
     this.setState({ showMapView: false });
 
-    this.props.navigator.push({
+    this.props.navigator.replace({
       component: Events,
+    });
+  }
+
+  _gotoSetting = () => {
+    this.props.navigator.push({
+      component: Setting,
     });
   }
 
@@ -201,10 +208,10 @@ class EventsMapView extends Component {
         <Header hasSegment>
           <Left />
           <Body>
-            <Title>Local Detour</Title>
+            <Title>localDetour</Title>
           </Body>
           <Right>
-            <Button transparent>
+            <Button transparent onPress={ this._gotoSetting }>
               <Icon name="settings" />
             </Button>
           </Right>
@@ -228,7 +235,7 @@ class EventsMapView extends Component {
                   style={ { borderColor: '#A9A9A9', backgroundColor: this.state.filters[0].selected ? '#00CED1' : 'white' } }
                   onPress={ this._onSelectFilter.bind(this, this.state.filters[0]) }
                 >
-                  <Text style={ { color: '#A9A9A9' } }>{ this.state.filters[0].name }</Text>
+                  <Text style={ { color: '#A9A9A9', fontSize: 10 } }>{ this.state.filters[0].name }</Text>
                 </Button>
               </Left>
               <Body>
@@ -239,7 +246,7 @@ class EventsMapView extends Component {
                   style={ { borderColor: '#A9A9A9', backgroundColor: this.state.filters[1].selected ? '#00CED1' : 'white' } }
                   onPress={ this._onSelectFilter.bind(this, this.state.filters[1]) }
                 >
-                  <Text style={ { color: '#A9A9A9' } }>{ this.state.filters[1].name }</Text>
+                  <Text style={ { color: '#A9A9A9', fontSize: 10 } }>{ this.state.filters[1].name }</Text>
                 </Button>
               </Body>
               <Right>
@@ -250,7 +257,7 @@ class EventsMapView extends Component {
                   style={ { borderColor: '#A9A9A9', backgroundColor: this.state.filters[2].selected ? '#00CED1' : 'white' } }
                   onPress={ this._onSelectFilter.bind(this, this.state.filters[2]) }
                 >
-                  <Text style={ { color: '#A9A9A9', fontSize: 13 } }>{ this.state.filters[2].name }</Text>
+                  <Text style={ { color: '#A9A9A9', fontSize: 10 } }>{ this.state.filters[2].name }</Text>
                 </Button>
               </Right>
             </Row>
@@ -259,7 +266,7 @@ class EventsMapView extends Component {
                 <MapView
                   style={ styles.map }
                   provider={ null }
-                  followsUserLocation={ true }
+                  followsUserLocation={ false }
                   showsScale={ true }
                   showsCompass={ true }
                   zoomEnabled={ true }

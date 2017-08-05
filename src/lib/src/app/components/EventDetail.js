@@ -1,3 +1,4 @@
+import Setting from './Setting';
 import Events from './Events';
 import WebViewWrapper from './common/WebViewWrapper';
 import moment from 'moment';
@@ -35,19 +36,20 @@ class EventDetail extends Component {
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
-  _openPage = (url) => {
+  _openWebPage = (url) => {
     this.props.navigator.push({
       component: WebViewWrapper,
-      passProps: {
-        url,
-        backToComponent: EventDetail,
-      },
+      passProps: { url },
     });
   }
 
   _backToEventsList = () => {
+    this.props.navigator.pop();
+  }
+
+  _gotoSetting = () => {
     this.props.navigator.push({
-      component: Events,
+      component: Setting,
     });
   }
 
@@ -83,10 +85,10 @@ class EventDetail extends Component {
             </Button>
           </Left>
           <Body>
-            <Title>Local Detour</Title>
+            <Title>localDetour</Title>
           </Body>
           <Right>
-            <Button transparent>
+            <Button transparent onPress={ this._gotoSetting }>
               <Icon name="settings" />
             </Button>
           </Right>
@@ -136,7 +138,7 @@ class EventDetail extends Component {
             <CardItem bordered>
               <Body>
                 <Text>More Info</Text>
-                <Text note onPress={ this._openPage.bind(this, event.externalLink) }>
+                <Text note onPress={ this._openWebPage.bind(this, event.externalLink) }>
                   { event.externalLink }
                 </Text>
               </Body>

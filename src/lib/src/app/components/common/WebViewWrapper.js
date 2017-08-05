@@ -23,14 +23,11 @@ class WebViewWrapper extends Component {
 
   static propTypes = {
     url: PropTypes.string.isRequired,
-    backToComponent: PropTypes.func.isRequired,
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
-  _backToEventDetail = () => {
-    this.props.navigator.push({
-      component: this.props.backToComponent,
-    });
+  _backToComponent = () => {
+    this.props.navigator.pop();
   }
 
   render() {
@@ -40,7 +37,7 @@ class WebViewWrapper extends Component {
       <Container>
         <Header searchBar rounded>
           <Left>
-            <Button transparent onPress={ this._backToEventDetail }>
+            <Button transparent onPress={ this._backToComponent }>
               <Icon name="arrow-back" />
             </Button>
           </Left>
