@@ -90,7 +90,7 @@ class Events extends Component {
               <Icon name="navigate" />
               <Text>Going</Text>
             </Button>
-            <Button iconLeft transparent onPress={ this._addToCalender.bind(this, event) }>
+            <Button iconLeft transparent onPress={ this._requestAndAddToCalender.bind(this, event) }>
               <Icon name="bookmark" />
               <Text>Save</Text>
             </Button>
@@ -118,26 +118,40 @@ class Events extends Component {
     });
   }
 
-  _addToCalender = async (event) => {
-    const authorize = await RNCalendarEvents.authorizeEventStore();
-
-    if (authorize === 'authorized') {
-      const calendars = await RNCalendarEvents.findCalendars();
-      // use default calendar
-
-      RNCalendarEvents.saveEvent('test123', {
-           location:'New York, NY',
-           startDate: '2017-08-19T19:26:00.000Z', //use ISO date
-           description: event.name,
-           endDate: '2017-08-20T19:26:00.000Z',
-           calendarId: calendars[0].id
-      }).then(savedEvent => {
-          Linking.openURL(`calshow:${new Date().getTime()}`);
-      }).catch(e => {
-        console.log('errr', e)
-      })
+  _addToCalendar = async (event) => {
+    const calendars = await RNCalendarEvents.findCalendars();
+    const defaultCalendar = calendars.find((c) => c.allowsModifications);
+    // use default calendar
+    const config = {
+      location: event.where.address ,
+      startDate: event.when.startTimestamp ?
+      JSON.parse(JSON.stringify(new Date(event.when.startTimestamp)))
+       : JSON.parse(JSON.stringify(new Date())),
+      description: event.name,
+      endDate: event.when.endTimestamp ?
+      JSON.parse(JSON.stringify(new Date(event.when.endTimestamp)))
+       : JSON.parse(JSON.stringify(new Date())),
+      calendarId: defaultCalendar.id
     }
-}
+    const savedEvent = await RNCalendarEvents.saveEvent(event.name, config);
+    const referenceDate = new Date(2011, 1, 11); // IOS reference date
+    const secondsSinceRefDate = event.when.startTimestamp - referenceDate.getTime();
+
+    if (savedEvent) Linking.openURL(`calshow:${secondsSinceRefDate}`);
+  }
+
+  _requestAndAddToCalender = async (event) => {
+    const authorizeStatus = await RNCalendarEvents.authorizationStatus();
+
+    if (authorizeStatus === 'authorized') {
+      return this._addToCalendar(event);
+    }
+    const request = await RNCalendarEvents.authorizeEventStore();
+
+    if (request === 'authorized') {
+      return this._addToCalendar(event)
+    }
+  }
 
 
   render() {
