@@ -134,8 +134,8 @@ class Events extends Component {
       calendarId: defaultCalendar.id
     }
     const savedEvent = await RNCalendarEvents.saveEvent(event.name, config);
-    const referenceDate = new Date(2011, 1, 11); // IOS reference date
-    const secondsSinceRefDate = event.when.startTimestamp - referenceDate.getTime();
+    const referenceDate = moment.utc([2001]); // IOS reference date
+    const secondsSinceRefDate = (event.when.startTimestamp / 1000) - referenceDate.unix();
 
     if (savedEvent) Linking.openURL(`calshow:${secondsSinceRefDate}`);
   }
