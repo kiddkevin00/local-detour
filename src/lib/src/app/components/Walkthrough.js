@@ -42,31 +42,45 @@ class Walkthrough extends Component {
       width: Dimensions.get('window').width,
       height: Dimensions.get('window').height,
     };
+    const buttonStyle = {
+      marginBottom: 80,
+      marginLeft: 20,
+      marginRight: 20,
+      paddingTop: 25,
+      paddingBottom: 25,
+    };
 
     return (
-      <Swiper showsButtons={ false } loop={ false } index={ 0 } activeDotColor="white">
-        <Image
-          style={ [styles.backgroundImage, backgroundImageInlineStyle] }
-          source={ require('../../../static/assets/images/walkthrough_1.jpg') }
-        />
-        <Image
-          style={ [styles.backgroundImage, backgroundImageInlineStyle] }
-          source={ require('../../../static/assets/images/walkthrough_2.jpg') }
-        />
-        <Image
-          style={ [styles.backgroundImage, backgroundImageInlineStyle] }
-          source={ require('../../../static/assets/images/walkthrough_3.jpg') }
-        >
-          <Button
-            block
-            light
-            style={ { marginBottom: 80, marginLeft: 20, marginRight: 20, paddingTop: 25, paddingBottom: 25 } }
-            onPress={ this._checkoutEvents }
-          >
-            <Text style={ { fontSize: 15 } }>Explore now</Text>
-          </Button>
-        </Image>
-      </Swiper>
+      <Container>
+        <Content>
+          <Swiper showsButtons={ false } loop={ false } index={ 0 } activeDotColor="white">
+            <Image
+              style={ [styles.backgroundImage, backgroundImageInlineStyle] }
+              source={ require('../../../static/assets/images/walkthrough_1.jpg') }
+              resizeMode="stretch"
+            />
+            <Image
+              style={ [styles.backgroundImage, backgroundImageInlineStyle] }
+              source={ require('../../../static/assets/images/walkthrough_2.jpg') }
+              resizeMode="stretch"
+            />
+            <Image
+              style={ [styles.backgroundImage, backgroundImageInlineStyle] }
+              source={ require('../../../static/assets/images/walkthrough_3.jpg') }
+              resizeMode="stretch"
+            >
+              <Button
+                block
+                light
+                style={ buttonStyle }
+                onPress={ this._checkoutEvents }
+              >
+                <Text style={ { fontSize: 15 } }>Explore now</Text>
+              </Button>
+            </Image>
+          </Swiper>
+        </Content>
+      </Container>
     );
   }
 

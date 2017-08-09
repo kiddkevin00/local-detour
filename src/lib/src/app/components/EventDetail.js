@@ -1,5 +1,4 @@
 import Setting from './Setting';
-import Events from './Events';
 import WebViewWrapper from './common/WebViewWrapper';
 import moment from 'moment';
 import {
