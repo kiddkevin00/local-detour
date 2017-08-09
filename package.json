@@ -22,7 +22,7 @@
     "prepush": "npm run branch-check && npm run lint && npm run coverage:unit-test && npm run coverage:update-thresholds",
     "version:bump": "npm run version:instruction && ./bin/version-bump.js",
     "-------------- INTERNAL -------------": "",
-    "eslint": "eslint --format 'node_modules/eslint-friendly-formatter' --ext .js,.jsx src/lib/src/ src/spec/ bin/",
+    "eslint": "eslint --format 'node_modules/eslint-friendly-formatter' --ext .js,.jsx src/lib/src/ src/spec/ bin/ firebase-cloud-functions/functions/index.js",
     "jest-unit-test": "jest",
     "coverage:unit-test": "npm run jest-unit-test -- --coverage",
     "coverage:ui-test": "",
