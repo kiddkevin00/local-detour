@@ -48,7 +48,7 @@ class Events extends Component {
         const event = eventSnapshot.val();
         const today = moment();
 
-        if (today.isBefore(event.when.endTimestamp)) {
+        if (today.isBefore(event.when && event.when.endTimestamp)) {
           events.push(event);
         }
       });
@@ -124,13 +124,17 @@ class Events extends Component {
     return (
       <Container>
         <Header hasSegment>
-          <Left />
+          <Left>
+            <Button transparent onPress={ this._gotoSetting }>
+              <Icon name="settings" />
+            </Button>
+          </Left>
           <Body>
             <Title>localDetour</Title>
           </Body>
           <Right>
-            <Button transparent onPress={ this._gotoSetting }>
-              <Icon name="settings" />
+            <Button transparent onPress={ this._gotoMapView }>
+              <Icon name="map" />
             </Button>
           </Right>
         </Header>

@@ -70,24 +70,25 @@ exports.sendEventPushNotification = functions.database.ref('/nyc/events/{eventId
   if (!previousEventSnapShot.exists()) {
     const notification = {
       title: 'localDetour',
-      body: `New Event\n${JSON.stringify(currentEventSnapshot.val(), null, 2)}`,
+      body: `Check out the new local event - ${currentEventSnapshot.val().name || 'N/A'}.`,
+      //badge: '1', /// TODO
     };
 
-    console.log(`Sending push notification: ${notification} to ${messagingTopic}`);
+    console.log(`Sending push notification: ${JSON.stringify(notification, null, 2)} to ${messagingTopic}`);
 
     return admin.messaging()
       .sendToTopic(messagingTopic, { notification });
   }
 
   // Sends event update push notification when the event is updated.
-  if (currentEventSnapshot.data.changed()) {
+  if (currentEventSnapshot.changed()) {
     const notification = {
       title: 'localDetour',
-      body: `Event Update\n${JSON.stringify(currentEventSnapshot.val(), null, 2)}`,
-      badge: '1',
+      body: `Check out the update information for ${currentEventSnapshot.val().name || 'N/A'}.`,
+      //badge: '1', /// TODO
     };
 
-    console.log(`Sending push notification: ${notification} to ${messagingTopic}`);
+    console.log(`Sending push notification: ${JSON.stringify(notification, null, 2)} to ${messagingTopic}`);
 
     return admin.messaging()
       .sendToTopic(messagingTopic, { notification });

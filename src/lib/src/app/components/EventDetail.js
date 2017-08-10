@@ -86,11 +86,7 @@ class EventDetail extends Component {
           <Body>
             <Title>localDetour</Title>
           </Body>
-          <Right>
-            <Button transparent onPress={ this._gotoSetting }>
-              <Icon name="settings" />
-            </Button>
-          </Right>
+          <Right />
         </Header>
         <Content padder>
           <Card>

@@ -206,13 +206,17 @@ class EventsMapView extends Component {
     return (
       <Container>
         <Header hasSegment>
-          <Left />
+          <Left>
+            <Button transparent onPress={ this._gotoSetting }>
+              <Icon name="settings" />
+            </Button>
+          </Left>
           <Body>
             <Title>localDetour</Title>
           </Body>
           <Right>
-            <Button transparent onPress={ this._gotoSetting }>
-              <Icon name="settings" />
+            <Button transparent onPress={ this._gotoListView }>
+              <Icon name="list-box" />
             </Button>
           </Right>
         </Header>

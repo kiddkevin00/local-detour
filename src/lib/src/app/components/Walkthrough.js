@@ -15,7 +15,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
-// [TODO] Check the sample styles on GitHub.
 const styles = StyleSheet.create({
   backgroundImage: {
     //flexGrow: 1,
