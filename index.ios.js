@@ -4,8 +4,6 @@ import {
   AppRegistry,
   StyleSheet,
   NavigatorIOS,
-  Platform,
-  Alert,
 } from 'react-native';
 import React, { Component } from 'react';
 
