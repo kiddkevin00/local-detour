@@ -80,7 +80,7 @@ class EventsMapView extends Component {
         const event = eventSnapshot.val();
         const today = moment();
 
-        if (today.isBefore(event.when.endTimestamp)) {
+        if (today.isBefore(event.when && event.when.endTimestamp)) {
           events.push(event);
         }
       });

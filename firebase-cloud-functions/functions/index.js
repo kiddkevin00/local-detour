@@ -84,7 +84,7 @@ exports.sendEventPushNotification = functions.database.ref('/nyc/events/{eventId
   if (currentEventSnapshot.changed()) {
     const notification = {
       title: 'localDetour',
-      body: `Check out the update information for ${currentEventSnapshot.val().name || 'N/A'}.`,
+      body: `Check out the new information for ${currentEventSnapshot.val().name || 'N/A'}.`,
       //badge: '1', /// TODO
     };
 

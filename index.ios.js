@@ -1,4 +1,3 @@
-import PushNotification from './src/lib/src/app/utils/PushNotification';
 import Landing from './src/lib/src/app/components/Landing';
 import {
   AppRegistry,
@@ -41,6 +40,5 @@ class LocalDetour extends Component {
 }
 
 AppRegistry.registerComponent('localDetour', () => LocalDetour);
-PushNotification.subscribeToTopic();
 
 export default LocalDetour;

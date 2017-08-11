@@ -1,3 +1,4 @@
+import PushNotification from '../utils/PushNotification';
 import EventMapView from './EventsMapView';
 import EventDetail from './EventDetail';
 import Setting from './Setting';
@@ -41,6 +42,9 @@ class Events extends Component {
   };
 
   componentDidMount() {
+    PushNotification.requestPermission();
+    PushNotification.subscribeToTopic();
+
     this.dataRef.on('value', (eventsSnapshot) => {
       const events = [];
 

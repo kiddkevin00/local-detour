@@ -15,31 +15,38 @@ const messagingTopic = 'nyc-events';
 class PushNotification {
 
   static subscribeToTopic = async () => {
-    // Asks the OS for permission to show notifications.
-    try {
-      PushNotification._requestPermission();
+    FCM.setBadgeNumber(0);
 
-      /*
-       * Subscribes this device to a channel.
-       * This makes it easy to send notifications to a group of devices.
-       */
-      FCM.subscribeToTopic(messagingTopic);
+    /*
+     * Subscribes this device to a channel.
+     * This makes it easy to send notifications to a group of devices.
+     */
+    FCM.subscribeToTopic(messagingTopic);
 
-      PushNotification._listenToPushNofication();
-      PushNotification.fetchUniqueToken();
-      PushNotification.fetchRefreshToken();
-    } catch (err) {
-      console.log(err);
-    }
+    PushNotification._listenToPushNofication();
   }
 
-  static _requestPermission = async () => {
-    return FCM.requestPermissions();
+  /*
+   * Asks the OS for permission to show notifications.
+   */
+  static requestPermission = async () => FCM.requestPermissions()
+
+  /*
+   * Generates and/or receives a unique notification token for this device.
+   * This makes it easy to send messages to a specific user.
+   */
+  static fetchUniqueToken = async () => FCM.getFCMToken()
+
+  static handleRefreshToken() {
+    FCM.on(FCMEvent.RefreshToken, (token) => {
+      console.log(token);
+
+    });
   }
 
   static _listenToPushNofication() {
-    FCM.on(FCMEvent.Notification, async (notif) => {
-      console.log(notif);
+    FCM.on(FCMEvent.Notification, (notif) => {
+      Alert.alert(notif.aps.alert.title, notif.aps.alert.body);
 
       /*
        * The iOS devices need to have some special handling to "finish" the incoming
@@ -69,24 +76,6 @@ class PushNotification {
     });
   }
 
-  /*
-   * Generates and/or receives a unique notification token for this device.
-   * This makes it easy to send messages to a specific user.
-   */
-  static fetchUniqueToken() {
-    FCM.getFCMToken()
-      .then((token) => {
-        console.log(token);
-
-      });
-  }
-
-  static fetchRefreshToken() {
-    FCM.on(FCMEvent.RefreshToken, (token) => {
-      console.log(token);
-
-    });
-  }
 }
 
 export default PushNotification;
