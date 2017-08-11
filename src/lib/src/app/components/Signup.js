@@ -122,7 +122,6 @@ class Signup extends Component {
       userInfo.sendEmailVerification();
 
       this.props.navigator.push({
-        title: 'Events List',
         component: Events,
         passProps: { userInfo },
       });
@@ -165,7 +164,6 @@ class Signup extends Component {
 
   _gotoLogin = () => {
     this.props.navigator.push({
-      title: 'Log In',
       component: Login,
     });
   }
@@ -179,7 +177,6 @@ class Signup extends Component {
       const userInfo = await firebaseAuth.signInAnonymously();
 
       this.props.navigator.push({
-        title: 'Events List',
         component: Events,
         passProps: { userInfo },
       });

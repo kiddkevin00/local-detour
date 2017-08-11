@@ -1,25 +1,64 @@
-import { StyleSheet, View, WebView } from 'react-native';
-import React from 'react';
+import {
+  WebView,
+  View,
+  Dimensions,
+} from 'react-native';
+import {
+  Container,
+  Header,
+  Content,
+  Left,
+  Right,
+  Item,
+  Input,
+  Button,
+  Text,
+  Icon,
+} from 'native-base';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    backgroundColor: '#F6F6EF',
-    flexDirection: 'column',
-  },
-});
+class WebViewWrapper extends Component {
 
-function WebViewWrapper(props) {
-  return (
-    <View style={ styles.container }>
-      <WebView source={ { uri: props.url } } />
-    </View>
-  );
+  static propTypes = {
+    url: PropTypes.string.isRequired,
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  };
+
+  _backToComponent = () => {
+    this.props.navigator.pop();
+  }
+
+  render() {
+    const { width, height } = Dimensions.get('window');
+
+    return (
+      <Container>
+        <Header searchBar rounded>
+          <Left>
+            <Button transparent onPress={ this._backToComponent }>
+              <Icon name="arrow-back" />
+            </Button>
+          </Left>
+          <Item>
+            <Icon name="ios-search" />
+            <Input />
+          </Item>
+          <Right>
+            <Button transparent>
+              <Text>Search</Text>
+            </Button>
+          </Right>
+        </Header>
+        <Content>
+          <View style={ { width, height } }>
+            <WebView source={ { uri: this.props.url } } />
+          </View>
+        </Content>
+      </Container>
+    );
+  }
 }
-WebViewWrapper.propTypes = {
-  url: PropTypes.string.isRequired,
-};
 
 export { WebViewWrapper as default };

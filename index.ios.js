@@ -24,10 +24,6 @@ class LocalDetour extends Component {
     isNavbarHidden: true,
   };
 
-  updateNavbarVisibility = (isNavbarHidden) => {
-    this.setState({ isNavbarHidden });
-  }
-
   render() {
     return (
       <NavigatorIOS
@@ -36,7 +32,6 @@ class LocalDetour extends Component {
         initialRoute={ {
           title: 'Welcome',
           component: Landing,
-          passProps: { updateNavbarVisibility: this.updateNavbarVisibility },
         } }
       />
     );

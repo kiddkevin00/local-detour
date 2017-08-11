@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
   title: {
     alignSelf: 'center',
     marginBottom: 20,
-    color: '#F5F5F5',
     fontSize: 25,
+    color: '#F5F5F5',
   },
   formInput: {
     marginBottom: 10,
@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     padding: 4,
     height: 50,
-    color: 'white',
     fontSize: 23,
+    color: 'white',
   },
   loginButton: {
     justifyContent: 'center',
@@ -68,16 +68,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'orange',
   },
   footerText: {
-    color: '#a3a7b2',
     fontSize: 14,
+    color: '#a3a7b2',
   },
   loginButtonText: {
-    color: '#111',
     fontSize: 18,
+    color: '#111',
   },
   signupButtonText: {
-    color: 'white',
     fontSize: 18,
+    color: 'white',
   },
 });
 
@@ -104,7 +104,6 @@ class Login extends Component {
         .signInWithEmailAndPassword(this.state.formEmail, this.state.formPassword);
 
       this.props.navigator.push({
-        title: 'Events List',
         component: Events,
         passProps: { userInfo },
       });
@@ -140,7 +139,6 @@ class Login extends Component {
 
   _gotoSignup = () => {
     this.props.navigator.push({
-      title: 'Sign Up',
       component: Signup,
     });
   }

@@ -22,7 +22,7 @@
     "prepush": "npm run branch-check && npm run lint && npm run coverage:unit-test && npm run coverage:update-thresholds",
     "version:bump": "npm run version:instruction && ./bin/version-bump.js",
     "-------------- INTERNAL -------------": "",
-    "eslint": "eslint --format 'node_modules/eslint-friendly-formatter' --ext .js,.jsx src/lib/src/ src/spec/ bin/",
+    "eslint": "eslint --format 'node_modules/eslint-friendly-formatter' --ext .js,.jsx src/lib/src/ src/spec/ bin/ firebase-cloud-functions/functions/index.js",
     "jest-unit-test": "jest",
     "coverage:unit-test": "npm run jest-unit-test -- --coverage",
     "coverage:ui-test": "",
@@ -59,7 +59,8 @@
     "react": "16.0.0-alpha.12",
     "react-native": "0.46.1",
     "react-native-calendar-events": "1.4.1",
-    "react-native-maps": "^0.15.3",
+    "react-native-fcm": "8.0.0",
+    "react-native-maps": "0.15.3",
     "react-native-swiper": "1.5.4",
     "react-navigation": "1.0.0-beta.11"
   },

@@ -21,7 +21,6 @@ class EventMapLabel extends Component {
 
   _checkoutEventDetail = (event) => {
     this.props.navigator.push({
-      title: 'Event Detail',
       component: EventDetail,
       passProps: { event },
     });

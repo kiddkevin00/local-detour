@@ -1,4 +1,5 @@
 import WebViewWrapper from './common/WebViewWrapper';
+import RNCalendarEvents from 'react-native-calendar-events';
 import moment from 'moment';
 import {
   Container,
@@ -10,6 +11,8 @@ import {
   CardItem,
   Left,
   Body,
+  Right,
+  Title,
   Grid,
   Col,
   Thumbnail,
@@ -18,6 +21,8 @@ import {
   Icon,
 } from 'native-base';
 import {
+  Alert,
+  Linking,
   Image,
 } from 'react-native';
 import React, { Component } from 'react';
@@ -31,12 +36,54 @@ class EventDetail extends Component {
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
-  _openPage = (url) => {
+  _requestAndAddToCalender = async function (event) {
+    const authorizeStatus = await RNCalendarEvents.authorizationStatus();
+
+    if (authorizeStatus === 'authorized') {
+      return this._addToCalendar(event);
+    }
+    const request = await RNCalendarEvents.authorizeEventStore();
+
+    if (request === 'authorized') {
+      return this._addToCalendar(event);
+    }
+  }
+
+  _addToCalendar = async function (event) {
+    const calendars = await RNCalendarEvents.findCalendars();
+    const writableCalendar = calendars.find((cal) => cal.allowsModifications);
+    const config = {
+      calendarId: writableCalendar.id,
+      location: event.where.address,
+      startDate: event.when.startTimestamp ? new Date(event.when.startTimestamp) : null,
+      endDate: event.when.endTimestamp ? new Date(event.when.endTimestamp) : null,
+      alarms: [{ date: -60 * 3 }], // 3 hours.
+      description: event.description,
+      notes: event.description,
+    };
+    const referenceDate = moment.utc([2001]); // Default reference date for iOS.
+    const secondsSinceRefDate = (event.when.startTimestamp / 1000) - referenceDate.unix();
+
+    try {
+      const savedEvent = await RNCalendarEvents.saveEvent(event.name, config);
+
+      if (savedEvent) {
+        Linking.openURL(`calshow:${secondsSinceRefDate}`);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  _openWebPage(url) {
     this.props.navigator.push({
-      title: 'Source',
       component: WebViewWrapper,
       passProps: { url },
     });
+  }
+
+  _backToEventsList = () => {
+    this.props.navigator.pop();
   }
 
   render() {
@@ -64,7 +111,17 @@ class EventDetail extends Component {
 
     return (
       <Container>
-        <Header style={ { height: 64, backgroundColor: '#f4f7f9' } } />
+        <Header>
+          <Left>
+            <Button transparent onPress={ this._backToEventsList }>
+              <Icon name="arrow-back" />
+            </Button>
+          </Left>
+          <Body>
+            <Title>localDetour</Title>
+          </Body>
+          <Right />
+        </Header>
         <Content padder>
           <Card>
             <CardItem cardBody>
@@ -110,7 +167,7 @@ class EventDetail extends Component {
             <CardItem bordered>
               <Body>
                 <Text>More Info</Text>
-                <Text note onPress={ this._openPage.bind(this, event.externalLink) }>
+                <Text note onPress={ this._openWebPage.bind(this, event.externalLink) }>
                   { event.externalLink }
                 </Text>
               </Body>
@@ -140,7 +197,7 @@ class EventDetail extends Component {
         </Content>
         <Footer>
           <FooterTab>
-            <Button full onPress={ () => global.alert('Saved!') }>
+            <Button full onPress={ this._requestAndAddToCalender.bind(this, event) }>
               <Text>Save</Text>
             </Button>
           </FooterTab>
