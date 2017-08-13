@@ -137,7 +137,7 @@ class Events extends Component {
       const savedEvent = await RNCalendarEvents.saveEvent(event.name, config);
 
       if (savedEvent) {
-        Linking.openURL(`calshow:${secondsSinceRefDate}`);
+        //Linking.openURL(`calshow:${secondsSinceRefDate}`);
       }
     } catch (err) {
       console.log(err);
