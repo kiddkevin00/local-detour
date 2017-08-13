@@ -1,9 +1,9 @@
 import PushNotification from '../utils/PushNotification';
+import CalendarEvents from '../utils/CalendarEvents';
 import EventMapView from './EventsMapView';
 import EventDetail from './EventDetail';
 import Setting from './Setting';
 import { firebaseDb } from '../proxies/FirebaseProxy';
-import RNCalendarEvents from 'react-native-calendar-events';
 import moment from 'moment';
 import {
   Container,
@@ -24,8 +24,8 @@ import {
   Icon,
 } from 'native-base';
 import {
+  Alert,
   AsyncStorage,
-  Linking,
   Image,
 } from 'react-native';
 import React, { Component } from 'react';
@@ -94,13 +94,13 @@ class Events extends Component {
         </CardItem>
         <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
           <Left>
-            <Button iconLeft transparent onPress={ this._requestAndAddToCalender.bind(this, event) }>
+            <Button iconLeft transparent onPress={ this._saveToCalenderApp.bind(this, event) }>
               <Icon name="navigate" />
-              <Text>Going</Text>
-            </Button>
-            <Button iconLeft transparent onPress={ this._requestAndAddToCalender.bind(this, event) }>
-              <Icon name="bookmark" />
               <Text>Save</Text>
+            </Button>
+            <Button iconLeft transparent onPress={ () => Alert.alert('Success', 'Shared on Facebook!') }>
+              <Icon name="bookmark" />
+              <Text>Share</Text>
             </Button>
           </Left>
           <Right>
@@ -111,43 +111,8 @@ class Events extends Component {
     </ListItem>
   )
 
-  _requestAndAddToCalender = async function (event) {
-    const authorizeStatus = await RNCalendarEvents.authorizationStatus();
-
-    if (authorizeStatus === 'authorized') {
-      return this._addToCalendar(event);
-    }
-    const request = await RNCalendarEvents.authorizeEventStore();
-
-    if (request === 'authorized') {
-      return this._addToCalendar(event);
-    }
-  }
-
-  _addToCalendar = async function (event) {
-    const calendars = await RNCalendarEvents.findCalendars();
-    const writableCalendar = calendars.find((cal) => cal.allowsModifications);
-    const config = {
-      calendarId: writableCalendar.id,
-      location: event.where.address,
-      startDate: event.when.startTimestamp ? new Date(event.when.startTimestamp) : null,
-      endDate: event.when.endTimestamp ? new Date(event.when.endTimestamp) : null,
-      alarms: [{ date: -60 * 3 }], // 3 hours.
-      description: event.description,
-      notes: event.description,
-    };
-    const referenceDate = moment.utc([2001]); // Default reference date for iOS.
-    const secondsSinceRefDate = (event.when.startTimestamp / 1000) - referenceDate.unix();
-
-    try {
-      const savedEvent = await RNCalendarEvents.saveEvent(event.name, config);
-
-      if (savedEvent) {
-        //Linking.openURL(`calshow:${secondsSinceRefDate}`);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+  _saveToCalenderApp = async function (event) {
+    return CalendarEvents.saveToCalendarEvents(event);
   }
 
   _checkoutEventDetail(event) {
