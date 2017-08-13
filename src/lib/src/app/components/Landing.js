@@ -1,4 +1,5 @@
 import Walkthrough from './Walkthrough';
+import Events from './Events';
 import Swiper from 'react-native-swiper';
 import {
   Container,
@@ -7,6 +8,7 @@ import {
   Text,
 } from 'native-base';
 import {
+  AsyncStorage,
   Image,
   StyleSheet,
   Dimensions,
@@ -29,6 +31,21 @@ class Landing extends Component {
   static propTypes = {
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
+
+  componentWillMount = () => {
+    AsyncStorage.getItem('@SystemSetting:shouldSkipWalkthrough')
+      .then((shouldSkipWalkthrough) => {
+        if (shouldSkipWalkthrough === 'TRUE') {
+          this.props.navigator.replace({
+            component: Events,
+          });
+        }
+      })
+      .catch((err) => {
+        // Error happens when retrieving data.
+        console.log(err);
+      });
+  }
 
   _checkoutWalkthrough = () => {
     this.props.navigator.push({

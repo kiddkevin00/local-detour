@@ -1,5 +1,6 @@
 import Landing from './src/lib/src/app/components/Landing';
 import {
+  AsyncStorage,
   AppRegistry,
   StyleSheet,
   NavigatorIOS,
@@ -20,15 +21,11 @@ const styles = StyleSheet.create({
 
 class LocalDetour extends Component {
 
-  state = {
-    isNavbarHidden: true,
-  };
-
   render() {
     return (
       <NavigatorIOS
         style={ styles.container }
-        navigationBarHidden={ this.state.isNavbarHidden }
+        navigationBarHidden={ true }
         initialRoute={ {
           title: 'Welcome',
           component: Landing,

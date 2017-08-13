@@ -24,7 +24,7 @@ import {
   Icon,
 } from 'native-base';
 import {
-  Alert,
+  AsyncStorage,
   Linking,
   Image,
 } from 'react-native';
@@ -46,6 +46,12 @@ class Events extends Component {
   componentDidMount() {
     PushNotification.requestPermission();
     PushNotification.subscribeToTopic();
+
+    AsyncStorage.setItem('@SystemSetting:shouldSkipWalkthrough', 'TRUE')
+      .catch((err) => {
+        // Error saving data
+        console.log(err);
+      });
 
     this.dataRef.on('value', (eventsSnapshot) => {
       const events = [];

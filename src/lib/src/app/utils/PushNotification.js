@@ -14,7 +14,7 @@ const messagingTopic = 'nyc-events';
 
 class PushNotification {
 
-  static subscribeToTopic = async () => {
+  static subscribeToTopic = () => {
     FCM.setBadgeNumber(0);
 
     /*
