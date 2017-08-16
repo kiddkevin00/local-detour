@@ -32,12 +32,20 @@ class Landing extends Component {
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
-  componentWillMount = () => {
+  state = {
+    waitingForAsyncOps: true,
+  };
+
+  componentDidMount() {
     AsyncStorage.getItem('@SystemSetting:shouldSkipWalkthrough')
       .then((shouldSkipWalkthrough) => {
         if (shouldSkipWalkthrough === 'TRUE') {
           this.props.navigator.replace({
             component: Events,
+          });
+        } else {
+          this.setState({
+            waitingForAsyncOps: false,
           });
         }
       })
@@ -54,6 +62,8 @@ class Landing extends Component {
   }
 
   render() {
+    if (this.state.waitingForAsyncOps) return null;
+
     const backgroundImageInlineStyle = {
       width: Dimensions.get('window').width,
       height: Dimensions.get('window').height,
@@ -61,7 +71,7 @@ class Landing extends Component {
 
     return (
       <Container>
-        <Content>
+        <Content >
           <Swiper showsButtons={ false }>
             <Image
               style={ [styles.backgroundImage, backgroundImageInlineStyle] }

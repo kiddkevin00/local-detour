@@ -95,11 +95,11 @@ class Events extends Component {
         <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
           <Left>
             <Button iconLeft transparent onPress={ this._saveToCalenderApp.bind(this, event) }>
-              <Icon name="navigate" />
+              <Icon name="bookmark" />
               <Text>Save</Text>
             </Button>
             <Button iconLeft transparent onPress={ () => Alert.alert('Success', 'Shared on Facebook!') }>
-              <Icon name="bookmark" />
+              <Icon name="share" />
               <Text>Share</Text>
             </Button>
           </Left>
@@ -112,7 +112,22 @@ class Events extends Component {
   )
 
   _saveToCalenderApp = async function (event) {
-    return CalendarEvents.saveToCalendarEvents(event);
+    try {
+      const savedEvent = await CalendarEvents.saveToCalendarEvents(event.name, {
+        location: event.where && event.where.address,
+        startDate: (event.when && event.when.startTimestamp) ? new Date(event.when.startTimestamp) : null,
+        endDate: (event.when && event.when.endTimestamp) ? new Date(event.when.endTimestamp) : null,
+        alarms: [{ date: -60 * 24 }], // 24 hours.
+        description: event.description,
+        notes: event.description,
+      });
+
+      if (savedEvent) {
+        CalendarEvents.showSavedEventWithCalendarApp(event.when && event.when.startTimestamp);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   _checkoutEventDetail(event) {
@@ -139,29 +154,21 @@ class Events extends Component {
   render() {
     return (
       <Container>
-        <Header hasSegment>
+        <Header style={ { backgroundColor: '#f96332' } }>
           <Left>
             <Button transparent onPress={ this._gotoSetting }>
-              <Icon name="settings" />
+              <Icon style={ { color: 'white', fontSize: 27 } } name="settings" />
             </Button>
           </Left>
-          <Body>
-            <Title>localDetour</Title>
+          <Body style={ { flexGrow: 3 } }>
+            <Title style={ { color: 'white', fontFamily: 'Lily Script One', fontSize: 27 } }>Local Detour</Title>
           </Body>
           <Right>
             <Button transparent onPress={ this._gotoMapView }>
-              <Icon name="map" />
+              <Icon style={ { color: 'white' } } name="map" />
             </Button>
           </Right>
         </Header>
-        <Segment>
-          <Button first active={ this.state.showListView }>
-            <Text>List View</Text>
-          </Button>
-          <Button last active={ !this.state.showListView } onPress={ this._gotoMapView }>
-            <Text>Map View</Text>
-          </Button>
-        </Segment>
         <Content>
           <List
             dataArray={ this.state.events }

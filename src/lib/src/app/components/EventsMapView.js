@@ -51,15 +51,15 @@ class EventsMapView extends Component {
     useFilter: false,
     filters: [
       {
-        name: 'This Week',
-        selected: false,
-      },
-      {
         name: 'Today',
         selected: false,
       },
       {
-        name: 'This Weekend',
+        name: 'Weekend',
+        selected: false,
+      },
+      {
+        name: 'This week',
         selected: false,
       },
     ],
@@ -138,10 +138,10 @@ class EventsMapView extends Component {
 
         if (targetFilter.name === 'Today') {
           return today.isBetween(moment(event.when.startTimestamp), moment(event.when.endTimestamp), null, '[]');
-        } else if (targetFilter.name === 'This Week') {
+        } else if (targetFilter.name === 'This week') {
           // Filters out the start date of the event after end of the week.
           return !moment(event.when.startTimestamp).isAfter(today, 'isoweek');
-        } else if (targetFilter.name === 'This Weekend') {
+        } else if (targetFilter.name === 'Weekend') {
           // Filters out the start date of the event after end of the weekend.
 
           // eslint-disable-next-line newline-per-chained-call
@@ -205,88 +205,98 @@ class EventsMapView extends Component {
 
     return (
       <Container>
-        <Header hasSegment>
+        <Header style={ { backgroundColor: '#f96332' } }>
           <Left>
             <Button transparent onPress={ this._gotoSetting }>
-              <Icon name="settings" />
+              <Icon style={ { color: 'white', fontSize: 27 } } name="settings" />
             </Button>
           </Left>
-          <Body>
-            <Title>localDetour</Title>
+          <Body style={ { flexGrow: 5 } }>
+            <Segment style={ { backgroundColor: '#f96332', alignSelf: 'center' } }>
+              <Button
+                first
+                onPress={ this._onSelectFilter.bind(this, this.state.filters[0]) }
+                style={ {
+                  backgroundColor: this.state.filters[0].selected ? 'white' : '#f96332',
+                  borderColor: 'white',
+                  paddingLeft: 9,
+                  paddingRight: 9,
+                } }
+              >
+                <Text
+                  style={ {
+                    color: this.state.filters[0].selected ? '#f96332' : 'white',
+                    fontSize: 12,
+                  } }
+                >
+                  &nbsp;&nbsp;&nbsp;{ this.state.filters[0].name }&nbsp;&nbsp;&nbsp;
+                </Text>
+              </Button>
+              <Button
+                onPress={ this._onSelectFilter.bind(this, this.state.filters[1]) }
+                style={ {
+                  backgroundColor: this.state.filters[1].selected ? 'white' : '#f96332',
+                  borderColor: 'white',
+                  paddingLeft: 9,
+                  paddingRight: 9,
+                } }
+              >
+                <Text
+                  style={ {
+                    color: this.state.filters[1].selected ? '#f96332' : 'white',
+                    fontSize: 12,
+                  } }
+                >
+                  { this.state.filters[1].name }&nbsp;
+                </Text>
+              </Button>
+              <Button
+                last
+                onPress={ this._onSelectFilter.bind(this, this.state.filters[2]) }
+                style={ {
+                  backgroundColor: this.state.filters[2].selected ? 'white' : '#f96332',
+                  borderColor: 'white',
+                  paddingLeft: 9,
+                  paddingRight: 9,
+                } }
+              >
+                <Text
+                  style={ {
+                    color: this.state.filters[2].selected ? '#f96332' : 'white',
+                    fontSize: 12,
+                  } }
+                >
+                  { this.state.filters[2].name }
+                </Text>
+              </Button>
+            </Segment>
           </Body>
-          <Right>
+          <Right style={ { flexGrow: 2 } }>
             <Button transparent onPress={ this._gotoListView }>
-              <Icon name="list-box" />
+              <Icon style={ { color: 'white' } } name="list" />
             </Button>
           </Right>
         </Header>
-        <Segment>
-          <Button first active={ !this.state.showMapView } onPress={ this._gotoListView }>
-            <Text>List View</Text>
-          </Button>
-          <Button last active={ this.state.showMapView }>
-            <Text>Map View</Text>
-          </Button>
-        </Segment>
         <Content scrollEnabled={ false }>
-          <Grid>
-            <Row>
-              <Left>
-                <Button
-                  full
-                  bordered
-                  small
-                  style={ { borderColor: '#A9A9A9', backgroundColor: this.state.filters[0].selected ? '#00CED1' : 'white' } }
-                  onPress={ this._onSelectFilter.bind(this, this.state.filters[0]) }
-                >
-                  <Text style={ { color: '#A9A9A9', fontSize: 10 } }>{ this.state.filters[0].name }</Text>
-                </Button>
-              </Left>
-              <Body>
-                <Button
-                  full
-                  bordered
-                  small
-                  style={ { borderColor: '#A9A9A9', backgroundColor: this.state.filters[1].selected ? '#00CED1' : 'white' } }
-                  onPress={ this._onSelectFilter.bind(this, this.state.filters[1]) }
-                >
-                  <Text style={ { color: '#A9A9A9', fontSize: 10 } }>{ this.state.filters[1].name }</Text>
-                </Button>
-              </Body>
-              <Right>
-                <Button
-                  full
-                  bordered
-                  small
-                  style={ { borderColor: '#A9A9A9', backgroundColor: this.state.filters[2].selected ? '#00CED1' : 'white' } }
-                  onPress={ this._onSelectFilter.bind(this, this.state.filters[2]) }
-                >
-                  <Text style={ { color: '#A9A9A9', fontSize: 10 } }>{ this.state.filters[2].name }</Text>
-                </Button>
-              </Right>
-            </Row>
-            <Row>
-              <View style={ { width, height } }>
-                <MapView
-                  style={ styles.map }
-                  provider={ null }
-                  followsUserLocation={ false }
-                  showsScale={ true }
-                  showsCompass={ true }
-                  zoomEnabled={ true }
-                  rotateEnabled={ true }
-                  scrollEnabled={ true }
-                  loadingEnabled={ true }
-                  loadingBackgroundColor={ '#f96332' }
-                  showsUserLocation={ true }
-                  region={ this.state.mapRegion }
-                  onRegionChange={ this._onMapRegionChange }
-                >
-                  { events.map((event, index) => this._renderEvent(event, index)) }
-                </MapView>
-              </View>
-            </Row>
-          </Grid>
+          <View style={ { width, height } }>
+            <MapView
+              style={ styles.map }
+              provider={ null }
+              followsUserLocation={ false }
+              showsScale={ true }
+              showsCompass={ true }
+              zoomEnabled={ true }
+              rotateEnabled={ true }
+              scrollEnabled={ true }
+              loadingEnabled={ true }
+              loadingBackgroundColor={ '#f96332' }
+              showsUserLocation={ true }
+              region={ this.state.mapRegion }
+              onRegionChange={ this._onMapRegionChange }
+            >
+              { events.map((event, index) => this._renderEvent(event, index)) }
+            </MapView>
+          </View>
         </Content>
       </Container>
     );

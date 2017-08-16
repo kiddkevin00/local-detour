@@ -37,7 +37,22 @@ class EventDetail extends Component {
   };
 
   _saveToCalenderApp = async function (event) {
-    return CalendarEvents.saveToCalendarEvents(event);
+    try {
+      const savedEvent = await CalendarEvents.saveToCalendarEvents(event.name, {
+        location: event.where && event.where.address,
+        startDate: (event.when && event.when.startTimestamp) ? new Date(event.when.startTimestamp) : null,
+        endDate: (event.when && event.when.endTimestamp) ? new Date(event.when.endTimestamp) : null,
+        alarms: [{ date: -60 * 24 }], // 24 hours.
+        description: event.description,
+        notes: event.description,
+      });
+
+      if (savedEvent) {
+        CalendarEvents.showSavedEventWithCalendarApp(event.when && event.when.startTimestamp);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   _openWebPage(url) {
@@ -76,16 +91,20 @@ class EventDetail extends Component {
 
     return (
       <Container>
-        <Header>
+        <Header style={ { backgroundColor: '#f96332' } }>
           <Left>
             <Button transparent onPress={ this._backToEventsList }>
-              <Icon name="arrow-back" />
+              <Icon style={ { color: 'white', fontSize: 27 } } name="arrow-back" />
             </Button>
           </Left>
           <Body>
-            <Title>localDetour</Title>
+            <Title style={ { color: 'white', fontFamily: 'Lily Script One', fontSize: 27 } }>Local Detour</Title>
           </Body>
-          <Right />
+          <Right>
+            <Button transparent onPress={ () => Alert.alert('Success', 'Shared on Facebook!') }>
+              <Icon style={ { color: 'white' } } name="share" />
+            </Button>
+          </Right>
         </Header>
         <Content padder>
           <Card>
@@ -93,49 +112,40 @@ class EventDetail extends Component {
               <Image style={ { height: 200, width: null, flex: 1 } } source={ require('../../../static/assets/images/sample-event_1.jpg') } />
             </CardItem>
             <CardItem bordered>
+              <Body>
+                <Text style={ { fontSize: 9, color: 'red' } }>&nbsp;{ moment(event.when.startTimestamp).format('MMM').toUpperCase() }</Text>
+                <Text style={ { fontSize: 20 } }>{ moment(event.when.startTimestamp).format('DD') }</Text>
+              </Body>
+              <Body style={ { flexGrow: 6 } }>
+                <Text>{ event.name }</Text>
+                <Text note>{ event.type }</Text>
+              </Body>
+            </CardItem>
+            <CardItem bordered>
               <Left>
-                <Thumbnail square source={ require('../../../static/assets/images/calendar-date.png') } />
+                <Icon style={ { fontSize: 25, color: 'red' } } name="time" />
+                <Text style={ { fontSize: 15 } }>{ moment(event.when.startTimestamp).format('MMM Do  hh:mm A') } - { moment(event.when.endTimestamp).format('MMM Do  hh:mm A') }</Text>
+              </Left>
+            </CardItem>
+            <CardItem bordered>
+              <Left>
+                <Icon style={ { fontSize: 25, color: 'red' } } name="navigate" />
                 <Body>
-                  <Text>{ event.name }</Text>
-                  <Text note>{ event.type }</Text>
+                  <Text>{ event.where.venue }</Text>
+                  <Text note>{ event.where.address }</Text>
                 </Body>
               </Left>
             </CardItem>
             <CardItem bordered>
               <Left>
-                <Button iconLeft transparent>
-                  <Icon name="navigate" />
-                  <Text>54 going</Text>
-                </Button>
-                <Button iconLeft transparent>
-                  <Icon name="thumbs-up" />
-                  <Text>76 liked</Text>
-                </Button>
-                <Button iconLeft transparent>
-                  <Icon name="share" />
-                  <Text>37 Shared</Text>
-                </Button>
+                <Icon style={ { fontSize: 25, color: 'red' } } name="link" />
+                <Body>
+                  <Text>Event Site</Text>
+                  <Text style={ { fontSize: 12 } } note onPress={ this._openWebPage.bind(this, event.externalLink) }>
+                    { event.externalLink }
+                  </Text>
+                </Body>
               </Left>
-            </CardItem>
-            <CardItem>
-              <Body>
-                <Text>{ moment(event.when.startTimestamp).format('MMM Do') } - { moment(event.when.endTimestamp).format('MMM Do') }</Text>
-                <Text note>from { moment(event.when.startTimestamp).format('h A') } to { moment(event.when.endTimestamp).format('h A') }</Text>
-              </Body>
-            </CardItem>
-            <CardItem>
-              <Body>
-                <Text>{ event.where.venue }</Text>
-                <Text note>{ event.where.address }</Text>
-              </Body>
-            </CardItem>
-            <CardItem bordered>
-              <Body>
-                <Text>More Info</Text>
-                <Text note onPress={ this._openWebPage.bind(this, event.externalLink) }>
-                  { event.externalLink }
-                </Text>
-              </Body>
             </CardItem>
             <CardItem bordered>
               <Body>
@@ -163,7 +173,7 @@ class EventDetail extends Component {
         <Footer>
           <FooterTab>
             <Button full onPress={ this._saveToCalenderApp.bind(this, event) }>
-              <Text>Save</Text>
+              <Text>Save to Calendar</Text>
             </Button>
           </FooterTab>
         </Footer>

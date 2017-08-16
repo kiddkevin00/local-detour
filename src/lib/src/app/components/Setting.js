@@ -43,14 +43,14 @@ class Events extends Component {
   render() {
     return (
       <Container>
-        <Header>
+        <Header style={ { backgroundColor: '#f96332' } }>
           <Left>
             <Button transparent onPress={ this._backToComponent }>
-              <Icon name="arrow-back" />
+              <Icon style={ { color: 'white', fontSize: 27 } } name="arrow-back" />
             </Button>
           </Left>
-          <Body>
-            <Title>localDetour</Title>
+          <Body style={ { flexGrow: 3 } }>
+            <Title style={ { color: 'white', fontFamily: 'Lily Script One', fontSize: 27 } }>Local Detour</Title>
           </Body>
           <Right />
         </Header>

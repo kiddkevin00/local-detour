@@ -6,17 +6,17 @@ import {
 
 class CalendarEvents {
 
-  static saveToCalendarEvents = async (event) => {
+  static saveToCalendarEvents = async (eventTitle, eventConfig) => {
     // Gets calendar authorization status.
     const authorizeStatus = await CalendarEvents.fetchAuthorizationStatus();
 
     if (authorizeStatus === 'authorized') {
-      return CalendarEvents._saveToCalendarEvents(event);
+      return CalendarEvents._saveToCalendarEvents(eventTitle, eventConfig);
     }
     const request = await CalendarEvents.requestPermission();
 
     if (request === 'authorized') {
-      return CalendarEvents._saveToCalendarEvents(event);
+      return CalendarEvents._saveToCalendarEvents(eventTitle, eventConfig);
     }
   }
 
@@ -34,34 +34,18 @@ class CalendarEvents {
   static showSavedEventWithCalendarApp(eventStartTimestamp) {
     const referenceDate = moment.utc([2001]); // Default reference date for iOS calendar app.
     const secondsSinceRefDate = eventStartTimestamp ?
-    (eventStartTimestamp / 1000) - referenceDate.unix() :
-    (moment().unix() / 1000) - referenceDate.unix();
+      (eventStartTimestamp / 1000) - referenceDate.unix() :
+      (moment().unix() / 1000) - referenceDate.unix();
 
     Linking.openURL(`calshow:${secondsSinceRefDate}`);
   }
 
-  static _saveToCalendarEvents = async (event) => {
+  static _saveToCalendarEvents = async (eventTitle, eventConfig) => {
     const calendars = await RNCalendarEvents.findCalendars();
     const writableCalendar = calendars.find((cal) => cal.allowsModifications);
-    const config = {
-      calendarId: writableCalendar.id,
-      location: event.where && event.where.address,
-      startDate: (event.when && event.when.startTimestamp) ? new Date(event.when.startTimestamp) : null,
-      endDate: (event.when && event.when.endTimestamp) ? new Date(event.when.endTimestamp) : null,
-      alarms: [{ date: -60 * 24 }], // 24 hours.
-      description: event.description,
-      notes: event.description,
-    };
+    const config = Object.assign({}, { calendarId: writableCalendar.id }, eventConfig);
 
-    try {
-      const savedEvent = await RNCalendarEvents.saveEvent(event.name, config);
-
-      if (savedEvent) {
-        CalendarEvents.showSavedEventWithCalendarApp(event.when && event.when.startTimestamp);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    return RNCalendarEvents.saveEvent(eventTitle, config);
   }
 
 }

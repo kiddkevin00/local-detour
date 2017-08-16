@@ -47,6 +47,7 @@
 		2D02E4C81E0B4AEC006451C7 /* libRCTWebSocket-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3E991DF850E9000B6D8A /* libRCTWebSocket-tvOS.a */; };
 		2D02E4C91E0B4AEC006451C7 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* localDetourTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* localDetourTests.m */; };
+		34865BDD71394620AE57C977 /* Lily Script One.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 139A841FFE5A496284F3AE07 /* Lily Script One.ttf */; };
 		3600BA33AF0F451E8B2B8807 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4329C135DC4747D7BA5B09E2 /* Ionicons.ttf */; };
 		4E4079D58D0241D4B3D522F5 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF428FF56C79466BB6F91576 /* SimpleLineIcons.ttf */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
@@ -319,6 +320,7 @@
 		133F52591F379974004E52BE /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		137814D81F36309F006EBCDC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
+		139A841FFE5A496284F3AE07 /* Lily Script One.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lily Script One.ttf"; path = "../src/lib/static/assets/fonts/Lily Script One.ttf"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* localDetour.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = localDetour.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = localDetour/AppDelegate.h; sourceTree = "<group>"; };
@@ -590,6 +592,7 @@
 				00EE2D6C5487426F91BC4797 /* rubicon-icon-font.ttf */,
 				BF428FF56C79466BB6F91576 /* SimpleLineIcons.ttf */,
 				1B8E201B0C0B44B18BCC4737 /* Zocial.ttf */,
+				139A841FFE5A496284F3AE07 /* Lily Script One.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1120,6 +1123,7 @@
 				4E4079D58D0241D4B3D522F5 /* SimpleLineIcons.ttf in Resources */,
 				776ADB53DB5F4E289EF53F6A /* Zocial.ttf in Resources */,
 				137814D91F36309F006EBCDC /* GoogleService-Info.plist in Resources */,
+				34865BDD71394620AE57C977 /* Lily Script One.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

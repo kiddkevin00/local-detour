@@ -47,6 +47,11 @@
     ],
     "coverageDirectory": "spec/coverage/"
   },
+  "rnpm": {
+    "assets": [
+      "./src/lib/static/assets/fonts/"
+    ]
+  },
   "engines": {
     "node": "6.11.1",
     "npm": ">=3.10.9"
