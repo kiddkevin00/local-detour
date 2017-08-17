@@ -206,11 +206,7 @@ class EventsMapView extends Component {
     return (
       <Container>
         <Header style={ { backgroundColor: '#f96332' } }>
-          <Left>
-            <Button transparent onPress={ this._gotoSetting }>
-              <Icon style={ { color: 'white', fontSize: 27 } } name="settings" />
-            </Button>
-          </Left>
+          <Left />
           <Body style={ { flexGrow: 5 } }>
             <Segment style={ { backgroundColor: '#f96332', alignSelf: 'center' } }>
               <Button

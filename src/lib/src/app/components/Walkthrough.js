@@ -74,7 +74,7 @@ class Walkthrough extends Component {
                 style={ buttonStyle }
                 onPress={ this._checkoutEvents }
               >
-                <Text style={ { fontSize: 15 } }>Explore now</Text>
+                <Text style={ { fontSize: 17, fontWeight: '500' } }>Explore now</Text>
               </Button>
             </Image>
           </Swiper>

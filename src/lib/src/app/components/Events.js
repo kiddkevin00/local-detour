@@ -155,11 +155,7 @@ class Events extends Component {
     return (
       <Container>
         <Header style={ { backgroundColor: '#f96332' } }>
-          <Left>
-            <Button transparent onPress={ this._gotoSetting }>
-              <Icon style={ { color: 'white', fontSize: 27 } } name="settings" />
-            </Button>
-          </Left>
+          <Left />
           <Body style={ { flexGrow: 3 } }>
             <Title style={ { color: 'white', fontFamily: 'Lily Script One', fontSize: 27 } }>Local Detour</Title>
           </Body>

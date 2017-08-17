@@ -97,7 +97,7 @@ class EventDetail extends Component {
               <Icon style={ { color: 'white', fontSize: 27 } } name="arrow-back" />
             </Button>
           </Left>
-          <Body>
+          <Body style={ { flexGrow: 3 } }>
             <Title style={ { color: 'white', fontFamily: 'Lily Script One', fontSize: 27 } }>Local Detour</Title>
           </Body>
           <Right>
