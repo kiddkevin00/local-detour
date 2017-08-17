@@ -3,6 +3,7 @@ package com.localdetour;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnative.photoview.PhotoViewPackage;
 import com.calendarevents.CalendarEventsPackage;
 import com.evollu.react.fcm.FIRMessagingPackage;
 import com.airbnb.android.react.maps.MapsPackage;
@@ -26,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
+            new PhotoViewPackage(),
         new CalendarEventsPackage(),
         new FIRMessagingPackage(),
         new MapsPackage()

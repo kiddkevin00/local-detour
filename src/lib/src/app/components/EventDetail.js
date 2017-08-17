@@ -22,7 +22,6 @@ import {
 } from 'native-base';
 import {
   Alert,
-  Linking,
   Image,
 } from 'react-native';
 import React, { Component } from 'react';
@@ -111,12 +110,12 @@ class EventDetail extends Component {
             <CardItem cardBody>
               <Image style={ { height: 200, width: null, flex: 1 } } source={ require('../../../static/assets/images/sample-event_1.jpg') } />
             </CardItem>
-            <CardItem bordered>
-              <Body>
-                <Text style={ { fontSize: 9, color: 'red' } }>&nbsp;{ moment(event.when.startTimestamp).format('MMM').toUpperCase() }</Text>
-                <Text style={ { fontSize: 20 } }>{ moment(event.when.startTimestamp).format('DD') }</Text>
+            <CardItem style={ { height: 70 } } bordered>
+              <Body style={ { justifyContent: 'center' } }>
+                <Text style={ { fontSize: 11, color: 'red' } }>&nbsp;{ moment(event.when.startTimestamp).format('MMM').toUpperCase() }</Text>
+                <Text style={ { fontSize: 25 } }>{ moment(event.when.startTimestamp).format('DD') }</Text>
               </Body>
-              <Body style={ { flexGrow: 6 } }>
+              <Body style={ { flexGrow: 6, justifyContent: 'center' } }>
                 <Text>{ event.name }</Text>
                 <Text note>{ event.type }</Text>
               </Body>
@@ -124,12 +123,14 @@ class EventDetail extends Component {
             <CardItem bordered>
               <Left>
                 <Icon style={ { fontSize: 25, color: 'red' } } name="time" />
+                <Text>&nbsp;</Text>
                 <Text style={ { fontSize: 15 } }>{ moment(event.when.startTimestamp).format('MMM Do  hh:mm A') } - { moment(event.when.endTimestamp).format('MMM Do  hh:mm A') }</Text>
               </Left>
             </CardItem>
             <CardItem bordered>
               <Left>
                 <Icon style={ { fontSize: 25, color: 'red' } } name="navigate" />
+                <Text>&nbsp;</Text>
                 <Body>
                   <Text>{ event.where.venue }</Text>
                   <Text note>{ event.where.address }</Text>
@@ -139,6 +140,7 @@ class EventDetail extends Component {
             <CardItem bordered>
               <Left>
                 <Icon style={ { fontSize: 25, color: 'red' } } name="link" />
+                <Text>&nbsp;</Text>
                 <Body>
                   <Text>Event Site</Text>
                   <Text style={ { fontSize: 12 } } note onPress={ this._openWebPage.bind(this, event.externalLink) }>

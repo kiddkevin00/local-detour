@@ -35,19 +35,19 @@ class WebViewWrapper extends Component {
 
     return (
       <Container>
-        <Header searchBar rounded>
+        <Header style={ { backgroundColor: '#f96332' } } searchBar rounded>
           <Left>
             <Button transparent onPress={ this._backToComponent }>
-              <Icon name="arrow-back" />
+              <Icon style={ { color: 'white' } } name="arrow-back" />
             </Button>
           </Left>
-          <Item>
+          <Item style={ { flexGrow: 2, backgroundColor: 'white' } }>
             <Icon name="ios-search" />
             <Input />
           </Item>
           <Right>
             <Button transparent>
-              <Text>Search</Text>
+              <Text style={ { color: 'white' } }>Search</Text>
             </Button>
           </Right>
         </Header>
