@@ -111,11 +111,12 @@ class EventDetail extends Component {
               <Image style={ { height: 200, width: null, flex: 1 } } source={ require('../../../static/assets/images/sample-event_1.jpg') } />
             </CardItem>
             <CardItem style={ { height: 70 } } bordered>
-              <Body style={ { justifyContent: 'center' } }>
+              <Body style={ { flexGrow: 2, justifyContent: 'center' } }>
                 <Text style={ { fontSize: 11, color: 'red' } }>&nbsp;{ moment(event.when.startTimestamp).format('MMM').toUpperCase() }</Text>
                 <Text style={ { fontSize: 25 } }>{ moment(event.when.startTimestamp).format('DD') }</Text>
               </Body>
-              <Body style={ { flexGrow: 6, justifyContent: 'center' } }>
+              <Text>&nbsp;</Text>
+              <Body style={ { flexGrow: 13, justifyContent: 'center' } }>
                 <Text>{ event.name }</Text>
                 <Text note>{ event.type }</Text>
               </Body>
@@ -124,7 +125,7 @@ class EventDetail extends Component {
               <Left>
                 <Icon style={ { fontSize: 25, color: 'red' } } name="time" />
                 <Text>&nbsp;</Text>
-                <Text style={ { fontSize: 15 } }>{ moment(event.when.startTimestamp).format('MMM Do  hh:mm A') } - { moment(event.when.endTimestamp).format('MMM Do  hh:mm A') }</Text>
+                <Text style={ { fontSize: 14 } }>{ moment(event.when.startTimestamp).format('MMM DD  hh:mmA') } - { moment(event.when.endTimestamp).format('MMM DD  hh:mmA') }</Text>
               </Left>
             </CardItem>
             <CardItem bordered>
