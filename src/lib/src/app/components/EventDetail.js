@@ -26,6 +26,7 @@ import {
 } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Share, { ShareSheet, Button as ShareButton } from 'react-native-share';
 
 
 class EventDetail extends Component {
@@ -33,6 +34,10 @@ class EventDetail extends Component {
   static propTypes = {
     event: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  };
+
+  state = {
+    shareVisible: false,
   };
 
   _saveToCalenderApp = async function (event) {
@@ -65,6 +70,45 @@ class EventDetail extends Component {
     this.props.navigator.pop();
   }
 
+  _openShare = () => {
+    this.setState({
+      shareVisible: true,
+    });
+  }
+
+  _closeShare = () => {
+    this.setState({
+      shareVisible: false,
+    });
+  }
+
+  shareEvent = async function (event, social) {
+    this._closeShare();
+    try {
+      Share.shareSingle({
+        title: event.name,
+        message: 'Come check this out!',
+        url: event.externalLink || null,
+        social,
+        subject: 'localDetour'
+      })
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  _renderButton(button, index, event) {
+    return (
+      <ShareButton
+        key={ index }
+        onPress={ this.shareEvent.bind(this, event, button.name) }
+      ><Icon
+        name={ button.icon }
+        style={ { fontSize: 20, color: button.color } }
+      />{ button.name[0].toUpperCase() + button.name.slice(1)}</ShareButton>
+    );
+  }
+
   render() {
     const event = this.props.event || {
       name: 'Test Event',
@@ -88,6 +132,12 @@ class EventDetail extends Component {
       tags: [],
     };
 
+    const buttons = [
+      { name: 'twitter', icon: 'logo-twitter', color: '#00aced' },
+      { name: 'facebook', icon: 'logo-facebook', color: '#3b5998' },
+      { name: 'email', icon: 'ios-mail-outline', color: '#000' },
+    ]
+
     return (
       <Container>
         <Header style={ { backgroundColor: '#f96332' } }>
@@ -100,7 +150,7 @@ class EventDetail extends Component {
             <Title style={ { color: 'white', fontFamily: 'Lily Script One', fontSize: 27 } }>Local Detour</Title>
           </Body>
           <Right>
-            <Button transparent onPress={ () => Alert.alert('Success', 'Shared on Facebook!') }>
+            <Button transparent onPress={ this._openShare }>
               <Icon style={ { color: 'white' } } name="share" />
             </Button>
           </Right>
@@ -180,6 +230,9 @@ class EventDetail extends Component {
             </Button>
           </FooterTab>
         </Footer>
+        <ShareSheet visible={ this.state.shareVisible } onCancel={ this._closeShare.bind(this) }>
+          { buttons.map((button, index) => this._renderButton(button, index, event)) }
+        </ShareSheet>
       </Container>
     );
   }
