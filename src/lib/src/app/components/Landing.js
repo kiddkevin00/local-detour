@@ -81,7 +81,7 @@ class Landing extends Component {
               <Button
                 block
                 light
-                style={ { marginBottom: 80, marginLeft: 20, marginRight: 20, paddingTop: 25, paddingBottom: 25, backgroundColor: '#f96332' } }
+                style={ { marginBottom: 80, marginHorizontal: 20, paddingTop: 25, paddingBottom: 25, backgroundColor: '#f96332' } }
                 onPress={ this._checkoutWalkthrough }
               >
                 <Text style={ { fontSize: 17, color: 'white', fontWeight: 'bold' } }>Let’s get started</Text>

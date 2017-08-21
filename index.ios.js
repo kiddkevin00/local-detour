@@ -27,7 +27,7 @@ class LocalDetour extends Component {
         style={ styles.container }
         navigationBarHidden={ true }
         initialRoute={ {
-          title: 'Welcome',
+          title: 'Title',
           component: Landing,
         } }
       />

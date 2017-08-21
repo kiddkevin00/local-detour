@@ -35,7 +35,7 @@ class CalendarEvents {
     const referenceDate = moment.utc([2001]); // Default reference date for iOS calendar app.
     const secondsSinceRefDate = eventStartTimestamp ?
       (eventStartTimestamp / 1000) - referenceDate.unix() :
-      (moment().unix() / 1000) - referenceDate.unix();
+      moment().unix() - referenceDate.unix();
 
     Linking.openURL(`calshow:${secondsSinceRefDate}`);
   }

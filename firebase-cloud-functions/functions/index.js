@@ -18,11 +18,12 @@ exports.addMessage = functions.https.onRequest((req, res) => {
   // Grabs the text parameter.
   const original = req.query.text;
 
-  // Pushs the new message into the Realtime Database using the Firebase Admin SDK.
-  admin.database().ref('/messages').push({ original }).then((snapshot) => {
-    // Redirects with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
-    res.redirect(303, snapshot.ref);
-  });
+  // Pushes the new message into the Realtime Database using the Firebase Admin SDK.
+  admin.database().ref('/messages').push({ original })
+    .then((snapshot) => {
+      // Redirects with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
+      res.redirect(303, snapshot.ref);
+    });
 });
 
 /*

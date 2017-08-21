@@ -97,21 +97,21 @@ class EventsMapView extends Component {
 
   dataRef = firebaseDb.ref('/nyc').child('events');
 
-  _renderEvent(event, index) {
+  _renderEvent(event) {
     return (
       <MapView.Marker
-        key={ index }
+        key={ `${event.name}-${event.when.startTimestamp}` }
         coordinate={ event.where.coordinate }
         onPress={ this._onMarkerPress.bind(this, event) }
         pinColor={ event.color || 'red' }
         title={ event.name }
-        description={ event.description }
+        description={ event.detail }
         onCalloutPress={ this._checkoutEventDetail.bind(this, event) }
       />
     );
   }
 
-  _onSelectFilter(targetFilter) {
+  _onFilterSelect(targetFilter) {
     let useFilter = this.state.useFilter;
     const filters = this.state.filters.map((filter) => {
       if (filter === targetFilter) {
@@ -211,7 +211,7 @@ class EventsMapView extends Component {
             <Segment style={ { backgroundColor: '#f96332', alignSelf: 'center' } }>
               <Button
                 first
-                onPress={ this._onSelectFilter.bind(this, this.state.filters[0]) }
+                onPress={ this._onFilterSelect.bind(this, this.state.filters[0]) }
                 style={ {
                   backgroundColor: this.state.filters[0].selected ? 'white' : '#f96332',
                   borderColor: 'white',
@@ -229,7 +229,7 @@ class EventsMapView extends Component {
                 </Text>
               </Button>
               <Button
-                onPress={ this._onSelectFilter.bind(this, this.state.filters[1]) }
+                onPress={ this._onFilterSelect.bind(this, this.state.filters[1]) }
                 style={ {
                   backgroundColor: this.state.filters[1].selected ? 'white' : '#f96332',
                   borderColor: 'white',
@@ -248,7 +248,7 @@ class EventsMapView extends Component {
               </Button>
               <Button
                 last
-                onPress={ this._onSelectFilter.bind(this, this.state.filters[2]) }
+                onPress={ this._onFilterSelect.bind(this, this.state.filters[2]) }
                 style={ {
                   backgroundColor: this.state.filters[2].selected ? 'white' : '#f96332',
                   borderColor: 'white',

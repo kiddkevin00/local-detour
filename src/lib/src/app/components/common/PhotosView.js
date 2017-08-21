@@ -3,12 +3,10 @@ import {
   Image,
   StyleSheet,
   Dimensions,
-
-  Text,
-  View,
   TouchableOpacity,
   TouchableWithoutFeedback,
-
+  View,
+  Text,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import PhotoView from 'react-native-photo-view';
@@ -53,9 +51,9 @@ const styles = StyleSheet.create({
 const renderPagination = (index, total, context) => (
   <View
     style={ {
-      position: 'absolute',
-      justifyContent: 'center',
+      //justifyContent: 'center',
       alignItems: 'center',
+      position: 'absolute',
       top: 25,
       left: 0,
       right: 0,
@@ -74,29 +72,40 @@ const renderPagination = (index, total, context) => (
           color: '#fff',
           fontSize: 14,
         } }
-      >{index + 1} / {total}</Text>
+      >
+        { index + 1 } / {total}
+      </Text>
     </View>
   </View>
-  );
+);
 
-const Viewer = (props) => <Swiper index={ props.index } style={ styles.wrapper } renderPagination={ renderPagination }>
-  {
-    props.imgList.map((item, i) => <View key={ i } style={ styles.slide }>
-      <TouchableWithoutFeedback onPress={ (e) => props.pressHandle() }>
-        <PhotoView
-          source={ { uri: item } }
-          resizeMode="contain"
-          minimumZoomScale={ 0.5 }
-          maximumZoomScale={ 3 }
-          androidScaleType="center"
-          style={ styles.photo }
-        />
-      </TouchableWithoutFeedback>
-    </View>)
-  }
-</Swiper>;
+const Viewer = (props) => (
+  <Swiper
+    style={ styles.wrapper }
+    index={ props.index }
+    renderPagination={ renderPagination }
+  >
+      {
+        props.imgList.map((item, index) => (
+          <View style={ styles.slide } key={ index }>
+            <TouchableWithoutFeedback onPress={ (event) => props.pressHandle() }>
+              <PhotoView
+                source={ { uri: item } }
+                resizeMode="stretch"
+                minimumZoomScale={ 0.5 }
+                maximumZoomScale={ 3 }
+                androidScaleType="center"
+                style={ styles.photo }
+              />
+            </TouchableWithoutFeedback>
+          </View>
+        ))
+      }
+  </Swiper>
+);
 
 class PhotosView extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -116,33 +125,45 @@ class PhotosView extends Component {
     this.viewerPressHandle = this.viewerPressHandle.bind(this);
     this.thumbPressHandle = this.thumbPressHandle.bind(this);
   }
+
   viewerPressHandle() {
     this.setState({
       showViewer: false,
     });
   }
+
   thumbPressHandle(i) {
     this.setState({
       showIndex: i,
       showViewer: true,
     });
   }
+
   render() {
-    return (<View style={ { position: 'relative' } }>
-      {this.state.showViewer && <Viewer
-        index={ this.state.showIndex }
-        pressHandle={ this.viewerPressHandle }
-        imgList={ this.state.imgList }
-      />}
-      <View style={ styles.thumbWrap }>
+    return (
+      <View style={ { position: 'relative' } }>
         {
-          this.state.imgList.map((item, i) => <TouchableOpacity key={ i } onPress={ (e) => this.thumbPressHandle(i) }>
-            <Image style={ styles.thumb } source={ { uri: item } } />
-          </TouchableOpacity>)
+          this.state.isViewerShown && (
+            <Viewer
+              index={ this.state.indexShown }
+              pressHandle={ this.viewerPressHandle }
+              imgList={ this.state.imgList }
+            />
+          )
         }
+        <View style={ styles.thumbWrap }>
+          {
+            this.state.imgList.map((item, i) => (
+              <TouchableOpacity key={ i } onPress={ (e) => this.thumbPressHandle(i) }>
+                <Image style={ styles.thumb } key={ i } source={ { uri: item } } />
+              </TouchableOpacity>
+            ))
+          }
+        </View>
       </View>
-    </View>);
+    );
   }
+
 }
 
 export { PhotosView as default };

@@ -8,7 +8,6 @@ import moment from 'moment';
 import {
   Container,
   Header,
-  Segment,
   Content,
   List,
   ListItem,
@@ -18,13 +17,12 @@ import {
   Body,
   Right,
   Title,
-  Thumbnail,
   Button,
   Text,
   Icon,
 } from 'native-base';
 import {
-  Alert,
+  Share,
   AsyncStorage,
   Image,
 } from 'react-native';
@@ -82,15 +80,18 @@ class Events extends Component {
       <Card>
         <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
           <Left>
-            <Thumbnail square source={ require('../../../static/assets/images/sample-event_1.jpg') } />
-            <Body>
-              <Text>{ event.name }</Text>
-              <Text note>{ event.where.address }</Text>
+            <Body style={ { flexGrow: 2, justifyContent: 'center' } }>
+              <Text style={ { fontSize: 11, color: 'red' } }>&nbsp;{ moment(event.when.startTimestamp).format('MMM').toUpperCase() }</Text>
+              <Text style={ { fontSize: 25 } }>{ moment(event.when.startTimestamp).format('DD') }</Text>
+            </Body>
+            <Body style={ { flexGrow: 15 } }>
+              <Text style={ { fontSize: 16 } }>{ event.name }</Text>
+              <Text style={ { fontSize: 13 } } note>{ event.where.address }</Text>
             </Body>
           </Left>
         </CardItem>
         <CardItem cardBody button onPress={ this._checkoutEventDetail.bind(this, event) }>
-          <Image style={ { height: 200, width: null, flex: 1 } } source={ require('../../../static/assets/images/sample-event_2.jpeg') } />
+          <Image style={ { height: 200, width: null, flex: 1 } } source={ { uri: event.heroPhoto } } />
         </CardItem>
         <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
           <Left>
@@ -98,7 +99,7 @@ class Events extends Component {
               <Icon name="bookmark" />
               <Text>Save</Text>
             </Button>
-            <Button iconLeft transparent onPress={ () => Alert.alert('Success', 'Shared on Facebook!') }>
+            <Button iconLeft transparent onPress={ () => Share.share({ title: event.name, message: event.detail, url: event.externalLink }) }>
               <Icon name="share" />
               <Text>Share</Text>
             </Button>
@@ -115,11 +116,11 @@ class Events extends Component {
     try {
       const savedEvent = await CalendarEvents.saveToCalendarEvents(event.name, {
         location: event.where && event.where.address,
-        startDate: (event.when && event.when.startTimestamp) ? new Date(event.when.startTimestamp) : null,
-        endDate: (event.when && event.when.endTimestamp) ? new Date(event.when.endTimestamp) : null,
+        startDate: (event.when && event.when.startTimestampp) ? new Date(event.when.startTimestamp) : new Date(),
+        endDate: (event.when && event.when.endTimestamppp) ? new Date(event.when.endTimestamp) : new Date(),
         alarms: [{ date: -60 * 24 }], // 24 hours.
-        description: event.description,
-        notes: event.description,
+        description: event.detail,
+        notes: event.detail,
       });
 
       if (savedEvent) {
