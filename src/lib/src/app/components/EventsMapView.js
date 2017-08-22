@@ -17,9 +17,6 @@ import {
   Left,
   Body,
   Right,
-  Title,
-  Grid,
-  Row,
   Button,
   Text,
   Icon,
@@ -288,7 +285,7 @@ class EventsMapView extends Component {
               loadingBackgroundColor={ '#f96332' }
               showsUserLocation={ true }
               region={ this.state.mapRegion }
-              onRegionChange={ this._onMapRegionChange }
+              //onRegionChange={ this._onMapRegionChange }
             >
               { events.map((event, index) => this._renderEvent(event, index)) }
             </MapView>

@@ -91,7 +91,7 @@ class Events extends Component {
           </Left>
         </CardItem>
         <CardItem cardBody button onPress={ this._checkoutEventDetail.bind(this, event) }>
-          <Image style={ { height: 200, width: null, flex: 1 } } source={ { uri: event.heroPhoto } } />
+          <Image style={ { flex: 1, height: 200, width: null } } source={ { uri: event.heroPhoto } } />
         </CardItem>
         <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
           <Left>

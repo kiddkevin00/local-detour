@@ -36,55 +36,24 @@ import PropTypes from 'prop-types';
 
 
 const styles = StyleSheet.create({
-  wrapper: {
-    backgroundColor: '#000',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-  },
-  slide: {
-    flex: 1,
-    justifyContent: 'center',
+  container: {
+    //justifyContent: 'center',
     alignItems: 'center',
+    position: 'absolute',
+    top: 25,
+    left: 0,
+    right: 0,
   },
-  photo: {
-    flex: 1,
+
+  wrapper: {
+    borderRadius: 7,
+    paddingVertical: 3,
+    paddingHorizontal: 7,
+    backgroundColor: 'rgba(255,255,255,.15)',
   },
 });
 
-const renderPagination = (index, total, context) => (
-  <View
-    style={ {
-      //justifyContent: 'center',
-      alignItems: 'center',
-      position: 'absolute',
-      top: 25,
-      left: 0,
-      right: 0,
-    } }
-  >
-    <View
-      style={ {
-        borderRadius: 7,
-        backgroundColor: 'rgba(255,255,255,.15)',
-        padding: 3,
-        paddingHorizontal: 7,
-      } }
-    >
-      <Text
-        style={ {
-          color: '#fff',
-          fontSize: 14,
-        } }
-      >
-        { index + 1 } / {total}
-      </Text>
-    </View>
-  </View>
-);
-
-const Viewer = (props) => {
+function Viewer(props) {
   const photoViewInlineStyle = {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
@@ -92,27 +61,39 @@ const Viewer = (props) => {
 
   return (
     <Swiper
-      style={ styles.wrapper }
       index={ props.imageIndex }
-      renderPagination={ renderPagination }
+      renderPagination={ Viewer._renderPagination }
     >
       {
         props.imgList.map((item) => (
-          <View style={ styles.slide } key={ item }>
-            <PhotoView
-              style={ [styles.photo, photoViewInlineStyle] }
-              resizeMode="contain"
-              minimumZoomScale={ 1 }
-              maximumZoomScale={ 3 }
-              source={ { uri: item } }
-              onViewTap={ props.onImageOutsideTap.bind(this) }
-            />
-          </View>
+          <PhotoView
+            style={ [photoViewInlineStyle] }
+            key={ item }
+            resizeMode="contain"
+            minimumZoomScale={ 1 }
+            maximumZoomScale={ 3 }
+            source={ { uri: item } }
+            onViewTap={ props.onImageOutsideTap }
+          />
         ))
       }
     </Swiper>
   );
+}
+Viewer.propTypes = {
+  imgList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  imageIndex: PropTypes.number.isRequired,
+  onImageOutsideTap: PropTypes.func.isRequired,
 };
+Viewer._renderPagination = (index, total/*, context*/) => (
+  <View style={ styles.container }>
+    <View style={ styles.wrapper }>
+      <Text style={ { fontSize: 14, color: '#fff' } }>
+        { index + 1 } / {total}
+      </Text>
+    </View>
+  </View>
+);
 
 class EventDetail extends Component {
 
@@ -146,7 +127,6 @@ class EventDetail extends Component {
   }
 
   _onPhotoSelect(indexShown) {
-    console.log(indexShown)
     this.setState({
       indexShown,
       isViewerShown: true,
@@ -170,11 +150,102 @@ class EventDetail extends Component {
     this.props.navigator.pop();
   }
 
+  _reducePhotosView = (rowViews, photo, index, photos) => {
+    if (index === photos.length - 1) {
+      if (index % 2 === 0) {
+        if (index > 0) {
+          rowViews.push((
+            <Row key={ photos[index - 2] }>
+              <Col style={ { borderWidth: 1, borderColor: 'white' } }>
+                <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index - 2) }>
+                  <Thumbnail
+                    style={ { width: '100%', height: 150 } }
+                    square
+                    source={ { uri: photos[index - 2] } }
+                  />
+                </TouchableHighlight>
+              </Col>
+              <Col style={ { borderWidth: 1, borderColor: 'white' } }>
+                <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index - 1) }>
+                  <Thumbnail
+                    style={ { width: '100%', height: 150 } }
+                    square
+                    source={ { uri: photos[index - 1] } }
+                  />
+                </TouchableHighlight>
+              </Col>
+            </Row>
+          ));
+        }
+        rowViews.push((
+          <Row key={ photos[index] }>
+            <Col style={ { borderWidth: 1, borderColor: 'white' } }>
+              <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index) }>
+                <Thumbnail
+                  style={ { width: '100%', height: 300 } }
+                  square
+                  source={ { uri: photos[index] } }
+                />
+              </TouchableHighlight>
+            </Col>
+          </Row>
+        ));
+      } else {
+        rowViews.push((
+          <Row key={ photos[index - 1] }>
+            <Col style={ { borderWidth: 1, borderColor: 'white' } }>
+              <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index - 1) }>
+                <Thumbnail
+                  style={ { width: '100%', height: 150 } }
+                  square
+                  source={ { uri: photos[index - 1] } }
+                />
+              </TouchableHighlight>
+            </Col>
+            <Col style={ { borderWidth: 1, borderColor: 'white' } }>
+              <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index) }>
+                <Thumbnail
+                  style={ { width: '100%', height: 150 } }
+                  square
+                  source={ { uri: photos[index] } }
+                />
+              </TouchableHighlight>
+            </Col>
+          </Row>
+        ));
+      }
+    } else if (index > 0 && index % 2 === 0) {
+      rowViews.push((
+        <Row key={ photos[index - 2] }>
+          <Col style={ { borderWidth: 1, borderColor: 'white' } }>
+            <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index - 2) }>
+              <Thumbnail
+                style={ { width: '100%', height: 150 } }
+                square
+                source={ { uri: photos[index - 2] } }
+              />
+            </TouchableHighlight>
+          </Col>
+          <Col style={ { borderWidth: 1, borderColor: 'white' } }>
+            <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index - 1) }>
+              <Thumbnail
+                style={ { width: '100%', height: 150 } }
+                square
+                source={ { uri: photos[index - 1] } }
+              />
+            </TouchableHighlight>
+          </Col>
+        </Row>
+      ));
+    }
+    return rowViews;
+  }
+
   render() {
     const event = this.props.event || {
       name: 'Test Event',
       type: 'Public',
-      description: 'Arts Brookfield’s annual summer music festival, the Lowdown Hudson Music Fest, returns to the heart of downtown New York for its seventh summer. Bringing fun, lively, world-class musical talent to the picturesque Waterfront Plaza at Brookfield Place, this year’s festival will be headlined by quirky veteran rockers OK GO. The show is free to attend and open to the public.Free to attend, no tickets required.\n\nPLEASE NOTE: In keeping with the summer concert vibe, this year’s festival will be standing room only on a first come, first served basis.\n\nEvent is rain or shine, except for extreme weather conditions.',
+      detail: 'Arts Brookfield’s annual summer music festival, the Lowdown Hudson Music Fest, returns to the heart of downtown New York for its seventh summer. Bringing fun, lively, world-class musical talent to the picturesque Waterfront Plaza at Brookfield Place, this year’s festival will be headlined by quirky veteran rockers OK GO. The show is free to attend and open to the public.Free to attend, no tickets required.\n\nPLEASE NOTE: In keeping with the summer concert vibe, this year’s festival will be standing room only on a first come, first served basis.\n\nEvent is rain or shine, except for extreme weather conditions.',
       cost: 0,
       where: {
         venue: 'Time Square',
@@ -192,7 +263,7 @@ class EventDetail extends Component {
       heroPhoto: 'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_sample-1.jpeg?alt=media&token=d0bc39b7-bdcd-4820-a423-077e3180febd',
       photos: [
         'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_fireworks-photo.jpg?alt=media&token=0ef5d862-4079-4d19-a3a3-39d42d2934ca',
-        'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_fireworks.jpg?alt=media&token=2de88024-6692-47f9-a378-4d496f0490f9',
+        'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_sample-1.jpeg?alt=media&token=d0bc39b7-bdcd-4820-a423-077e3180febd',
         'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2mGX3v9pJ2R_47ge_sample-3.jpeg?alt=media&token=f7a218c3-d048-426c-8a4c-088f1daf4830',
         'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_fireworks-display-from-seafair-yacht.jpg?alt=media&token=393bd179-49c7-4b7e-8b3e-c5d0a005f593',
         'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_fireworks.jpg?alt=media&token=2de88024-6692-47f9-a378-4d496f0490f9',
@@ -202,96 +273,7 @@ class EventDetail extends Component {
     const photosView = (
       Array.isArray(event.photos) ? (
         event.photos
-          .reduce((rowViews, photo, index, photos) => {
-            if (index === photos.length - 1) {
-              if (index % 2 === 0) {
-                if (index > 0) {
-                  rowViews.push((
-                    <Row key={ photos[index - 2] }>
-                      <Col style={ { borderWidth: 1, borderColor: 'white' } }>
-                        <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index - 2) }>
-                          <Thumbnail
-                            style={ { width: '100%', height: 100 } }
-                            square
-                            source={ { uri: photos[index - 2] } }
-                          />
-                        </TouchableHighlight>
-                      </Col>
-                      <Col style={ { borderWidth: 1, borderColor: 'white' } }>
-                        <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index - 1) }>
-                          <Thumbnail
-                            style={ { width: '100%', height: 100 } }
-                            square
-                            source={ { uri: photos[index - 1] } }
-                          />
-                        </TouchableHighlight>
-                      </Col>
-                    </Row>
-                  ));
-                }
-                rowViews.push((
-                  <Row key={ photos[index] }>
-                    <Col style={ { borderWidth: 1, borderColor: 'white' } }>
-                      <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index) }>
-                        <Thumbnail
-                          style={ { width: '100%', height: 200 } }
-                          square
-                          source={ { uri: photos[index] } }
-                        />
-                      </TouchableHighlight>
-                    </Col>
-                  </Row>
-                ));
-              } else {
-                rowViews.push((
-                  <Row key={ photos[index - 1] }>
-                    <Col style={ { borderWidth: 1, borderColor: 'white' } }>
-                      <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index - 1) }>
-                        <Thumbnail
-                          style={ { width: '100%', height: 100 } }
-                          square
-                          source={ { uri: photos[index - 1] } }
-                        />
-                      </TouchableHighlight>
-                    </Col>
-                    <Col style={ { borderWidth: 1, borderColor: 'white' } }>
-                      <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index) }>
-                        <Thumbnail
-                          style={ { width: '100%', height: 100 } }
-                          square
-                          source={ { uri: photos[index] } }
-                        />
-                      </TouchableHighlight>
-                    </Col>
-                  </Row>
-                ));
-              }
-            } else if (index > 0 && index % 2 === 0) {
-              rowViews.push((
-                <Row key={ photos[index - 2] }>
-                  <Col style={ { borderWidth: 1, borderColor: 'white' } }>
-                    <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index - 2) }>
-                      <Thumbnail
-                        style={ { width: '100%', height: 100 } }
-                        square
-                        source={ { uri: photos[index - 2] } }
-                      />
-                    </TouchableHighlight>
-                  </Col>
-                  <Col style={ { borderWidth: 1, borderColor: 'white' } }>
-                    <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index - 1) }>
-                      <Thumbnail
-                        style={ { width: '100%', height: 100 } }
-                        square
-                        source={ { uri: photos[index - 1] } }
-                      />
-                    </TouchableHighlight>
-                  </Col>
-                </Row>
-              ));
-            }
-            return rowViews;
-          }, [])
+          .reduce(this._reducePhotosView, [])
       ) : (
         <Row>
           <Text note>coming soon...</Text>
@@ -329,7 +311,7 @@ class EventDetail extends Component {
         <Content padder>
           <Card>
             <CardItem cardBody>
-              <Image style={ { height: 200, width: null, flex: 1 } } source={ { uri: event.heroPhoto } } />
+              <Image style={ {  flex: 1, height: 200, width: null } } source={ { uri: event.heroPhoto } } />
             </CardItem>
             <CardItem style={ { height: 70 } } bordered>
               <Body style={ { flexGrow: 2, justifyContent: 'center' } }>
