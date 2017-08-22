@@ -99,7 +99,14 @@ class Events extends Component {
               <Icon name="bookmark" />
               <Text>Save</Text>
             </Button>
-            <Button iconLeft transparent onPress={ () => Share.share({ title: event.name, message: event.detail, url: event.externalLink }) }>
+            <Button
+              iconLeft
+              transparent
+              onPress={ () => Share.share({
+                title: event.name,
+                message: `Check out this hand picked event ${event.name} - ${event.externalLink || 'N/A'}\n\nFind more by downloading our app for free now:\nhttps://localdetourapp.com`,
+              }) }
+            >
               <Icon name="share" />
               <Text>Share</Text>
             </Button>
