@@ -198,7 +198,7 @@ class EventsMapView extends Component {
 
   render() {
     const events = this.state.useFilter ? this.state.filteredEvents : this.state.events;
-    const { width, height } = Dimensions.get('window');
+    const { height, width } = Dimensions.get('window');
 
     return (
       <Container>
@@ -271,7 +271,7 @@ class EventsMapView extends Component {
           </Right>
         </Header>
         <Content scrollEnabled={ false }>
-          <View style={ { width, height } }>
+          <View style={ { height, width } }>
             <MapView
               style={ styles.map }
               provider={ null }
@@ -284,7 +284,7 @@ class EventsMapView extends Component {
               loadingEnabled={ true }
               loadingBackgroundColor={ '#f96332' }
               showsUserLocation={ true }
-              region={ this.state.mapRegion }
+              initialRegion={ this.state.mapRegion }
               //onRegionChange={ this._onMapRegionChange }
             >
               { events.map((event, index) => this._renderEvent(event, index)) }

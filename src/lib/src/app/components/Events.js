@@ -81,8 +81,8 @@ class Events extends Component {
         <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
           <Left>
             <Body style={ { flexGrow: 2, justifyContent: 'center' } }>
-              <Text style={ { fontSize: 11, color: 'red' } }>&nbsp;{ moment(event.when.startTimestamp).format('MMM').toUpperCase() }</Text>
-              <Text style={ { fontSize: 25 } }>{ moment(event.when.startTimestamp).format('DD') }</Text>
+              <Text style={ { fontSize: 10.5, color: 'red' } }>&nbsp;{ moment(event.when.startTimestamp).format('MMM').toUpperCase() }</Text>
+              <Text style={ { fontSize: 22.5 } }>{ moment(event.when.startTimestamp).format('DD') }</Text>
             </Body>
             <Body style={ { flexGrow: 15 } }>
               <Text style={ { fontSize: 16 } }>{ event.name }</Text>
@@ -104,7 +104,8 @@ class Events extends Component {
               transparent
               onPress={ () => Share.share({
                 title: event.name,
-                message: `Check out this hand picked event ${event.name} - ${event.externalLink || 'N/A'}\n\nFind more by downloading our app for free now:\nhttps://localdetourapp.com`,
+                message: `Check out this hand picked event - ${event.name}\n${event.externalLink}\n\nFind out more by downloading our app for free:\nhttps://mysugarpost.herokuapp.com/`,
+                //url: 'https://mysugarpost.herokuapp.com/',
               }) }
             >
               <Icon name="share" />
@@ -123,8 +124,8 @@ class Events extends Component {
     try {
       const savedEvent = await CalendarEvents.saveToCalendarEvents(event.name, {
         location: event.where && event.where.address,
-        startDate: (event.when && event.when.startTimestampp) ? new Date(event.when.startTimestamp) : new Date(),
-        endDate: (event.when && event.when.endTimestamppp) ? new Date(event.when.endTimestamp) : new Date(),
+        startDate: (event.when && event.when.startTimestamp) ? new Date(event.when.startTimestamp) : new Date(),
+        endDate: (event.when && event.when.endTimestamp) ? new Date(event.when.endTimestamp) : new Date(),
         alarms: [{ date: -60 * 24 }], // 24 hours.
         description: event.detail,
         notes: event.detail,

@@ -31,7 +31,7 @@ class WebViewWrapper extends Component {
   }
 
   render() {
-    const { width, height } = Dimensions.get('window');
+    const { height, width } = Dimensions.get('window');
 
     return (
       <Container>
@@ -52,7 +52,7 @@ class WebViewWrapper extends Component {
           </Right>
         </Header>
         <Content>
-          <View style={ { width, height } }>
+          <View style={ { height, width } }>
             <WebView source={ { uri: this.props.url } } />
           </View>
         </Content>

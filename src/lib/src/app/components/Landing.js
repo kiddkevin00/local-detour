@@ -1,3 +1,4 @@
+import actionCreator from '../actioncreators/landing';
 import Walkthrough from './Walkthrough';
 import Events from './Events';
 import Swiper from 'react-native-swiper';
@@ -13,6 +14,7 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
+import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -29,13 +31,12 @@ const styles = StyleSheet.create({
 class Landing extends Component {
 
   static propTypes = {
+    dispatchFinishWaitingForAsyncOps: PropTypes.func.isRequired,
+    waitingForAsyncOps: PropTypes.bool.isRequired,
+
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
-
-  state = {
-    waitingForAsyncOps: true,
-  };
-
+  
   componentDidMount() {
     AsyncStorage.getItem('@SystemSetting:shouldSkipWalkthrough')
       .then((shouldSkipWalkthrough) => {
@@ -44,9 +45,7 @@ class Landing extends Component {
             component: Events,
           });
         } else {
-          this.setState({
-            waitingForAsyncOps: false,
-          });
+          this.props.dispatchFinishWaitingForAsyncOps();
         }
       })
       .catch((err) => {
@@ -62,11 +61,11 @@ class Landing extends Component {
   }
 
   render() {
-    if (this.state.waitingForAsyncOps) return null;
+    if (this.props.waitingForAsyncOps) return null;
 
     const backgroundImageInlineStyle = {
-      width: Dimensions.get('window').width,
       height: Dimensions.get('window').height,
+      width: Dimensions.get('window').width,
     };
 
     return (
@@ -81,8 +80,14 @@ class Landing extends Component {
               <Button
                 block
                 light
-                style={ { marginBottom: 80, marginHorizontal: 20, paddingTop: 25, paddingBottom: 25, backgroundColor: '#f96332' } }
                 onPress={ this._checkoutWalkthrough }
+                style={ {
+                  marginBottom: 80,
+                  marginHorizontal: 20,
+                  paddingTop: 25,
+                  paddingBottom: 25,
+                  backgroundColor: '#f96332',
+                } }
               >
                 <Text style={ { fontSize: 17, color: 'white', fontWeight: 'bold' } }>Let’s get started</Text>
               </Button>
@@ -95,4 +100,17 @@ class Landing extends Component {
 
 }
 
-export { Landing as default };
+function mapStateToProps(state) {
+  return {
+    waitingForAsyncOps: state.landing.waitingForAsyncOps,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatchFinishWaitingForAsyncOps() {
+      dispatch(actionCreator.finishWaitingForAsyncOps());
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Landing);

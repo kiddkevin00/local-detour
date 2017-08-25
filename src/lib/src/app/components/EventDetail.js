@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
 
 function Viewer(props) {
   const photoViewInlineStyle = {
-    width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
+    width: Dimensions.get('window').width,
   };
 
   return (
@@ -159,7 +159,7 @@ class EventDetail extends Component {
               <Col style={ { borderWidth: 1, borderColor: 'white' } }>
                 <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index - 2) }>
                   <Thumbnail
-                    style={ { width: '100%', height: 150 } }
+                    style={ { height: 150, width: '100%' } }
                     square
                     source={ { uri: photos[index - 2] } }
                   />
@@ -168,7 +168,7 @@ class EventDetail extends Component {
               <Col style={ { borderWidth: 1, borderColor: 'white' } }>
                 <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index - 1) }>
                   <Thumbnail
-                    style={ { width: '100%', height: 150 } }
+                    style={ { height: 150, width: '100%' } }
                     square
                     source={ { uri: photos[index - 1] } }
                   />
@@ -182,7 +182,7 @@ class EventDetail extends Component {
             <Col style={ { borderWidth: 1, borderColor: 'white' } }>
               <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index) }>
                 <Thumbnail
-                  style={ { width: '100%', height: 300 } }
+                  style={ { height: 300, width: '100%' } }
                   square
                   source={ { uri: photos[index] } }
                 />
@@ -196,7 +196,7 @@ class EventDetail extends Component {
             <Col style={ { borderWidth: 1, borderColor: 'white' } }>
               <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index - 1) }>
                 <Thumbnail
-                  style={ { width: '100%', height: 150 } }
+                  style={ { height: 150, width: '100%' } }
                   square
                   source={ { uri: photos[index - 1] } }
                 />
@@ -205,7 +205,7 @@ class EventDetail extends Component {
             <Col style={ { borderWidth: 1, borderColor: 'white' } }>
               <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index) }>
                 <Thumbnail
-                  style={ { width: '100%', height: 150 } }
+                  style={ { height: 150, width: '100%' } }
                   square
                   source={ { uri: photos[index] } }
                 />
@@ -220,7 +220,7 @@ class EventDetail extends Component {
           <Col style={ { borderWidth: 1, borderColor: 'white' } }>
             <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index - 2) }>
               <Thumbnail
-                style={ { width: '100%', height: 150 } }
+                style={ { height: 150, width: '100%' } }
                 square
                 source={ { uri: photos[index - 2] } }
               />
@@ -229,7 +229,7 @@ class EventDetail extends Component {
           <Col style={ { borderWidth: 1, borderColor: 'white' } }>
             <TouchableHighlight onPress={ this._onPhotoSelect.bind(this, index - 1) }>
               <Thumbnail
-                style={ { width: '100%', height: 150 } }
+                style={ { height: 150, width: '100%' } }
                 square
                 source={ { uri: photos[index - 1] } }
               />
@@ -303,7 +303,14 @@ class EventDetail extends Component {
             <Title style={ { color: 'white', fontFamily: 'Lily Script One', fontSize: 27 } }>Local Detour</Title>
           </Body>
           <Right>
-            <Button transparent onPress={ () => Share.share({ title: event.name, message: event.detail, url: event.externalLink }) }>
+            <Button
+              transparent
+              onPress={ () => Share.share({
+                title: event.name,
+                message: `Check out this hand picked event - ${event.name}\n${event.externalLink}\n\nFind out more by downloading our app for free`,
+                url: 'https://mysugarpost.herokuapp.com/',
+              }) }
+            >
               <Icon style={ { color: 'white' } } name="share" />
             </Button>
           </Right>
@@ -311,7 +318,7 @@ class EventDetail extends Component {
         <Content padder>
           <Card>
             <CardItem cardBody>
-              <Image style={ {  flex: 1, height: 200, width: null } } source={ { uri: event.heroPhoto } } />
+              <Image style={ { flex: 1, height: 200, width: null } } source={ { uri: event.heroPhoto } } />
             </CardItem>
             <CardItem style={ { height: 70 } } bordered>
               <Body style={ { flexGrow: 2, justifyContent: 'center' } }>
@@ -328,7 +335,7 @@ class EventDetail extends Component {
               <Left>
                 <Icon style={ { fontSize: 25, color: 'red' } } name="time" />
                 <Text>&nbsp;</Text>
-                <Text style={ { fontSize: 14 } }>{ moment(event.when.startTimestamp).format('MMM DD  hh:mmA') } - { moment(event.when.endTimestamp).format('MMM DD  hh:mmA') }</Text>
+                <Text style={ { fontSize: 14 } }>{ moment(event.when.startTimestamp).format('MMM DD hh:mm A') } - { moment(event.when.endTimestamp).format('MMM DD hh:mm A') }</Text>
               </Left>
             </CardItem>
             <CardItem bordered>
