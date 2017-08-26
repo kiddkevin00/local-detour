@@ -16,6 +16,8 @@ import FBSDK, {
   AccessToken,
 } from 'react-native-fbsdk';
 
+import firebase from 'firebase';
+
 
 const styles = StyleSheet.create({
   container: {
@@ -176,10 +178,16 @@ class Signup extends Component {
     if (error) {
       global.alert(`Facebook login error ${result.error}`);
     } else if (result.isCancelled) {
-      global.alert("Facebook login is cancelled.");
+      global.alert('Facebook login is cancelled.');
     } else {
       const data = await AccessToken.getCurrentAccessToken();
       console.log(`login success!! ${data.accessToken.toString()}`)
+      const credential = await firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+      try {
+        const auth = firebaseAuth.signInWithCredential(credential)
+      } catch (err) {
+        global.alert('Firebase Facebook auth failed');
+      }
     }
   }
 
