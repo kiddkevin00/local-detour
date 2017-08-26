@@ -11,6 +11,10 @@ import {
 } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import FBSDK, {
+  LoginButton,
+  AccessToken,
+} from 'react-native-fbsdk';
 
 
 const styles = StyleSheet.create({
@@ -168,6 +172,17 @@ class Signup extends Component {
     });
   }
 
+  _fbLogin = async (error, result) => {
+    if (error) {
+      global.alert(`Facebook login error ${result.error}`);
+    } else if (result.isCancelled) {
+      global.alert("Facebook login is cancelled.");
+    } else {
+      const data = await AccessToken.getCurrentAccessToken();
+      console.log(`login success!! ${data.accessToken.toString()}`)
+    }
+  }
+
   _signinAnonymously = async () => {
     this.setState({
       isLoading: true,
@@ -253,6 +268,10 @@ class Signup extends Component {
           >
             <Text style={ styles.signupLaterButtonText }>SIGN UP LATER</Text>
           </TouchableHighlight>
+          <LoginButton
+            publishPermissions={ ['publish_actions'] }
+            onLoginFinished={ this._fbLogin }
+            onLogoutFinished={() => alert("logout.")}/>
           <ActivityIndicator
             animating={ this.state.isLoading }
             color="#111"

@@ -1,4 +1,4 @@
-import Landing from './src/lib/src/app/components/Landing';
+import Landing from './src/lib/src/app/components/Signup';
 import {
   AsyncStorage,
   AppRegistry,
