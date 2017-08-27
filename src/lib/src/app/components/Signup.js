@@ -18,7 +18,6 @@ import FBSDK, {
 
 import firebase from 'firebase';
 
-
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
@@ -184,7 +183,8 @@ class Signup extends Component {
       console.log(`login success!! ${data.accessToken.toString()}`)
       const credential = await firebase.auth.FacebookAuthProvider.credential(data.accessToken);
       try {
-        const auth = firebaseAuth.signInWithCredential(credential)
+        const auth = firebaseAuth.signInWithCredential(credential);
+        // TODO: pass userName, photoUrl into profile page
       } catch (err) {
         global.alert('Firebase Facebook auth failed');
       }
@@ -278,8 +278,9 @@ class Signup extends Component {
           </TouchableHighlight>
           <LoginButton
             publishPermissions={ ['publish_actions'] }
+            readPermissions={ ['public_profile', 'email'] }
             onLoginFinished={ this._fbLogin }
-            onLogoutFinished={() => alert("logout.")}/>
+            onLogoutFinished={ () => alert("logout.")} />
           <ActivityIndicator
             animating={ this.state.isLoading }
             color="#111"
