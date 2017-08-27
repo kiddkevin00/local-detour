@@ -1,14 +1,13 @@
 import Events from './Events';
 import EventDetail from './EventDetail';
 import Setting from './Setting';
-import { firebaseDb } from '../proxies/FirebaseProxy';
 import MapView from 'react-native-maps';
-import moment from 'moment';
 import {
-  View,
-  StyleSheet,
-  Dimensions,
-} from 'react-native';
+  firebaseConnect,
+} from 'react-redux-firebase';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import moment from 'moment';
 import {
   Container,
   Header,
@@ -21,6 +20,11 @@ import {
   Text,
   Icon,
 } from 'native-base';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -39,11 +43,14 @@ const styles = StyleSheet.create({
 class EventsMapView extends Component {
 
   static propTypes = {
+    events: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    auth: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    firebase: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
   state = {
-    events: [],
     filteredEvents: [],
     useFilter: false,
     filters: [
@@ -66,33 +73,7 @@ class EventsMapView extends Component {
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0922 * (Dimensions.get('window').width / Dimensions.get('window').height),
     },
-    showMapView: true,
   };
-
-  componentDidMount() {
-    this.dataRef.on('value', (eventsSnapshot) => {
-      const events = [];
-
-      eventsSnapshot.forEach((eventSnapshot) => {
-        const event = eventSnapshot.val();
-        const today = moment();
-
-        if (today.isBefore(event.when && event.when.endTimestamp)) {
-          events.push(event);
-        }
-      });
-
-      this.setState({
-        events,
-      });
-    });
-  }
-
-  componentWillUnmount() {
-    this.dataRef.off();
-  }
-
-  dataRef = firebaseDb.ref('/nyc').child('events');
 
   _renderEvent(event) {
     return (
@@ -125,7 +106,7 @@ class EventsMapView extends Component {
     let filteredEvents = [];
 
     if (useFilter) {
-      filteredEvents = this.state.events.filter((event) => {
+      filteredEvents = this.props.events.filter((event) => {
         const today = moment();
 
         // Filters out past events.
@@ -159,7 +140,7 @@ class EventsMapView extends Component {
   }
 
   _onMarkerPress(targetEvent) {
-    const events = this.state.events.map((event) => {
+    const events = this.props.events.map((event) => {
       if (event === targetEvent) {
         return Object.assign({}, event, { color: 'orange' });
       }
@@ -183,8 +164,6 @@ class EventsMapView extends Component {
   }
 
   _gotoListView = () => {
-    this.setState({ showMapView: false });
-
     this.props.navigator.replace({
       component: Events,
     });
@@ -197,7 +176,7 @@ class EventsMapView extends Component {
   }
 
   render() {
-    const events = this.state.useFilter ? this.state.filteredEvents : this.state.events;
+    const events = this.state.useFilter ? this.state.filteredEvents : this.props.events;
     const { height, width } = Dimensions.get('window');
 
     return (
@@ -297,5 +276,18 @@ class EventsMapView extends Component {
 
 }
 
-
-export { EventsMapView as default };
+export default compose(
+  firebaseConnect([
+    { path: '/nyc/events' },
+  ]),
+  connect(
+    function mapStateToProps(state) {
+      return {
+        events: state.firebase.ordered && state.firebase.ordered.nyc &&
+          Array.isArray(state.firebase.ordered.nyc.events) ?
+          (state.firebase.ordered.nyc.events.map((event) => event.value)) : [],
+        auth: state.firebase.auth,
+      };
+    }
+  )
+)(EventsMapView);

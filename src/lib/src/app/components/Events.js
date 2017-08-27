@@ -3,7 +3,11 @@ import CalendarEvents from '../utils/CalendarEvents';
 import EventMapView from './EventsMapView';
 import EventDetail from './EventDetail';
 import Setting from './Setting';
-import { firebaseDb } from '../proxies/FirebaseProxy';
+import {
+  firebaseConnect,
+} from 'react-redux-firebase';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import moment from 'moment';
 import {
   Container,
@@ -33,12 +37,11 @@ import PropTypes from 'prop-types';
 class Events extends Component {
 
   static propTypes = {
-    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  };
+    events: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    auth: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    firebase: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 
-  state = {
-    events: [],
-    showListView: true,
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
   componentDidMount() {
@@ -50,30 +53,7 @@ class Events extends Component {
         // Error saving data
         console.log(err);
       });
-
-    this.dataRef.on('value', (eventsSnapshot) => {
-      const events = [];
-
-      eventsSnapshot.forEach((eventSnapshot) => {
-        const event = eventSnapshot.val();
-        const today = moment();
-
-        if (today.isBefore(event.when && event.when.endTimestamp)) {
-          events.push(event);
-        }
-      });
-
-      this.setState({
-        events,
-      });
-    });
   }
-
-  componentWillUnmount() {
-    this.dataRef.off();
-  }
-
-  dataRef = firebaseDb.ref('/nyc').child('events');
 
   _renderEvent = (event) => (
     <ListItem style={ { borderBottomWidth: 0 } } >
@@ -147,8 +127,6 @@ class Events extends Component {
   }
 
   _gotoMapView = () => {
-    this.setState({ showListView: false });
-
     this.props.navigator.replace({
       component: EventMapView,
     });
@@ -176,7 +154,7 @@ class Events extends Component {
         </Header>
         <Content>
           <List
-            dataArray={ this.state.events }
+            dataArray={ this.props.events }
             renderRow={ this._renderEvent }
           />
         </Content>
@@ -186,4 +164,18 @@ class Events extends Component {
 
 }
 
-export { Events as default };
+export default compose(
+  firebaseConnect([
+    { path: '/nyc/events' },
+  ]),
+  connect(
+    function mapStateToProps(state) {
+      return {
+        events: state.firebase.ordered && state.firebase.ordered.nyc &&
+          Array.isArray(state.firebase.ordered.nyc.events) ?
+          (state.firebase.ordered.nyc.events.map((event) => event.value)) : [],
+        auth: state.firebase.auth,
+      };
+    }
+  )
+)(Events);

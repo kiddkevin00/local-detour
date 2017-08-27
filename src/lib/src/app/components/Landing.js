@@ -31,12 +31,12 @@ const styles = StyleSheet.create({
 class Landing extends Component {
 
   static propTypes = {
-    dispatchFinishWaitingForAsyncOps: PropTypes.func.isRequired,
     waitingForAsyncOps: PropTypes.bool.isRequired,
+    dispatchFinishWaitingForAsyncOps: PropTypes.func.isRequired,
 
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
-  
+
   componentDidMount() {
     AsyncStorage.getItem('@SystemSetting:shouldSkipWalkthrough')
       .then((shouldSkipWalkthrough) => {

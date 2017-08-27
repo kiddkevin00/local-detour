@@ -11,9 +11,10 @@ function landingReducer(state = initialState, action) {
 
   switch (actionType) {
     case actionTypes.LANDING.FINISH_WAITING_FOR_ASYNC_OPS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         waitingForAsyncOps: false,
-      });
+      };
     default:
       return state;
   }
