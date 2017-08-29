@@ -8,11 +8,12 @@
  */
 
 #import "AppDelegate.h"
-
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "RNFIRMessaging.h"
+#import "Firebase.h"
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-#import "Firebase.h"
+
 
 @implementation AppDelegate
 
@@ -27,6 +28,13 @@
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
+  
+  /*
+   * To post-process the results from actions that require you to switch to the native Facebook app or 
+   * Safari, such as Facebook Login or Facebook Dialogs
+   */
+  [[FBSDKApplicationDelegate sharedInstance] application:application
+    didFinishLaunchingWithOptions:launchOptions];
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
@@ -36,8 +44,9 @@
 
   // Uses Firebase library to configure APIs
   [FIRApp configure];
-  [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
   
+  [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
+
   return YES;
 }
 
@@ -51,13 +60,25 @@
   [RNFIRMessaging didReceiveNotificationResponse:response withCompletionHandler:completionHandler];
 }
 
-//You can skip this method if you don't want to use local notification
+// You can skip this method if you don't want to use local notification
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
   [RNFIRMessaging didReceiveLocalNotification:notification];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler{
   [RNFIRMessaging didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+    sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+
+  BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application
+    openURL:url
+    sourceApplication:sourceApplication
+    annotation:annotation
+  ];
+  // Add any custom logic here.
+  return handled;
 }
 
 @end

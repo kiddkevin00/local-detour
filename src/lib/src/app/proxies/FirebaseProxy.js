@@ -14,5 +14,5 @@ firebaseProxy.initializeApp(config);
 
 export const firebaseDb = firebaseProxy.database();
 export const firebaseAuth = firebaseProxy.auth();
-export const firebaseGoogleAuthProvider = new firebaseProxy.auth.GoogleAuthProvider();
+export const firebaseAuthProviders = firebaseProxy.auth;
 export default firebaseProxy;

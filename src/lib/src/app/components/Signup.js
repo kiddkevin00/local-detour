@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flexGrow: 70,
-    marginTop: 64,
+    //marginTop: 64,
     padding: 30,
     backgroundColor: '#23cfb9',
   },
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   footerText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#a3a7b2',
   },
   loginButtonText: {
@@ -156,18 +156,6 @@ class Signup extends Component {
     }
   }
 
-  _handleChange = (field, event) => {
-    this.setState({
-      [`form${field}`]: event.nativeEvent.text,
-    });
-  }
-
-  _gotoLogin = () => {
-    this.props.navigator.push({
-      component: Login,
-    });
-  }
-
   _signinAnonymously = async () => {
     this.setState({
       isLoading: true,
@@ -203,6 +191,18 @@ class Signup extends Component {
         error: errorMessage,
       });
     }
+  }
+
+  _gotoLogin = () => {
+    this.props.navigator.push({
+      component: Login,
+    });
+  }
+
+  _handleChange = (field, event) => {
+    this.setState({
+      [`form${field}`]: event.nativeEvent.text,
+    });
   }
 
   render() {
