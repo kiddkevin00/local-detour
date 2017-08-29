@@ -38,8 +38,8 @@ class Walkthrough extends Component {
 
   render() {
     const backgroundImageInlineStyle = {
-      width: Dimensions.get('window').width,
       height: Dimensions.get('window').height,
+      width: Dimensions.get('window').width,
     };
     const buttonStyle = {
       marginBottom: 80,
@@ -68,12 +68,7 @@ class Walkthrough extends Component {
               source={ require('../../../static/assets/images/walkthrough_3.jpg') }
               resizeMode="stretch"
             >
-              <Button
-                block
-                light
-                style={ buttonStyle }
-                onPress={ this._checkoutEvents }
-              >
+              <Button style={ buttonStyle } block light onPress={ this._checkoutEvents }>
                 <Text style={ { fontSize: 17, fontWeight: '500' } }>Explore now</Text>
               </Button>
             </Image>

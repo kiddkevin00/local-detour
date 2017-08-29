@@ -819,6 +819,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = AL3QQKJ8WD;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1375,6 +1376,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = localDetour/localDetour.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = AL3QQKJ8WD;
@@ -1404,6 +1406,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.travelPal.localDetour;
 				PRODUCT_NAME = localDetour;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1414,6 +1417,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = localDetour/localDetour.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = AL3QQKJ8WD;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1442,6 +1446,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.travelPal.localDetour;
 				PRODUCT_NAME = localDetour;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -1478,7 +1483,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.localDetour-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.travelPal.localDetour-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -1517,7 +1522,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.localDetour-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.travelPal.localDetour-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;

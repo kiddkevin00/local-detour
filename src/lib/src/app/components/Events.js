@@ -3,7 +3,11 @@ import CalendarEvents from '../utils/CalendarEvents';
 import EventMapView from './EventsMapView';
 import EventDetail from './EventDetail';
 import Setting from './Setting';
-import { firebaseDb } from '../proxies/FirebaseProxy';
+import {
+  firebaseConnect,
+} from 'react-redux-firebase';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import moment from 'moment';
 import {
   Container,
@@ -33,12 +37,11 @@ import PropTypes from 'prop-types';
 class Events extends Component {
 
   static propTypes = {
-    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  };
+    events: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    auth: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    firebase: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 
-  state = {
-    events: [],
-    showListView: true,
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
   componentDidMount() {
@@ -50,30 +53,7 @@ class Events extends Component {
         // Error saving data
         console.log(err);
       });
-
-    this.dataRef.on('value', (eventsSnapshot) => {
-      const events = [];
-
-      eventsSnapshot.forEach((eventSnapshot) => {
-        const event = eventSnapshot.val();
-        const today = moment();
-
-        if (today.isBefore(event.when && event.when.endTimestamp)) {
-          events.push(event);
-        }
-      });
-
-      this.setState({
-        events,
-      });
-    });
   }
-
-  componentWillUnmount() {
-    this.dataRef.off();
-  }
-
-  dataRef = firebaseDb.ref('/nyc').child('events');
 
   _renderEvent = (event) => (
     <ListItem style={ { borderBottomWidth: 0 } } >
@@ -81,8 +61,8 @@ class Events extends Component {
         <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
           <Left>
             <Body style={ { flexGrow: 2, justifyContent: 'center' } }>
-              <Text style={ { fontSize: 11, color: 'red' } }>&nbsp;{ moment(event.when.startTimestamp).format('MMM').toUpperCase() }</Text>
-              <Text style={ { fontSize: 25 } }>{ moment(event.when.startTimestamp).format('DD') }</Text>
+              <Text style={ { fontSize: 10.5, color: 'red' } }>&nbsp;{ moment(event.when.startTimestamp).format('MMM').toUpperCase() }</Text>
+              <Text style={ { fontSize: 22.5 } }>{ moment(event.when.startTimestamp).format('DD') }</Text>
             </Body>
             <Body style={ { flexGrow: 15 } }>
               <Text style={ { fontSize: 16 } }>{ event.name }</Text>
@@ -104,7 +84,8 @@ class Events extends Component {
               transparent
               onPress={ () => Share.share({
                 title: event.name,
-                message: `Check out this hand picked event ${event.name} - ${event.externalLink || 'N/A'}\n\nFind more by downloading our app for free now:\nhttps://localdetourapp.com`,
+                message: `Check out this hand picked event - ${event.name}\n${event.externalLink}\n\nFind out more by downloading our app for free:\nhttps://mysugarpost.herokuapp.com/`,
+                //url: 'https://mysugarpost.herokuapp.com/',
               }) }
             >
               <Icon name="share" />
@@ -123,8 +104,8 @@ class Events extends Component {
     try {
       const savedEvent = await CalendarEvents.saveToCalendarEvents(event.name, {
         location: event.where && event.where.address,
-        startDate: (event.when && event.when.startTimestampp) ? new Date(event.when.startTimestamp) : new Date(),
-        endDate: (event.when && event.when.endTimestamppp) ? new Date(event.when.endTimestamp) : new Date(),
+        startDate: (event.when && event.when.startTimestamp) ? new Date(event.when.startTimestamp) : new Date(),
+        endDate: (event.when && event.when.endTimestamp) ? new Date(event.when.endTimestamp) : new Date(),
         alarms: [{ date: -60 * 24 }], // 24 hours.
         description: event.detail,
         notes: event.detail,
@@ -146,8 +127,6 @@ class Events extends Component {
   }
 
   _gotoMapView = () => {
-    this.setState({ showListView: false });
-
     this.props.navigator.replace({
       component: EventMapView,
     });
@@ -175,7 +154,7 @@ class Events extends Component {
         </Header>
         <Content>
           <List
-            dataArray={ this.state.events }
+            dataArray={ this.props.events }
             renderRow={ this._renderEvent }
           />
         </Content>
@@ -185,4 +164,18 @@ class Events extends Component {
 
 }
 
-export { Events as default };
+export default compose(
+  firebaseConnect([
+    { path: '/nyc/events' },
+  ]),
+  connect(
+    function mapStateToProps(state) {
+      return {
+        events: state.firebase.ordered && state.firebase.ordered.nyc &&
+          Array.isArray(state.firebase.ordered.nyc.events) ?
+          (state.firebase.ordered.nyc.events.map((event) => event.value)) : [],
+        auth: state.firebase.auth,
+      };
+    }
+  )
+)(Events);
