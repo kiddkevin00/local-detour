@@ -76,23 +76,23 @@
 	<false/>
 	<key>CFBundleURLTypes</key>
 	<array>
-		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>fb244325672756420</string>
-			</array>
-		</dict>
+	  <dict>
+	  <key>CFBundleURLSchemes</key>
+	  <array>
+	    <string>fb158721484707033</string>
+	  </array>
+	  </dict>
 	</array>
 	<key>FacebookAppID</key>
-	<string>244325672756420</string>
+	<string>158721484707033</string>
 	<key>FacebookDisplayName</key>
-	<string>localDetour</string>
+	<string>Local Detour</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>fbapi</string>
-		<string>fb-messenger-api</string>
-		<string>fbauth2</string>
-		<string>fbshareextension</string>
+	  <string>fbapi</string>
+	  <string>fb-messenger-api</string>
+	  <string>fbauth2</string>
+	  <string>fbshareextension</string>
 	</array>
 </dict>
 </plist>

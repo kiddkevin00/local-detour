@@ -280,7 +280,7 @@ class Signup extends Component {
             publishPermissions={ ['publish_actions'] }
             readPermissions={ ['public_profile', 'email'] }
             onLoginFinished={ this._fbLogin }
-            onLogoutFinished={ () => alert("logout.")} />
+            onLogoutFinished={ () => alert('Logout succeed!') } />
           <ActivityIndicator
             animating={ this.state.isLoading }
             color="#111"

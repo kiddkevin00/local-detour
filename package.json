@@ -73,8 +73,7 @@
     "react-native-maps": "0.15.3",
     "react-native-photo-view": "1.4.0",
     "react-native-swiper": "1.5.4",
-    "react-navigation": "1.0.0-beta.11",
-    "xcode": "^0.9.3"
+    "react-navigation": "1.0.0-beta.11"
   },
   "devDependencies": {
     "babel-eslint": "7.2.3",
