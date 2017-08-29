@@ -11,12 +11,7 @@ import {
 } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import FBSDK, {
-  LoginButton,
-  AccessToken,
-} from 'react-native-fbsdk';
 
-import firebase from 'firebase';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,7 +20,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flexGrow: 70,
-    marginTop: 64,
+    //marginTop: 64,
     padding: 30,
     backgroundColor: '#23cfb9',
   },
@@ -84,7 +79,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   footerText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#a3a7b2',
   },
   loginButtonText: {
@@ -161,36 +156,6 @@ class Signup extends Component {
     }
   }
 
-  _handleChange = (field, event) => {
-    this.setState({
-      [`form${field}`]: event.nativeEvent.text,
-    });
-  }
-
-  _gotoLogin = () => {
-    this.props.navigator.push({
-      component: Login,
-    });
-  }
-
-  _fbLogin = async (error, result) => {
-    if (error) {
-      global.alert(`Facebook login error ${result.error}`);
-    } else if (result.isCancelled) {
-      global.alert('Facebook login is cancelled.');
-    } else {
-      const data = await AccessToken.getCurrentAccessToken();
-      console.log(`login success!! ${data.accessToken.toString()}`)
-      const credential = await firebase.auth.FacebookAuthProvider.credential(data.accessToken);
-      try {
-        const auth = firebaseAuth.signInWithCredential(credential);
-        // TODO: pass userName, photoUrl into profile page
-      } catch (err) {
-        global.alert('Firebase Facebook auth failed');
-      }
-    }
-  }
-
   _signinAnonymously = async () => {
     this.setState({
       isLoading: true,
@@ -226,6 +191,18 @@ class Signup extends Component {
         error: errorMessage,
       });
     }
+  }
+
+  _gotoLogin = () => {
+    this.props.navigator.push({
+      component: Login,
+    });
+  }
+
+  _handleChange = (field, event) => {
+    this.setState({
+      [`form${field}`]: event.nativeEvent.text,
+    });
   }
 
   render() {
@@ -276,11 +253,6 @@ class Signup extends Component {
           >
             <Text style={ styles.signupLaterButtonText }>SIGN UP LATER</Text>
           </TouchableHighlight>
-          <LoginButton
-            publishPermissions={ ['publish_actions'] }
-            readPermissions={ ['public_profile', 'email'] }
-            onLoginFinished={ this._fbLogin }
-            onLogoutFinished={ () => alert('Logout succeed!') } />
           <ActivityIndicator
             animating={ this.state.isLoading }
             color="#111"

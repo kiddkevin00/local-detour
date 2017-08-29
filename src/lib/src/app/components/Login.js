@@ -1,6 +1,10 @@
 import Events from './Events';
 import Signup from './Signup';
-import { firebaseAuth } from '../proxies/FirebaseProxy';
+import { firebaseAuth, firebaseAuthProviders } from '../proxies/FirebaseProxy';
+import FBSDK, {
+  LoginButton as FacebookSignInButton,
+  AccessToken,
+} from 'react-native-fbsdk';
 import {
   ActivityIndicator,
   TouchableHighlight,
@@ -20,7 +24,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flexGrow: 70,
-    marginTop: 64,
+    //marginTop: 64,
     padding: 30,
     backgroundColor: '#23cfb9',
   },
@@ -59,7 +63,7 @@ const styles = StyleSheet.create({
   signupButton: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10,
+    //marginTop: 10,
     marginBottom: 5,
     borderWidth: 1,
     borderRadius: 8,
@@ -68,7 +72,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'orange',
   },
   footerText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#a3a7b2',
   },
   loginButtonText: {
@@ -131,15 +135,38 @@ class Login extends Component {
     }
   }
 
-  _handleChange = (field, event) => {
-    this.setState({
-      [`form${field}`]: event.nativeEvent.text,
-    });
+  _handleFbLogin = async (error, result) => {
+    if (error) {
+      global.alert(`Facebook login error: ${result.error}`);
+    } else if (result.isCancelled) {
+      global.alert('Facebook login cancelled.');
+    } else {
+      const { accessToken } = await AccessToken.getCurrentAccessToken();
+
+      console.log(`Facebook login access token: ${accessToken.toString()}`);
+
+      const credential = await firebaseAuthProviders.FacebookAuthProvider.credential(accessToken);
+
+      try {
+        // [TODO] Pass userName, photoUrl, etc in `auth` into profile page.
+        const auth = firebaseAuth.signInWithCredential(credential);
+
+
+      } catch (err) {
+        global.alert('Facebook login with Firebase failed');
+      }
+    }
   }
 
   _gotoSignup = () => {
     this.props.navigator.push({
       component: Signup,
+    });
+  }
+
+  _handleChange = (field, event) => {
+    this.setState({
+      [`form${field}`]: event.nativeEvent.text,
     });
   }
 
@@ -177,6 +204,12 @@ class Login extends Component {
           >
             <Text style={ styles.signupButtonText }>SIGN UP</Text>
           </TouchableHighlight>
+          <FacebookSignInButton
+            publishPermissions={ ['publish_actions'] }
+            readPermissions={ ['public_profile', 'email', 'user_friends'] }
+            onLoginFinished={ this._handleFbLogin }
+            onLogoutFinished={ () => global.alert('Logout succeeded!') }
+          />
           <ActivityIndicator
             animating={ this.state.isLoading }
             color="#111"
