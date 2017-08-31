@@ -1,5 +1,5 @@
 {
-  "name": "localDetour",
+  "name": "LocalDetour",
   "version": "0.0.1",
   "description": "",
   "main": "./src/lib/src/app/components/Landing.js",

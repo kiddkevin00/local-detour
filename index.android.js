@@ -3,7 +3,7 @@ import { AppRegistry } from 'react-native';
 import React, { Component } from 'react';
 
 
-class localDetour extends Component {
+class LocalDetour extends Component {
 
   render() {
     return (
@@ -13,6 +13,6 @@ class localDetour extends Component {
 
 }
 
-AppRegistry.registerComponent('localDetour', () => localDetour);
+AppRegistry.registerComponent('LocalDetour', () => LocalDetour);
 
-export default localDetour;
+export default LocalDetour;

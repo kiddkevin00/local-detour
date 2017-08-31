@@ -38,6 +38,6 @@ class LocalDetour extends Component {
 
 }
 
-AppRegistry.registerComponent('localDetour', () => LocalDetour);
+AppRegistry.registerComponent('LocalDetour', () => LocalDetour);
 
 export default LocalDetour;
