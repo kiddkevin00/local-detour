@@ -63,8 +63,8 @@ class EventsMapView extends Component {
         selected: false,
       },
       {
-        name: 'This week',
-        selected: false,
+        name: 'All',
+        selected: true,
       },
     ],
     mapRegion: {
@@ -201,7 +201,7 @@ class EventsMapView extends Component {
                     fontSize: 12,
                   } }
                 >
-                  &nbsp;&nbsp;&nbsp;{ this.state.filters[0].name }&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;{ this.state.filters[0].name }&nbsp;&nbsp;
                 </Text>
               </Button>
               <Button
@@ -219,7 +219,7 @@ class EventsMapView extends Component {
                     fontSize: 12,
                   } }
                 >
-                  { this.state.filters[1].name }&nbsp;
+                  { this.state.filters[1].name }
                 </Text>
               </Button>
               <Button
@@ -238,7 +238,7 @@ class EventsMapView extends Component {
                     fontSize: 12,
                   } }
                 >
-                  { this.state.filters[2].name }
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ this.state.filters[2].name }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </Button>
             </Segment>

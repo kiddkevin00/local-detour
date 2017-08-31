@@ -74,6 +74,7 @@ function Viewer(props) {
             maximumZoomScale={ 3 }
             source={ { uri: item } }
             onViewTap={ props.onImageOutsideTap }
+            onTap={ props.onImageOutsideTap }
           />
         ))
       }
@@ -318,7 +319,7 @@ class EventDetail extends Component {
         <Content padder>
           <Card>
             <CardItem cardBody>
-              <Image style={ { flex: 1, height: 200, width: null } } source={ { uri: event.heroPhoto } } />
+              <Image style={ { height: 200, width: '100%' } } source={ { uri: event.heroPhoto } } />
             </CardItem>
             <CardItem style={ { height: 70 } } bordered>
               <Body style={ { flexGrow: 2, justifyContent: 'center' } }>
@@ -361,6 +362,14 @@ class EventDetail extends Component {
               </Left>
             </CardItem>
             <CardItem bordered>
+              <Grid>
+                <Row>
+                  <Text>Photos</Text>
+                </Row>
+                { photosView }
+              </Grid>
+            </CardItem>
+            <CardItem bordered>
               <Body>
                 <Text>Details</Text>
                 <Text note>
@@ -368,13 +377,13 @@ class EventDetail extends Component {
                 </Text>
               </Body>
             </CardItem>
-            <CardItem>
-              <Grid>
-                <Row>
-                  <Text>Photos</Text>
-                </Row>
-                { photosView }
-              </Grid>
+            <CardItem bordered>
+              <Body>
+                <Text>Comment</Text>
+                <Text note>
+                  { event.editorComment || 'Stay tuned! Coming soon...' }
+                </Text>
+              </Body>
             </CardItem>
           </Card>
         </Content>
