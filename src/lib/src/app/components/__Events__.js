@@ -139,8 +139,9 @@ class Events extends Component {
       .push({
         name: this.state.newEvent,
         type: 'Public',
-        description: 'Arts Brookfield’s annual summer music festival, the Lowdown Hudson Music Fest, returns to the heart of downtown New York for its seventh summer. Bringing fun, lively, world-class musical talent to the picturesque Waterfront Plaza at Brookfield Place, this year’s festival will be headlined by quirky veteran rockers OK GO. The show is free to attend and open to the public.Free to attend, no tickets required.PLEASE NOTE: In keeping with the summer concert vibe, this year’s festival will be standing room only on a first come, first served basis.Event is rain or shine, except for extreme weather conditions.',
-        cost: 0,
+        editorComment: 'Stay tuned! Coming soon...',
+        detail: 'Arts Brookfield’s annual summer music festival, the Lowdown Hudson Music Fest, returns to the heart of downtown New York for its seventh summer. Bringing fun, lively, world-class musical talent to the picturesque Waterfront Plaza at Brookfield Place, this year’s festival will be headlined by quirky veteran rockers OK GO. The show is free to attend and open to the public.Free to attend, no tickets required.PLEASE NOTE: In keeping with the summer concert vibe, this year’s festival will be standing room only on a first come, first served basis.Event is rain or shine, except for extreme weather conditions.',
+        cost: '$0',
         where: {
           venue: 'Time Square',
           address: '123 42nd street, New York, NY',
@@ -153,10 +154,19 @@ class Events extends Component {
           startTimestamp: moment('2017-07-28T18:00').valueOf(),
           endTimestamp: moment('2017-08-28T21:00').valueOf(),
         },
-
         externalLink: 'https://www.timeout.com/newyork/things-to-do/sunset-sail-happy-hour',
-        photoUrls: [],
-        tags: [],
+        heroPhoto: 'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_sample-1.jpeg?alt=media&token=d0bc39b7-bdcd-4820-a423-077e3180febd',
+        previousPhotos: [
+          'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_fireworks-photo.jpg?alt=media&token=0ef5d862-4079-4d19-a3a3-39d42d2934ca',
+        ],
+        photos: [
+          'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_fireworks-photo.jpg?alt=media&token=0ef5d862-4079-4d19-a3a3-39d42d2934ca',
+          'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_sample-1.jpeg?alt=media&token=d0bc39b7-bdcd-4820-a423-077e3180febd',
+          'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2mGX3v9pJ2R_47ge_sample-3.jpeg?alt=media&token=f7a218c3-d048-426c-8a4c-088f1daf4830',
+          'https://firebaskestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_fireworks-display-from-seafair-yacht.jpg?alt=media&token=393bd179-49c7-4b7e-8b3e-c5d0a005f593',
+          'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_fireworks.jpg?alt=media&token=2de88024-6692-47f9-a378-4d496f0490f9',
+        ],
+        tags: ['#Placeholder'],
       })
       .then(() => {
         this.setState({

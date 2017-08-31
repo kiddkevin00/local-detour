@@ -246,8 +246,9 @@ class EventDetail extends Component {
     const event = this.props.event || {
       name: 'Test Event',
       type: 'Public',
+      editorComment: 'Stay tuned! Coming soon...',
       detail: 'Arts Brookfield’s annual summer music festival, the Lowdown Hudson Music Fest, returns to the heart of downtown New York for its seventh summer. Bringing fun, lively, world-class musical talent to the picturesque Waterfront Plaza at Brookfield Place, this year’s festival will be headlined by quirky veteran rockers OK GO. The show is free to attend and open to the public.Free to attend, no tickets required.\n\nPLEASE NOTE: In keeping with the summer concert vibe, this year’s festival will be standing room only on a first come, first served basis.\n\nEvent is rain or shine, except for extreme weather conditions.',
-      cost: 0,
+      cost: '$0',
       where: {
         venue: 'Time Square',
         address: '123 42nd street, New York, NY',
@@ -262,6 +263,9 @@ class EventDetail extends Component {
       },
       externalLink: 'https://www.timeout.com/newyork/things-to-do/sunset-sail-happy-hour',
       heroPhoto: 'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_sample-1.jpeg?alt=media&token=d0bc39b7-bdcd-4820-a423-077e3180febd',
+      previousPhotos: [
+        'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_fireworks-photo.jpg?alt=media&token=0ef5d862-4079-4d19-a3a3-39d42d2934ca',
+      ],
       photos: [
         'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_fireworks-photo.jpg?alt=media&token=0ef5d862-4079-4d19-a3a3-39d42d2934ca',
         'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_sample-1.jpeg?alt=media&token=d0bc39b7-bdcd-4820-a423-077e3180febd',
@@ -269,7 +273,7 @@ class EventDetail extends Component {
         'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_fireworks-display-from-seafair-yacht.jpg?alt=media&token=393bd179-49c7-4b7e-8b3e-c5d0a005f593',
         'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fnyc-KqL2ok5NjDZekgIhYPl_fireworks.jpg?alt=media&token=2de88024-6692-47f9-a378-4d496f0490f9',
       ],
-      tags: [],
+      tags: ['#Placeholder'],
     };
     const photosView = (
       Array.isArray(event.photos) ? (
@@ -281,6 +285,7 @@ class EventDetail extends Component {
         </Row>
       )
     );
+    const displayWhen = event.when.display || `${moment(event.when.startTimestamp).format('MMM DD hh:mm A')} - ${moment(event.when.endTimestamp).format('MMM DD hh:mm A')}`;
 
     return (
       <Container>
@@ -328,15 +333,15 @@ class EventDetail extends Component {
               </Body>
               <Text>&nbsp;</Text>
               <Body style={ { flexGrow: 13, justifyContent: 'center' } }>
-                <Text>{ event.name }</Text>
-                <Text note>{ event.type }</Text>
+                <Text style={ { fontSize: 17, fontWeight: 'bold' } }>{ event.name }</Text>
+                <Text style={ { fontSize: 15 } } note>{ event.type }</Text>
               </Body>
             </CardItem>
             <CardItem bordered>
               <Left>
                 <Icon style={ { fontSize: 25, color: 'red' } } name="time" />
                 <Text>&nbsp;</Text>
-                <Text style={ { fontSize: 14 } }>{ moment(event.when.startTimestamp).format('MMM DD hh:mm A') } - { moment(event.when.endTimestamp).format('MMM DD hh:mm A') }</Text>
+                <Text style={ { fontSize: 15, fontWeight: 'bold' } }>{ displayWhen }</Text>
               </Left>
             </CardItem>
             <CardItem bordered>
@@ -344,9 +349,16 @@ class EventDetail extends Component {
                 <Icon style={ { fontSize: 25, color: 'red' } } name="navigate" />
                 <Text>&nbsp;</Text>
                 <Body>
-                  <Text>{ event.where.venue }</Text>
-                  <Text note>{ event.where.address }</Text>
+                  <Text style={ { fontSize: 17, fontWeight: 'bold' } }>{ event.where.venue }</Text>
+                  <Text style={ { fontSize: 16, color: '#333' } } note>{ event.where.address }</Text>
                 </Body>
+              </Left>
+            </CardItem>
+            <CardItem bordered>
+              <Left>
+                <Icon style={ { fontSize: 25, color: 'red' } } name="pricetag" />
+                <Text>&nbsp;</Text>
+                <Text style={ { fontSize: 17, fontWeight: 'bold' } }>{ event.cost === '$0' ? 'FREE' : event.cost }</Text>
               </Left>
             </CardItem>
             <CardItem bordered>
@@ -354,37 +366,38 @@ class EventDetail extends Component {
                 <Icon style={ { fontSize: 25, color: 'red' } } name="link" />
                 <Text>&nbsp;</Text>
                 <Body>
-                  <Text>Event Site</Text>
-                  <Text style={ { fontSize: 12 } } note onPress={ this._openWebPage.bind(this, event.externalLink) }>
+                  <Text style={ { fontSize: 17, fontWeight: 'bold' } }>Event Site</Text>
+                  <Text style={ { fontSize: 14, color: '#333' } } note onPress={ this._openWebPage.bind(this, event.externalLink) }>
                     { event.externalLink }
                   </Text>
                 </Body>
               </Left>
             </CardItem>
             <CardItem bordered>
-              <Grid>
-                <Row>
-                  <Text>Photos</Text>
-                </Row>
-                { photosView }
-              </Grid>
+              <Body>
+                <Text style={ { fontSize: 17, fontWeight: 'bold' } }>Editor&#39;s Comment</Text>
+                <Text style={ { fontSize: 16, color: '#333' } } note>
+                  { event.editorComment || 'Stay tuned! Coming soon...' }
+                </Text>
+              </Body>
             </CardItem>
             <CardItem bordered>
               <Body>
-                <Text>Details</Text>
-                <Text note>
+                <Text style={ { fontSize: 17, fontWeight: 'bold' } }>Details</Text>
+                <Text style={ { fontSize: 16, color: '#333' } } note>
                   { event.detail }
                 </Text>
               </Body>
             </CardItem>
             <CardItem bordered>
-              <Body>
-                <Text>Comment</Text>
-                <Text note>
-                  { event.editorComment || 'Stay tuned! Coming soon...' }
-                </Text>
-              </Body>
+              <Grid>
+                <Row>
+                  <Text style={ { fontSize: 17, fontWeight: 'bold' } }>Photos</Text>
+                </Row>
+                { photosView }
+              </Grid>
             </CardItem>
+            <CardItem />
           </Card>
         </Content>
         <Footer>
