@@ -51,8 +51,6 @@ class EventsMapView extends Component {
   };
 
   state = {
-    filteredEvents: [],
-    useFilter: false,
     filters: [
       {
         name: 'Today',
@@ -67,6 +65,7 @@ class EventsMapView extends Component {
         selected: true,
       },
     ],
+    filteredEvents: [],
     mapRegion: {
       latitude: 40.7554778,
       longitude: -73.981885,
@@ -74,6 +73,10 @@ class EventsMapView extends Component {
       longitudeDelta: 0.0922 * (Dimensions.get('window').width / Dimensions.get('window').height),
     },
   };
+
+  componentDidMount() {
+    this._onFilterSelect(this.state.filters[2]);
+  }
 
   _renderEvent(event) {
     return (
@@ -90,50 +93,41 @@ class EventsMapView extends Component {
   }
 
   _onFilterSelect(targetFilter) {
-    let useFilter = this.state.useFilter;
     const filters = this.state.filters.map((filter) => {
       if (filter === targetFilter) {
-        if (filter.selected === true) {
-          useFilter = false;
-        } else {
-          useFilter = true;
-        }
-
-        return Object.assign({}, filter, { selected: !filter.selected });
+        return Object.assign({}, filter, { selected: true });
       }
       return Object.assign({}, filter, { selected: false });
     });
-    let filteredEvents = [];
 
-    if (useFilter) {
-      filteredEvents = this.props.events.filter((event) => {
-        const today = moment();
+    const filteredEvents = this.props.events.filter((event) => {
+      const today = moment();
 
-        // Filters out past events.
-        if (today.isAfter(event.when.endTimestamp)) {
-          return false;
-        }
-
-        if (targetFilter.name === 'Today') {
-          return today.isBetween(moment(event.when.startTimestamp), moment(event.when.endTimestamp), null, '[]');
-        } else if (targetFilter.name === 'This week') {
-          // Filters out the start date of the event after end of the week.
-          return !moment(event.when.startTimestamp).isAfter(today, 'isoweek');
-        } else if (targetFilter.name === 'Weekend') {
-          // Filters out the start date of the event after end of the weekend.
-
-          // eslint-disable-next-line newline-per-chained-call
-          const thisSaturday = moment().week(today.isoWeek()).day('Saturday').hour(0).minute(0).second(0);
-
-          return !thisSaturday.isAfter(event.when.endTimestamp) &&
-            !moment(event.when.startTimestamp).isAfter(today, 'isoweek');
-        }
+      // Filters out past events.
+      if (today.isAfter(event.when.endTimestamp)) {
         return false;
-      });
-    }
+      }
+
+      if (targetFilter.name === 'Today') {
+        return today.isBetween(moment(event.when.startTimestamp), moment(event.when.endTimestamp), null, '[]');
+      } else if (targetFilter.name === 'This week') {
+        // Filters out the start date of the event after end of the week.
+        return !moment(event.when.startTimestamp).isAfter(today, 'isoweek');
+      } else if (targetFilter.name === 'Weekend') {
+        // Filters out the start date of the event after end of the weekend.
+
+        // eslint-disable-next-line newline-per-chained-call
+        const thisSaturday = moment().week(today.isoWeek()).day('Saturday').hour(0).minute(0).second(0);
+
+        return !thisSaturday.isAfter(event.when.endTimestamp) &&
+          !moment(event.when.startTimestamp).isAfter(today, 'isoweek');
+      } else if (targetFilter.name === 'All') {
+        return true;
+      }
+      return false;
+    });
 
     this.setState({
-      useFilter,
       filters,
       filteredEvents,
     });
@@ -176,7 +170,7 @@ class EventsMapView extends Component {
   }
 
   render() {
-    const events = this.state.useFilter ? this.state.filteredEvents : this.props.events;
+    const events = this.state.filteredEvents;
     const { height, width } = Dimensions.get('window');
 
     return (
