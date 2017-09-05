@@ -7,7 +7,7 @@ const initialState = {
 
 function landingReducer(state = initialState, action) {
   const actionType = action.type;
-  const actionData = action.data;
+  const actionPayload = action.payload;
 
   switch (actionType) {
     case actionTypes.LANDING.FINISH_WAITING_FOR_ASYNC_OPS:

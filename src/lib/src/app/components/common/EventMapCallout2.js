@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
   },
 });
 
-
 class EventMapLabel2 extends Component {
 
   static propTypes = {

@@ -1,10 +1,9 @@
 import Landing from './src/lib/src/app/components/Landing';
 import configureStore from './src/lib/src/app/store/';
 import {
-  AsyncStorage,
-  AppRegistry,
-  StyleSheet,
   NavigatorIOS,
+  StyleSheet,
+  AppRegistry,
 } from 'react-native';
 import { Provider } from 'react-redux';
 import React, { Component } from 'react';
@@ -40,4 +39,4 @@ class LocalDetour extends Component {
 
 AppRegistry.registerComponent('LocalDetour', () => LocalDetour);
 
-export default LocalDetour;
+export { LocalDetour as default };

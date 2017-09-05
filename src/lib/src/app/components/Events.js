@@ -1,11 +1,9 @@
-import PushNotification from '../utils/PushNotification';
-import CalendarEvents from '../utils/CalendarEvents';
 import EventMapView from './EventsMapView';
 import EventDetail from './EventDetail';
+import PushNotificationPermReq from './PushNotificationPermReq';
 import Setting from './Setting';
-import {
-  firebaseConnect,
-} from 'react-redux-firebase';
+import CalendarEvents from '../utils/CalendarEvents';
+import { firebaseConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import moment from 'moment';
@@ -26,9 +24,11 @@ import {
   Icon,
 } from 'native-base';
 import {
+  Alert,
   Share,
   AsyncStorage,
   Image,
+  Dimensions,
 } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -45,60 +45,84 @@ class Events extends Component {
   };
 
   componentDidMount() {
-    PushNotification.requestPermission();
-    PushNotification.subscribeToTopic();
+    AsyncStorage.getItem('@SystemSetting:shouldRequestPushNotificationPerm')
+      .then((shouldRequestPushNotificationPerm) => {
+        if (shouldRequestPushNotificationPerm !== 'TRUE') {
+          global.setTimeout(() => {
+            this.props.navigator.push({
+              component: PushNotificationPermReq,
+            });
+          }, 3000);
+        }
+      })
+      .catch((err) => {
+        // Error happens when retrieving data.
+        console.log(err);
+      });
 
     AsyncStorage.setItem('@SystemSetting:shouldSkipWalkthrough', 'TRUE')
       .catch((err) => {
-        // Error saving data
+        // Error saving data.
         console.log(err);
       });
   }
 
-  _renderEvent = (event) => (
-    <ListItem style={ { borderBottomWidth: 0 } } >
-      <Card>
-        <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
-          <Left>
-            <Body style={ { flexGrow: 2, justifyContent: 'center' } }>
-              <Text style={ { fontSize: 10.5, color: 'red' } }>&nbsp;{ moment(event.when.startTimestamp).format('MMM').toUpperCase() }</Text>
-              <Text style={ { fontSize: 22.5 } }>{ moment(event.when.startTimestamp).format('DD') }</Text>
-            </Body>
-            <Body style={ { flexGrow: 15 } }>
-              <Text style={ { fontSize: 16 } }>{ event.name }</Text>
-              <Text style={ { fontSize: 13 } } note>{ event.where.address }</Text>
-            </Body>
-          </Left>
-        </CardItem>
-        <CardItem cardBody button onPress={ this._checkoutEventDetail.bind(this, event) }>
-          <Image style={ { flexGrow: 1, height: 200, width: null } } source={ { uri: event.heroPhoto } } />
-        </CardItem>
-        <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
-          <Left>
-            <Button iconLeft transparent onPress={ this._saveToCalenderApp.bind(this, event) }>
-              <Icon name="bookmark" />
-              <Text>Save</Text>
-            </Button>
-            <Button
-              iconLeft
-              transparent
-              onPress={ () => Share.share({
-                title: event.name,
-                message: `Check out this hand picked event - ${event.name}\n${event.externalLink}\n\nFind out more by downloading our app for free:\nhttps://mysugarpost.herokuapp.com/`,
-                //url: 'https://mysugarpost.herokuapp.com/',
-              }) }
-            >
-              <Icon name="share" />
-              <Text>Share</Text>
-            </Button>
-          </Left>
-          <Right>
-            <Icon name="arrow-forward" />
-          </Right>
-        </CardItem>
-      </Card>
-    </ListItem>
-  )
+  _renderEvent = (event) => {
+    const startDate = moment(event.when.startTimestamp);
+    const today = moment();
+    const displayMonth = today.isAfter(startDate) ? today.format('MMM').toUpperCase() : startDate.format('MMM').toUpperCase();
+    const displayDate = today.isAfter(startDate) ? today.format('DD') : startDate.format('DD');
+
+    return (
+      <ListItem style={ { borderBottomWidth: 0 } }>
+        <Card>
+          <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
+            <Left>
+              <Body style={ { flexGrow: 2, justifyContent: 'center', marginLeft: 0 } }>
+                <Text style={ { fontSize: 10.5, color: 'red' } }>&nbsp;{ displayMonth }</Text>
+                <Text style={ { fontSize: 22.5 } }>{ displayDate }</Text>
+              </Body>
+              <Body style={ { flexGrow: 15 } }>
+                <Text style={ { fontSize: 18, fontWeight: '500' } }>{ event.name }</Text>
+                <Text style={ { fontSize: 13, color: '#333' } } note>{ event.where.address }</Text>
+              </Body>
+            </Left>
+          </CardItem>
+          <CardItem cardBody button onPress={ this._checkoutEventDetail.bind(this, event) }>
+            <Image
+              style={ { height: Dimensions.get('window').width - 35, width: '100%' } }
+              source={ { uri: event.heroPhoto } }
+            />
+          </CardItem>
+          <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
+            <Left>
+              <Button iconLeft transparent onPress={ this._saveToCalenderApp.bind(this, event) }>
+                <Icon style={ { fontSize: 22, color: '#f96332' } } name="bookmark" />
+                <Text style={ { fontSize: 15, fontWeight: '700', color: '#f96332' } }>Save</Text>
+              </Button>
+              <Text>&nbsp;</Text>
+              <Button
+                iconLeft
+                transparent
+                onPress={ () => Share.share({
+                  title: event.name,
+                  message: `Check out this hand picked event - ${event.name}\n${event.externalLink}\n\nFind out more by downloading our app for free:\nhttps://localdetour.herokuapp.com/`,
+                  //url: 'https://localdetour.herokuapp.com/',
+                }) }
+              >
+                <Icon style={ { fontSize: 22, color: '#f96332' } } name="share" />
+                <Text style={ { fontSize: 15, fontWeight: '700', color: '#f96332' } }>Share</Text>
+              </Button>
+            </Left>
+            <Right>
+              <Icon name="arrow-forward" />
+            </Right>
+          </CardItem>
+          <CardItem style={ { paddingTop: 0.1, paddingBottom: 0.1 } } />
+        </Card>
+      </ListItem>
+    );
+  }
 
   _saveToCalenderApp = async function (event) {
     try {
@@ -112,7 +136,8 @@ class Events extends Component {
       });
 
       if (savedEvent) {
-        CalendarEvents.showSavedEventWithCalendarApp(event.when && event.when.startTimestamp);
+        Alert.alert('Success', 'The event has been saved to your calendar and will remind you one day before it starts');
+        //CalendarEvents.showSavedEventInCalendarApp(event.when && event.when.startTimestamp);
       }
     } catch (err) {
       console.log(err);
@@ -138,7 +163,24 @@ class Events extends Component {
     });
   }
 
+  static _filterEvents(events) {
+    return events.filter((event) => {
+      const today = moment();
+
+      // Filters out past events.
+      if (today.isAfter(event.when.endTimestamp)) {
+        return false;
+      }
+      return true;
+    });
+
+  }
+
   render() {
+    const events = this.props.events
+      .filter((event) => !moment().isAfter(event.when.endTimestamp))
+      .sort((event1, event2) => event1.when.startTimestamp - event2.when.startTimestamp);
+
     return (
       <Container>
         <Header style={ { backgroundColor: '#f96332' } }>
@@ -154,7 +196,7 @@ class Events extends Component {
         </Header>
         <Content>
           <List
-            dataArray={ this.props.events }
+            dataArray={ events }
             renderRow={ this._renderEvent }
           />
         </Content>

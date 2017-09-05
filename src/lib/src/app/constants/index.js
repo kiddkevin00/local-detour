@@ -1,8 +1,10 @@
-const systemConstants = require('./system');
-const credentialConstants = require('./credential/');
+import * as systemConstants from './system';
+import * as credentialConstants from './credential/';
+import * as appConstants from './app';
 
 
-module.exports = exports = {
+export default {
   SYSTEM: systemConstants,
-  CREDENTIAL: credentialConstants, // For Node environment only
+  CREDENTIAL: credentialConstants,
+  APP: appConstants,
 };

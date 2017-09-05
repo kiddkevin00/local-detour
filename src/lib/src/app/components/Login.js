@@ -1,9 +1,9 @@
+import actionCreator from '../actioncreators/login';
 import Events from './Events';
 import Signup from './Signup';
-import { firebaseAuth, firebaseAuthProviders } from '../proxies/FirebaseProxy';
-import FBSDK, {
+import { firebaseAuth } from '../proxies/FirebaseProxy';
+import {
   LoginButton as FacebookSignInButton,
-  AccessToken,
 } from 'react-native-fbsdk';
 import {
   ActivityIndicator,
@@ -13,6 +13,7 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
+import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -88,6 +89,7 @@ const styles = StyleSheet.create({
 class Login extends Component {
 
   static propTypes = {
+    dispatchFacebookPostLogin: PropTypes.func.isRequired,
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
@@ -109,7 +111,12 @@ class Login extends Component {
 
       this.props.navigator.push({
         component: Events,
-        passProps: { userInfo },
+        passProps: {
+          userInfo: {
+            uid: userInfo.uid,
+            isAnonymous: userInfo.isAnonymous,
+          },
+        },
       });
 
       this.setState({
@@ -135,26 +142,13 @@ class Login extends Component {
     }
   }
 
-  _handleFbLogin = async (error, result) => {
+  _handleFbPostLogin = async (error, result) => {
     if (error) {
       global.alert(`Facebook login error: ${result.error}`);
     } else if (result.isCancelled) {
       global.alert('Facebook login cancelled.');
     } else {
-      const { accessToken } = await AccessToken.getCurrentAccessToken();
-
-      console.log(`Facebook login access token: ${accessToken.toString()}`);
-
-      const credential = await firebaseAuthProviders.FacebookAuthProvider.credential(accessToken);
-
-      try {
-        // [TODO] Pass userName, photoUrl, etc in `auth` into profile page.
-        const auth = firebaseAuth.signInWithCredential(credential);
-
-
-      } catch (err) {
-        global.alert('Facebook login with Firebase failed');
-      }
+      this.props.dispatchFacebookPostLogin(this.props.navigator);
     }
   }
 
@@ -205,9 +199,8 @@ class Login extends Component {
             <Text style={ styles.signupButtonText }>SIGN UP</Text>
           </TouchableHighlight>
           <FacebookSignInButton
-            publishPermissions={ ['publish_actions'] }
             readPermissions={ ['public_profile', 'email', 'user_friends'] }
-            onLoginFinished={ this._handleFbLogin }
+            onLoginFinished={ this._handleFbPostLogin }
             onLogoutFinished={ () => global.alert('Logout succeeded!') }
           />
           <ActivityIndicator
@@ -228,4 +221,15 @@ class Login extends Component {
 
 }
 
-export { Login as default };
+function mapStateToProps(state) {
+  return {};
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatchFacebookPostLogin(navigator) {
+      dispatch(actionCreator.facebookPostLogin(navigator));
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

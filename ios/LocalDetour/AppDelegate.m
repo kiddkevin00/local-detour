@@ -75,8 +75,8 @@
   BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application
     openURL:url
     sourceApplication:sourceApplication
-    annotation:annotation
-  ];
+    annotation:annotation];
+  
   // Add any custom logic here.
   return handled;
 }

@@ -8,11 +8,10 @@ import {
   Header,
   Content,
   Left,
+  Body,
   Right,
-  Item,
-  Input,
+  Title,
   Button,
-  Text,
   Icon,
 } from 'native-base';
 import React, { Component } from 'react';
@@ -35,21 +34,16 @@ class WebViewWrapper extends Component {
 
     return (
       <Container>
-        <Header style={ { backgroundColor: '#f96332' } } searchBar rounded>
+        <Header style={ { backgroundColor: '#f96332' } }>
           <Left>
             <Button transparent onPress={ this._backToComponent }>
-              <Icon style={ { color: 'white', fontSize: 27 } } name="arrow-back" />
+              <Icon style={ { color: 'white', fontSize: 32 } } name="arrow-back" />
             </Button>
           </Left>
-          <Item style={ { flexGrow: 2, backgroundColor: 'white' } }>
-            <Icon name="ios-search" />
-            <Input />
-          </Item>
-          <Right>
-            <Button transparent>
-              <Text style={ { color: 'white', fontSize: 16 } }>Search</Text>
-            </Button>
-          </Right>
+          <Body style={ { flexGrow: 3 } }>
+            <Title style={ { color: 'white', fontFamily: 'Lily Script One', fontSize: 27 } }>Local Detour</Title>
+          </Body>
+          <Right />
         </Header>
         <Content>
           <View style={ { height, width } }>

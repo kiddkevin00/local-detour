@@ -46,7 +46,7 @@ class Events extends Component {
         <Header style={ { backgroundColor: '#f96332' } }>
           <Left>
             <Button transparent onPress={ this._backToComponent }>
-              <Icon style={ { color: 'white', fontSize: 27 } } name="arrow-back" />
+              <Icon style={ { color: 'white', fontSize: 32 } } name="arrow-back" />
             </Button>
           </Left>
           <Body style={ { flexGrow: 3 } }>

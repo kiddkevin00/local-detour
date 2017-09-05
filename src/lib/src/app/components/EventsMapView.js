@@ -50,34 +50,24 @@ class EventsMapView extends Component {
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
-  state = {
-    filters: [
-      {
-        name: 'Today',
-        selected: false,
-      },
-      {
-        name: 'Weekend',
-        selected: false,
-      },
-      {
-        name: 'All',
-        selected: true,
-      },
-    ],
-    filteredEvents: [],
-    mapRegion: {
-      latitude: 40.7554778,
-      longitude: -73.981885,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0922 * (Dimensions.get('window').width / Dimensions.get('window').height),
-    },
+  static filterMap = {
+    today: 'Today',
+    thisWeek: 'This week',
+    weekend: 'Weekend',
+    all: 'All',
   };
 
-  componentDidMount() {
-    this._onFilterSelect(this.state.filters[2]);
-  }
-
+  state = {
+    currentFilter: 'All',
+    filteredEvents: [],
+    mapRegion: {
+      latitude: 40.71225723361184,
+      longitude: -73.95616403264754,
+      latitudeDelta: 0.1801169679799912,
+      longitudeDelta: 0.1801169679799912 * (Dimensions.get('window').width / Dimensions.get('window').height),
+    },
+  };
+  
   _renderEvent(event) {
     return (
       <MapView.Marker
@@ -93,42 +83,10 @@ class EventsMapView extends Component {
   }
 
   _onFilterSelect(targetFilter) {
-    const filters = this.state.filters.map((filter) => {
-      if (filter === targetFilter) {
-        return Object.assign({}, filter, { selected: true });
-      }
-      return Object.assign({}, filter, { selected: false });
-    });
-
-    const filteredEvents = this.props.events.filter((event) => {
-      const today = moment();
-
-      // Filters out past events.
-      if (today.isAfter(event.when.endTimestamp)) {
-        return false;
-      }
-
-      if (targetFilter.name === 'Today') {
-        return today.isBetween(moment(event.when.startTimestamp), moment(event.when.endTimestamp), null, '[]');
-      } else if (targetFilter.name === 'This week') {
-        // Filters out the start date of the event after end of the week.
-        return !moment(event.when.startTimestamp).isAfter(today, 'isoweek');
-      } else if (targetFilter.name === 'Weekend') {
-        // Filters out the start date of the event after end of the weekend.
-
-        // eslint-disable-next-line newline-per-chained-call
-        const thisSaturday = moment().week(today.isoWeek()).day('Saturday').hour(0).minute(0).second(0);
-
-        return !thisSaturday.isAfter(event.when.endTimestamp) &&
-          !moment(event.when.startTimestamp).isAfter(today, 'isoweek');
-      } else if (targetFilter.name === 'All') {
-        return true;
-      }
-      return false;
-    });
+    const filteredEvents = EventsMapView._filterEvents(this.props.events, targetFilter);
 
     this.setState({
-      filters,
+      currentFilter: targetFilter,
       filteredEvents,
     });
   }
@@ -169,8 +127,37 @@ class EventsMapView extends Component {
     });
   }
 
+  static _filterEvents(events, targetFilter) {
+    return events.filter((event) => {
+      const today = moment();
+
+      // Filters out past events.
+      if (today.isAfter(event.when.endTimestamp)) {
+        return false;
+      }
+
+      if (targetFilter === EventsMapView.filterMap.today) {
+        return today.isBetween(moment(event.when.startTimestamp), moment(event.when.endTimestamp), null, '[]');
+      } else if (targetFilter === EventsMapView.filterMap.thisWeek) {
+        // Filters out the start date of the event after end of the week.
+        return !moment(event.when.startTimestamp).isAfter(today, 'isoweek');
+      } else if (targetFilter === EventsMapView.filterMap.weekend) {
+        // Filters out the start date of the event after end of the weekend.
+
+        // eslint-disable-next-line newline-per-chained-call
+        const thisSaturday = moment().week(today.isoWeek()).day('Saturday').hour(0).minute(0).second(0);
+
+        return !thisSaturday.isAfter(event.when.endTimestamp) &&
+          !moment(event.when.startTimestamp).isAfter(today, 'isoweek');
+      } else if (targetFilter === EventsMapView.filterMap.all) {
+        return true;
+      }
+      return false;
+    });
+  }
+
   render() {
-    const events = this.state.filteredEvents;
+    const events = EventsMapView._filterEvents(this.props.events, this.state.currentFilter);
     const { height, width } = Dimensions.get('window');
 
     return (
@@ -181,9 +168,9 @@ class EventsMapView extends Component {
             <Segment style={ { backgroundColor: '#f96332', alignSelf: 'center' } }>
               <Button
                 first
-                onPress={ this._onFilterSelect.bind(this, this.state.filters[0]) }
+                onPress={ this._onFilterSelect.bind(this, EventsMapView.filterMap.today) }
                 style={ {
-                  backgroundColor: this.state.filters[0].selected ? 'white' : '#f96332',
+                  backgroundColor: this.state.currentFilter === EventsMapView.filterMap.today ? 'white' : '#f96332',
                   borderColor: 'white',
                   paddingLeft: 9,
                   paddingRight: 9,
@@ -191,17 +178,17 @@ class EventsMapView extends Component {
               >
                 <Text
                   style={ {
-                    color: this.state.filters[0].selected ? '#f96332' : 'white',
+                    color: this.state.currentFilter === EventsMapView.filterMap.today ? '#f96332' : 'white',
                     fontSize: 12,
                   } }
                 >
-                  &nbsp;&nbsp;{ this.state.filters[0].name }&nbsp;&nbsp;
+                  &nbsp;&nbsp;{ EventsMapView.filterMap.today }&nbsp;&nbsp;
                 </Text>
               </Button>
               <Button
-                onPress={ this._onFilterSelect.bind(this, this.state.filters[1]) }
+                onPress={ this._onFilterSelect.bind(this, EventsMapView.filterMap.weekend) }
                 style={ {
-                  backgroundColor: this.state.filters[1].selected ? 'white' : '#f96332',
+                  backgroundColor: this.state.currentFilter === EventsMapView.filterMap.weekend ? 'white' : '#f96332',
                   borderColor: 'white',
                   paddingLeft: 9,
                   paddingRight: 9,
@@ -209,18 +196,18 @@ class EventsMapView extends Component {
               >
                 <Text
                   style={ {
-                    color: this.state.filters[1].selected ? '#f96332' : 'white',
+                    color: this.state.currentFilter === EventsMapView.filterMap.weekend ? '#f96332' : 'white',
                     fontSize: 12,
                   } }
                 >
-                  { this.state.filters[1].name }
+                  { EventsMapView.filterMap.weekend }
                 </Text>
               </Button>
               <Button
                 last
-                onPress={ this._onFilterSelect.bind(this, this.state.filters[2]) }
+                onPress={ this._onFilterSelect.bind(this, EventsMapView.filterMap.all) }
                 style={ {
-                  backgroundColor: this.state.filters[2].selected ? 'white' : '#f96332',
+                  backgroundColor: this.state.currentFilter === EventsMapView.filterMap.all ? 'white' : '#f96332',
                   borderColor: 'white',
                   paddingLeft: 9,
                   paddingRight: 9,
@@ -228,18 +215,18 @@ class EventsMapView extends Component {
               >
                 <Text
                   style={ {
-                    color: this.state.filters[2].selected ? '#f96332' : 'white',
+                    color: this.state.currentFilter === EventsMapView.filterMap.all ? '#f96332' : 'white',
                     fontSize: 12,
                   } }
                 >
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ this.state.filters[2].name }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ EventsMapView.filterMap.all }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </Button>
             </Segment>
           </Body>
           <Right style={ { flexGrow: 2 } }>
             <Button transparent onPress={ this._gotoListView }>
-              <Icon style={ { color: 'white' } } name="list" />
+              <Icon style={ { fontSize: 29, color: 'white' } } name="list" />
             </Button>
           </Right>
         </Header>

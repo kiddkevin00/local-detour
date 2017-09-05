@@ -31,7 +31,7 @@ class Walkthrough extends Component {
   };
 
   _checkoutEvents = () => {
-    this.props.navigator.push({
+    this.props.navigator.replace({
       component: Events,
     });
   }
@@ -69,7 +69,7 @@ class Walkthrough extends Component {
               resizeMode="stretch"
             >
               <Button style={ buttonStyle } block light onPress={ this._checkoutEvents }>
-                <Text style={ { fontSize: 17, fontWeight: '500' } }>Explore now</Text>
+                <Text style={ { fontSize: 17, fontWeight: '500' } }>Explore Now</Text>
               </Button>
             </Image>
           </Swiper>

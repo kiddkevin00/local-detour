@@ -89,7 +89,7 @@ class Landing extends Component {
                   backgroundColor: '#f96332',
                 } }
               >
-                <Text style={ { fontSize: 17, color: 'white', fontWeight: 'bold' } }>Let’s get started</Text>
+                <Text style={ { fontSize: 17, color: 'white', fontWeight: 'bold' } }>Let’s Get Started</Text>
               </Button>
             </Image>
           </Swiper>

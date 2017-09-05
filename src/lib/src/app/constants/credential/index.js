@@ -1,6 +1,6 @@
-const prodCredential = require('./production');
-const testCredential = require('./test');
-const devCredential = require('./development');
+import * as prodCredential from './production';
+import * as testCredential from './test';
+import * as devCredential from './development';
 
 
 const env = process.env.NODE_ENV;

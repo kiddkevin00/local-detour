@@ -31,7 +31,7 @@ class CalendarEvents {
    */
   static fetchAuthorizationStatus = async () => RNCalendarEvents.authorizationStatus()
 
-  static showSavedEventWithCalendarApp(eventStartTimestamp) {
+  static showSavedEventInCalendarApp(eventStartTimestamp) {
     const referenceDate = moment.utc([2001]); // Default reference date for iOS calendar app.
     const secondsSinceRefDate = eventStartTimestamp ?
       (eventStartTimestamp / 1000) - referenceDate.unix() :
