@@ -23,8 +23,11 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.travelPal.localDetour</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>LocalDetourNYC2017</string>
 				<string>fb158721484707033</string>
 			</array>
 		</dict>
