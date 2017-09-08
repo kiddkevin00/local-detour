@@ -126,7 +126,7 @@ class EventDetail extends Component {
         //CalendarEvents.showSavedEventInCalendarApp(event.when && event.when.startTimestamp);
       }
     } catch (err) {
-      console.log(err);
+      console.log(`Something went wrong when saving event to calendar app - ${err}`);
     }
   }
 
@@ -150,8 +150,18 @@ class EventDetail extends Component {
     });
   }
 
-  _showDirectionInMapApp(coordinate) {
-    Linking.openURL(`http://maps.apple.com/?daddr=${coordinate.latitude},${coordinate.longitude}`);
+  _showDirectionInMapApp = async (coordinate) => {
+    const url = `http://maps.apple.com/?daddr=${coordinate.latitude},${coordinate.longitude}`;
+
+    try {
+      const isSupported = await Linking.canOpenURL(url);
+
+      if (isSupported) {
+        await Linking.openURL(url);
+      }
+    } catch (err) {
+      console.log(`Something went wrong when showing direction in map app - ${err}`);
+    }
   }
 
   _backToEventsList = () => {

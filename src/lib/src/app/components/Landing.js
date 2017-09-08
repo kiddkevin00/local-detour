@@ -49,8 +49,7 @@ class Landing extends Component {
         }
       })
       .catch((err) => {
-        // Error happens when retrieving data.
-        console.log(err);
+        console.log(`Something went wrong when retrieving data - ${err}`);
       });
   }
 

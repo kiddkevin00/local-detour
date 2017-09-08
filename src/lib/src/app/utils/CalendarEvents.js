@@ -31,13 +31,22 @@ class CalendarEvents {
    */
   static fetchAuthorizationStatus = async () => RNCalendarEvents.authorizationStatus()
 
-  static showSavedEventInCalendarApp(eventStartTimestamp) {
+  static showSavedEventInCalendarApp = async (eventStartTimestamp) => {
     const referenceDate = moment.utc([2001]); // Default reference date for iOS calendar app.
     const secondsSinceRefDate = eventStartTimestamp ?
       (eventStartTimestamp / 1000) - referenceDate.unix() :
       moment().unix() - referenceDate.unix();
+    const url = `calshow:${secondsSinceRefDate}`;
 
-    Linking.openURL(`calshow:${secondsSinceRefDate}`);
+    try {
+      const isSupported = await Linking.canOpenURL(url);
+
+      if (isSupported) {
+        await Linking.openURL(url);
+      }
+    } catch (err) {
+      console.log(`Something went wrong when showing a date in calendar app - ${err}`);
+    }
   }
 
   static _saveToCalendarEvents = async (eventTitle, eventConfig) => {

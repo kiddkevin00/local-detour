@@ -56,14 +56,12 @@ class Events extends Component {
         }
       })
       .catch((err) => {
-        // Error happens when retrieving data.
-        console.log(err);
+        console.log(`Something went wrong when retrieving data - ${err}`);
       });
 
     AsyncStorage.setItem('@SystemSetting:shouldSkipWalkthrough', 'TRUE')
       .catch((err) => {
-        // Error saving data.
-        console.log(err);
+        console.log(`Something went wrong when saving data - ${err}`);
       });
   }
 
@@ -140,7 +138,7 @@ class Events extends Component {
         //CalendarEvents.showSavedEventInCalendarApp(event.when && event.when.startTimestamp);
       }
     } catch (err) {
-      console.log(err);
+      console.log(`Something went wrong when saving event to calendar app - ${err}`);
     }
   }
 

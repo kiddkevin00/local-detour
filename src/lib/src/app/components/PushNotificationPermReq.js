@@ -39,8 +39,7 @@ class PushNotificationPermReq extends Component {
       await AsyncStorage.setItem('@SystemSetting:shouldRequestPushNotificationPerm', 'TRUE')
       this._backToComponent();
     } catch (err) {
-      // Error saving data.
-      console.log(err);
+      console.log(`Something went wrong when saving data - ${err}`);
     }
   }
 
