@@ -112,7 +112,7 @@ class EventDetail extends Component {
 
   _saveToCalenderApp = async function (event) {
     try {
-      const savedEvent = await CalendarEvents.saveToCalendarEvents(event.name, {
+      const savedEventId = await CalendarEvents.saveToCalendarEvents(event.name, {
         location: event.where && event.where.address,
         startDate: (event.when && event.when.startTimestamp) ? new Date(event.when.startTimestamp) : null,
         endDate: (event.when && event.when.endTimestamp) ? new Date(event.when.endTimestamp) : null,
@@ -121,7 +121,7 @@ class EventDetail extends Component {
         notes: event.detail,
       });
 
-      if (savedEvent) {
+      if (savedEventId) {
         Alert.alert('Success', 'The event has been saved to your calendar and will remind you one day before it starts');
         //CalendarEvents.showSavedEventInCalendarApp(event.when && event.when.startTimestamp);
       }
@@ -298,8 +298,8 @@ class EventDetail extends Component {
               transparent
               onPress={ () => Share.share({
                 title: event.name,
-                message: `Check out this hand picked event - ${event.name}\n${event.externalLink}\n\nFind out more by downloading our app for free`,
-                url: 'https://localdetour.herokuapp.com/',
+                message: `Check out this hand picked event - ${event.name}:\nLocalDetourNYC2017://?event=${JSON.stringify(event)}\n\nIf you haven't download our app yet, please download now before clicking the above event detail link:\nhttps://itunes.apple.com/us/app/localdetour/id1262262548?mt=8`,
+                //url: 'https://localdetour.herokuapp.com/',
               }) }
             >
               <Icon style={ { color: 'white' } } name="share" />
