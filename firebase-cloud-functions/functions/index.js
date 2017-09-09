@@ -58,6 +58,28 @@ exports.makeUppercase = functions.database.ref('/messages/{pushId}/original').on
   return currentEventSnapshot.ref.parent.child('uppercase').set(uppercase);
 });
 
+exports.sendPushNotification = functions.https.onRequest((req, res) => {
+  const title = req.query.title || 'LocalDetour';
+  const body = req.query.content;
+
+  if (!body) return res.status(400)
+    .send('Please include content parameter in your query string.<br /><br />Here is the ' +
+      'sample URL:<br />https://us-central1-spiritual-guide-476dd.cloudfunctions.net/' +
+      'sendPushNotification?title=LocalDetour&content=Five+events+are+coming+up+this+weekend');
+
+  const notification = {
+    title,
+    body,
+    //badge: '1', /// TODO
+  };
+
+  admin.messaging()
+    .sendToTopic(messagingTopic, { notification })
+    .then(() => {
+      res.sendStatus(200);
+    });
+});
+
 exports.sendEventPushNotification = functions.database.ref('/nyc/events/{eventId}').onWrite((event) => {
   const currentEventSnapshot = event.data;
   const previousEventSnapShot = currentEventSnapshot.previous;
@@ -71,7 +93,7 @@ exports.sendEventPushNotification = functions.database.ref('/nyc/events/{eventId
   if (!previousEventSnapShot.exists()) {
     const notification = {
       title: 'LocalDetour',
-      body: `Check out the new local event - ${currentEventSnapshot.val().name || 'N/A'}.`,
+      body: `Check out the new event:\n${currentEventSnapshot.val().name || 'N/A'}`,
       //badge: '1', /// TODO
     };
 
