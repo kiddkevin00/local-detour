@@ -45,7 +45,7 @@ class CalendarEvents {
         await Linking.openURL(url);
       }
     } catch (err) {
-      console.log(`Something went wrong when showing a date in calendar app - ${err}`);
+      console.log(`Something went wrong when showing schedule for a specific date in calendar app - ${err}`);
     }
   }
 

@@ -103,6 +103,8 @@ class EventDetail extends Component {
   static propTypes = {
     event: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    
+     
   };
 
   state = {

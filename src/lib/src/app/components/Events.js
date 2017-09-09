@@ -6,7 +6,6 @@ import CalendarEvents from '../utils/CalendarEvents';
 import { firebaseConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import moment from 'moment';
 import {
   Container,
   Header,
@@ -32,6 +31,7 @@ import {
 } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 
 class Events extends Component {

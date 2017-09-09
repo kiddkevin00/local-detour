@@ -11,6 +11,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "RNFIRMessaging.h"
 #import "Firebase.h"
+#import <React/RCTLinkingManager.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
@@ -77,8 +78,15 @@
     sourceApplication:sourceApplication
     annotation:annotation];
   
-  // Add any custom logic here.
+  // Add other custom logic here.
+  
   return handled;
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+    options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  return [RCTLinkingManager application:application openURL:url options:options];
 }
 
 @end
