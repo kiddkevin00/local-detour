@@ -32,6 +32,7 @@ import {
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 
 class Events extends Component {
@@ -42,6 +43,10 @@ class Events extends Component {
     firebase: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  };
+
+  state = {
+    photoTestURI: ''
   };
 
   componentDidMount() {
@@ -63,6 +68,27 @@ class Events extends Component {
       .catch((err) => {
         console.log(`Something went wrong when saving data - ${err}`);
       });
+    RNFetchBlob
+        .config({
+          fileCache: true,
+          appendExt: 'jpg'
+        })
+        .fetch('GET', "https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2FGovIsland%2FGovIsland_6.jpg?alt=media&token=bf07f3c8-dd98-42ff-8788-94d875afa704")
+        .then((res) => {
+          this.setState({
+            photoTestURI: res.path()
+          });
+        })
+  }
+
+  _renderImage(event) {
+    return (
+      <Image
+        style={ { height: Dimensions.get('window').width - 35, width: '100%' } }
+        source={ { uri: this.state.photoTestURI } }
+      />
+    )
+
   }
 
   _renderEvent = (event) => {
@@ -87,10 +113,7 @@ class Events extends Component {
             </Left>
           </CardItem>
           <CardItem cardBody button onPress={ this._checkoutEventDetail.bind(this, event) }>
-            <Image
-              style={ { height: Dimensions.get('window').width - 35, width: '100%' } }
-              source={ { uri: event.heroPhoto } }
-            />
+            { this._renderImage(event) }
           </CardItem>
           <CardItem button onPress={ this._checkoutEventDetail.bind(this, event) }>
             <Left>

@@ -3,6 +3,7 @@ package com.localdetour;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.RNFetchBlob.RNFetchBlobPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.reactnative.photoview.PhotoViewPackage;
 import com.calendarevents.CalendarEventsPackage;
@@ -28,6 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
+            new RNFetchBlobPackage(),
             new FBSDKPackage(),
             new PhotoViewPackage(),
         new CalendarEventsPackage(),
