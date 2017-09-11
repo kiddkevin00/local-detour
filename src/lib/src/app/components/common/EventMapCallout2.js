@@ -1,4 +1,4 @@
-import EventDetail from './EventDetail';
+import EventDetail from '../EventDetail';
 import {
   Container,
   Text,

@@ -2,12 +2,7 @@ import Events from './Events';
 import EventDetail from './EventDetail';
 import Setting from './Setting';
 import MapView from 'react-native-maps';
-import {
-  firebaseConnect,
-} from 'react-redux-firebase';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import moment from 'moment';
+import { firebaseConnect } from 'react-redux-firebase';
 import {
   Container,
   Header,
@@ -25,8 +20,11 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 
 const styles = StyleSheet.create({
@@ -45,7 +43,6 @@ class EventsMapView extends Component {
   static propTypes = {
     events: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     auth: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-    firebase: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
@@ -67,7 +64,7 @@ class EventsMapView extends Component {
       longitudeDelta: 0.1801169679799912 * (Dimensions.get('window').width / Dimensions.get('window').height),
     },
   };
-  
+
   _renderEvent(event) {
     return (
       <MapView.Marker
@@ -107,7 +104,7 @@ class EventsMapView extends Component {
   _checkoutEventDetail = (event) => {
     this.props.navigator.push({
       component: EventDetail,
-      passProps: { event },
+      passProps: { eventName: event.name },
     });
   }
 
@@ -264,9 +261,9 @@ export default compose(
   connect(
     function mapStateToProps(state) {
       return {
-        events: state.firebase.ordered && state.firebase.ordered.nyc &&
-          Array.isArray(state.firebase.ordered.nyc.events) ?
-          (state.firebase.ordered.nyc.events.map((event) => event.value)) : [],
+        events: (state.firebase.ordered && state.firebase.ordered.nyc &&
+          Array.isArray(state.firebase.ordered.nyc.events)) ?
+            state.firebase.ordered.nyc.events.map((event) => event.value) : [],
         auth: state.firebase.auth,
       };
     }

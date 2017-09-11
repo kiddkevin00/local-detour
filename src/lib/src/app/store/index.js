@@ -1,6 +1,6 @@
 import rootReducer from '../reducers/';
+import firebaseProxy from '../proxies/FirebaseProxy';
 import { reactReduxFirebase } from 'react-redux-firebase';
-import firebaseProxy from '../proxies/FirebaseProxy'
 import thunkMiddleware from 'redux-thunk';
 import loggerMiddleware from 'redux-logger';
 import { createStore, applyMiddleware, compose } from 'redux';
@@ -13,7 +13,7 @@ function configureStore(initialState) {
     applyMiddleware(thunkMiddleware),
     applyMiddleware(loggerMiddleware),
     reactReduxFirebase(firebaseProxy, config),
-    global.__DEV__ && global.__REDUX_DEVTOOLS_EXTENSION__ ?
+    (global.__DEV__ && global.__REDUX_DEVTOOLS_EXTENSION__) ?
       global.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f,
   ));
 
