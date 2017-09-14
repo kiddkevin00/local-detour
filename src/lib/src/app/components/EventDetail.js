@@ -282,6 +282,9 @@ class EventDetail extends Component {
     const today = moment();
     const displayMonth = today.isAfter(startDate) ? today.format('MMM').toUpperCase() : startDate.format('MMM').toUpperCase();
     const displayDate = today.isAfter(startDate) ? today.format('DD') : startDate.format('DD');
+    const diaplyDateInterval = moment(event.when.startTimestamp).format('MMM DD') !== moment(event.when.endTimestamp).format('MMM DD') ?
+      `${moment(event.when.startTimestamp).format('MMM DD')} - ${moment(event.when.endTimestamp).format('MMM DD')}` :
+      moment(event.when.startTimestamp).format('MMM DD');
     const displayTimeInterval = event.when.display || `${moment(event.when.startTimestamp).format('hh:mm A')} - ${moment(event.when.endTimestamp).format('hh:mm A')}`;
 
     return (
@@ -342,7 +345,7 @@ class EventDetail extends Component {
                 <Icon style={ { fontSize: 25, color: 'red' } } name="time" />
                 <Text>&nbsp;</Text>
                 <Body>
-                  <Text style={ { fontSize: 16, fontWeight: '500' } }>{ moment(event.when.startTimestamp).format('MMM DD') } - { moment(event.when.endTimestamp).format('MMM DD') }</Text>
+                  <Text style={ { fontSize: 16, fontWeight: '500' } }>{ diaplyDateInterval }</Text>
                   <Text style={ { fontSize: 14, fontWeight: '400', color: '#333' } } note>{ displayTimeInterval }</Text>
                 </Body>
               </Left>

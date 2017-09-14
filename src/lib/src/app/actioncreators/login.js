@@ -16,8 +16,6 @@ const landingActionCreator = {
       try {
         const { accessToken } = await AccessToken.getCurrentAccessToken();
         const credential = firebaseAuthProviders.FacebookAuthProvider.credential(accessToken);
-
-        // [TODO] Saves `userInfo` to Redux state.
         const userInfo = await firebaseAuth.signInWithCredential(credential);
 
         dispatch({

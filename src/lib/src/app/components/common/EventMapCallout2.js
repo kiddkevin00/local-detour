@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class EventMapLabel2 extends Component {
+class EventMapCallout2 extends Component {
 
   static propTypes = {
     event: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -76,4 +76,4 @@ class EventMapLabel2 extends Component {
 
 }
 
-export { EventMapLabel2 as default };
+export { EventMapCallout2 as default };

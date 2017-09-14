@@ -20,4 +20,4 @@ function configureStore(initialState) {
   return store;
 }
 
-export default configureStore;
+export { configureStore as default };

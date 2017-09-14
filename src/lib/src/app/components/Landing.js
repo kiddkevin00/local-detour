@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
 class Landing extends Component {
 
   static propTypes = {
-    waitingForAsyncOps: PropTypes.bool.isRequired,
+    isWaitingForAsyncOps: PropTypes.bool.isRequired,
     dispatchFinishWaitingForAsyncOps: PropTypes.func.isRequired,
 
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -94,7 +94,7 @@ class Landing extends Component {
   }
 
   render() {
-    if (this.props.waitingForAsyncOps) return null;
+    if (this.props.isWaitingForAsyncOps) return null;
 
     const backgroundImageInlineStyle = {
       height: Dimensions.get('window').height,
@@ -135,7 +135,7 @@ class Landing extends Component {
 
 function mapStateToProps(state) {
   return {
-    waitingForAsyncOps: state.landing.waitingForAsyncOps,
+    isWaitingForAsyncOps: state.landing.isWaitingForAsyncOps,
   };
 }
 function mapDispatchToProps(dispatch) {

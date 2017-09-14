@@ -821,6 +821,9 @@
 						DevelopmentTeam = AL3QQKJ8WD;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.ApplePay = {
+								enabled = 0;
+							};
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};

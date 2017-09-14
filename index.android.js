@@ -1,4 +1,4 @@
-import Landing from './app/components/Landing';
+import Landing from './src/lib/src/app/components/Landing';
 import { AppRegistry } from 'react-native';
 import React, { Component } from 'react';
 
