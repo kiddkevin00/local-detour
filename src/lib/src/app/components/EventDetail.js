@@ -327,7 +327,7 @@ class EventDetail extends Component {
         <Content padder>
           <Card>
             <CardItem cardBody>
-              <Image style={ { height: Dimensions.get('window').width - 25, width: '100%' } } source={ { uri: event.heroPhoto } } />
+              <Image style={ { height: Dimensions.get('window').width - 25, width: '100%' } } source={ event.heroPhoto ? { uri: event.heroPhoto } : require('../../../static/assets/images/loading-indicator.gif') } />
             </CardItem>
             <CardItem style={ { height: 70 } } bordered>
               <Body style={ { flexGrow: 2, justifyContent: 'center' } }>
