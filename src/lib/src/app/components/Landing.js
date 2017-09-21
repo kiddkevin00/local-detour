@@ -81,7 +81,7 @@ class Landing extends Component {
       this.props.navigator.push({
         component: EventDetail,
         passProps: {
-          eventName: JSON.parse(params.event),
+          eventName: params.event,
         },
       });
     }
