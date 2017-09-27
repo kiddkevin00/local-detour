@@ -88,7 +88,7 @@ class Landing extends Component {
   }
 
   _checkoutWalkthrough = () => {
-    this.props.navigator.push({
+    this.props.navigator.replace({
       component: Walkthrough,
     });
   }

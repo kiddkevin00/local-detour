@@ -1,5 +1,5 @@
-import CalendarEvents from '../utils/CalendarEvents';
 import WebViewWrapper from './common/WebViewWrapper';
+import CalendarEvents from '../utils/CalendarEvents';
 import constants from '../constants/';
 import Swiper from 'react-native-swiper';
 import PhotoView from 'react-native-photo-view';
@@ -267,7 +267,8 @@ class EventDetail extends Component {
   }
 
   render() {
-    const event = this.props.events.find((e) => e.name === this.props.eventName) || constants.APP.SAMPLE_EVENT;
+    const event = this.props.events.find((e) => e.name === this.props.eventName) ||
+      constants.APP.SAMPLE_EVENT;
     const photosView = (
       Array.isArray(event.photos) ? (
         event.photos
@@ -314,7 +315,7 @@ class EventDetail extends Component {
               onPress={ () => Share.share({
                 title: event.name,
                 message: `Check out this event - ${event.name}:\n` +
-                  `LocalDetourNYC2017://?event=${global.encodeURIComponent(JSON.stringify(event.name))}\n\n` +
+                  `LocalDetourNYC2017://?event=${global.encodeURIComponent(event.name)}\n\n` +
                   'Click the link below to download LocalDetour:\n' +
                   'https://itunes.apple.com/us/app/localdetour/id1262262548?mt=8',
                 //url: 'https://localdetour.herokuapp.com/',

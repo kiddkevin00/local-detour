@@ -6,7 +6,7 @@ import {
 } from 'react-native-fbsdk';
 
 
-const landingActionCreator = {
+const loginActionCreator = {
   facebookPostLogin(navigator) {
     return async (dispatch/*, getState*/) => {
       dispatch({
@@ -35,7 +35,7 @@ const landingActionCreator = {
           type: actionTypes.LOGIN.FACEBOOK_LOGIN_SUCCEED,
         });
 
-        navigator.push({
+        navigator.replace({
           component: Events,
         });
       } catch (err) {
@@ -45,4 +45,4 @@ const landingActionCreator = {
   },
 };
 
-export { landingActionCreator as default };
+export { loginActionCreator as default };

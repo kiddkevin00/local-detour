@@ -121,7 +121,7 @@ class Signup extends Component {
 
       userInfo.sendEmailVerification();
 
-      this.props.navigator.push({
+      this.props.navigator.replace({
         component: Events,
         passProps: { userInfo },
       });
@@ -164,7 +164,7 @@ class Signup extends Component {
     try {
       const userInfo = await firebaseAuth.signInAnonymously();
 
-      this.props.navigator.push({
+      this.props.navigator.replace({
         component: Events,
         passProps: { userInfo },
       });
@@ -194,7 +194,7 @@ class Signup extends Component {
   }
 
   _gotoLogin = () => {
-    this.props.navigator.push({
+    this.props.navigator.replace({
       component: Login,
     });
   }

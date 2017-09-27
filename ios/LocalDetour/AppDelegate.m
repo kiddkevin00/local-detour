@@ -80,6 +80,9 @@
     sourceApplication:sourceApplication
     annotation:annotation];
   
+  [RCTLinkingManager application:application openURL:url
+    sourceApplication:sourceApplication annotation:annotation];
+  
   // Add other custom logic here.
   
   return handled;
@@ -88,7 +91,15 @@
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
     options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
-  return [RCTLinkingManager application:application openURL:url options:options];
+  BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application
+    openURL:url
+    options:options];
+  
+  [RCTLinkingManager application:application openURL:url options:options];
+  
+  // Add other custom logic here.
+  
+  return handled;
 }
 
 @end

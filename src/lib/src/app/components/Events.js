@@ -104,7 +104,7 @@ class Events extends Component {
                 onPress={ () => Share.share({
                   title: event.name,
                   message: `Check out this event - ${event.name}:\n` +
-                    `LocalDetourNYC2017://?event=${global.encodeURIComponent(JSON.stringify(event.name))}\n\n` +
+                    `LocalDetourNYC2017://?event=${global.encodeURIComponent(event.name)}\n\n` +
                     'Click the link below to download LocalDetour:\n' +
                     'https://itunes.apple.com/us/app/localdetour/id1262262548?mt=8',
                   //url: 'https://localdetour.herokuapp.com/',
