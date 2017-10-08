@@ -2,7 +2,7 @@ import actionTypes from '../actiontypes/';
 
 
 const initialState = {
-  waitingForAsyncOps: true,
+  isWaitingForAsyncOps: true,
 };
 
 function landingReducer(state = initialState, action) {
@@ -13,7 +13,7 @@ function landingReducer(state = initialState, action) {
     case actionTypes.LANDING.FINISH_WAITING_FOR_ASYNC_OPS:
       return {
         ...state,
-        waitingForAsyncOps: false,
+        isWaitingForAsyncOps: false,
       };
     default:
       return state;

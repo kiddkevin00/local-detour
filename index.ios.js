@@ -1,10 +1,9 @@
 import Landing from './src/lib/src/app/components/Landing';
 import configureStore from './src/lib/src/app/store/';
 import {
-  Linking,
   NavigatorIOS,
-  StyleSheet,
   AppRegistry,
+  StyleSheet,
 } from 'react-native';
 import { Provider } from 'react-redux';
 import React, { Component } from 'react';

@@ -109,7 +109,7 @@ class Login extends Component {
       const userInfo = await firebaseAuth
         .signInWithEmailAndPassword(this.state.formEmail, this.state.formPassword);
 
-      this.props.navigator.push({
+      this.props.navigator.replace({
         component: Events,
         passProps: {
           userInfo: {
@@ -153,7 +153,7 @@ class Login extends Component {
   }
 
   _gotoSignup = () => {
-    this.props.navigator.push({
+    this.props.navigator.replace({
       component: Signup,
     });
   }

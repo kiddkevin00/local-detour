@@ -1,9 +1,9 @@
-import CalendarEvents from '../utils/CalendarEvents';
 import WebViewWrapper from './common/WebViewWrapper';
+import CalendarEvents from '../utils/CalendarEvents';
 import constants from '../constants/';
 import Swiper from 'react-native-swiper';
 import PhotoView from 'react-native-photo-view';
-import moment from 'moment';
+import { firebaseConnect } from 'react-redux-firebase';
 import {
   Container,
   Header,
@@ -34,8 +34,11 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 
 const styles = StyleSheet.create({
@@ -101,10 +104,12 @@ Viewer._renderPagination = (index, total/*, context*/) => (
 class EventDetail extends Component {
 
   static propTypes = {
-    event: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    eventName: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
+
+    events: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    auth: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-    
-     
   };
 
   state = {
@@ -262,7 +267,8 @@ class EventDetail extends Component {
   }
 
   render() {
-    const event = this.props.event || constants.APP.SAMPLE_EVENT;
+    const event = this.props.events.find((e) => e.name === this.props.eventName) ||
+      constants.APP.SAMPLE_EVENT;
     const photosView = (
       Array.isArray(event.photos) ? (
         event.photos
@@ -273,6 +279,14 @@ class EventDetail extends Component {
         </Row>
       )
     );
+    const startDate = moment(event.when.startTimestamp);
+    const today = moment();
+    const displayMonth = today.isAfter(startDate) ? today.format('MMM').toUpperCase() : startDate.format('MMM').toUpperCase();
+    const displayDate = today.isAfter(startDate) ? today.format('DD') : startDate.format('DD');
+    const diaplyDateInterval = moment(event.when.startTimestamp).format('MMM DD') !== moment(event.when.endTimestamp).format('MMM DD') ?
+      `${moment(event.when.startTimestamp).format('MMM DD')} - ${moment(event.when.endTimestamp).format('MMM DD')}` :
+      moment(event.when.startTimestamp).format('MMM DD');
+    const displayTimeInterval = event.when.display || `${moment(event.when.startTimestamp).format('hh:mm A')} - ${moment(event.when.endTimestamp).format('hh:mm A')}`;
 
     return (
       <Container>
@@ -300,7 +314,10 @@ class EventDetail extends Component {
               transparent
               onPress={ () => Share.share({
                 title: event.name,
-                message: `Check out this hand picked event - ${event.name}:\nLocalDetourNYC2017://?event=${JSON.stringify(event)}\n\nIf you haven't download our app yet, please download now before clicking the above event detail link:\nhttps://itunes.apple.com/us/app/localdetour/id1262262548?mt=8`,
+                message: `Check out this event - ${event.name}:\n` +
+                  `LocalDetourNYC2017://?event=${global.encodeURIComponent(event.name)}\n\n` +
+                  'Click the link below to download LocalDetour:\n' +
+                  'https://itunes.apple.com/us/app/localdetour/id1262262548?mt=8',
                 //url: 'https://localdetour.herokuapp.com/',
               }) }
             >
@@ -311,12 +328,12 @@ class EventDetail extends Component {
         <Content padder>
           <Card>
             <CardItem cardBody>
-              <Image style={ { height: Dimensions.get('window').width - 25, width: '100%' } } source={ { uri: event.heroPhoto } } />
+              <Image style={ { height: Dimensions.get('window').width - 25, width: '100%' } } source={ event.heroPhoto ? { uri: event.heroPhoto } : require('../../../static/assets/images/loading-indicator.gif') } />
             </CardItem>
             <CardItem style={ { height: 70 } } bordered>
               <Body style={ { flexGrow: 2, justifyContent: 'center' } }>
-                <Text style={ { fontSize: 11, color: 'red' } }>&nbsp;{ moment(event.when.startTimestamp).format('MMM').toUpperCase() }</Text>
-                <Text style={ { fontSize: 25 } }>{ moment(event.when.startTimestamp).format('DD') }</Text>
+                <Text style={ { fontSize: 11, color: 'red' } }>&nbsp;{ displayMonth }</Text>
+                <Text style={ { fontSize: 25 } }>{ displayDate }</Text>
               </Body>
               <Text>&nbsp;</Text>
               <Body style={ { flexGrow: 13, justifyContent: 'center' } }>
@@ -328,7 +345,10 @@ class EventDetail extends Component {
               <Left>
                 <Icon style={ { fontSize: 25, color: 'red' } } name="time" />
                 <Text>&nbsp;</Text>
-                <Text style={ { fontSize: 16, fontWeight: '500' } }>{ moment(event.when.startTimestamp).format('MM/DD hh:mma') } - { moment(event.when.endTimestamp).format('MM/DD hh:mma') }</Text>
+                <Body>
+                  <Text style={ { fontSize: 16, fontWeight: '500' } }>{ diaplyDateInterval }</Text>
+                  <Text style={ { fontSize: 14, fontWeight: '400', color: '#333' } } note>{ displayTimeInterval }</Text>
+                </Body>
               </Left>
             </CardItem>
             <CardItem bordered button onPress={ this._showDirectionInMapApp.bind(this, event.where.coordinate) }>
@@ -400,4 +420,18 @@ class EventDetail extends Component {
 
 }
 
-export { EventDetail as default };
+export default compose(
+  firebaseConnect([
+    { path: '/nyc/events' },
+  ]),
+  connect(
+    function mapStateToProps(state) {
+      return {
+        events: (state.firebase.ordered && state.firebase.ordered.nyc &&
+          Array.isArray(state.firebase.ordered.nyc.events)) ?
+            state.firebase.ordered.nyc.events.map((event) => event.value) : [],
+        auth: state.firebase.auth,
+      };
+    }
+  )
+)(EventDetail);

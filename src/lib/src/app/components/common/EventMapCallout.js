@@ -1,4 +1,4 @@
-import EventDetail from './EventDetail';
+import EventDetail from '../EventDetail';
 import {
   Container,
   Content,
@@ -12,7 +12,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
-class EventMapLabel extends Component {
+class EventMapCallout extends Component {
 
   static propTypes = {
     event: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -58,4 +58,4 @@ class EventMapLabel extends Component {
 
 }
 
-export { EventMapLabel as default };
+export { EventMapCallout as default };

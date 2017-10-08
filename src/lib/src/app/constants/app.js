@@ -20,7 +20,6 @@ export const SAMPLE_EVENT = {
     endTimestamp: moment('2107-01-02T00:00').valueOf(),
   },
   externalLink: 'https://localdetour.herokuapp.com/',
-  heroPhoto: 'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fcoming-soon.jpeg?alt=media&token=644ac5ec-6a78-45af-be32-11e041578171',
   previousPhotos: [
     'https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/public%2Fimage-coming-soon.png?alt=media&token=a1c411af-8ac3-4657-bab5-e5063cfe1ced',
   ],

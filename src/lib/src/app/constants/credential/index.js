@@ -18,4 +18,4 @@ switch (env) {
     break;
 }
 
-module.exports = exports = credential;
+export { credential as default };

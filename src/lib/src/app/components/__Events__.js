@@ -167,7 +167,7 @@ class Events extends Component {
     try {
       await firebaseAuth.signOut();
 
-      this.props.navigator.push({
+      this.props.navigator.replace({
         title: 'Log In',
         component: Login,
       });

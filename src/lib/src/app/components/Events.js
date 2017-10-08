@@ -4,8 +4,6 @@ import PushNotificationPermReq from './PushNotificationPermReq';
 import Setting from './Setting';
 import CalendarEvents from '../utils/CalendarEvents';
 import { firebaseConnect } from 'react-redux-firebase';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
 import {
   Container,
   Header,
@@ -29,6 +27,8 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -40,7 +40,6 @@ class Events extends Component {
   static propTypes = {
     events: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
     auth: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-    firebase: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
@@ -127,7 +126,10 @@ class Events extends Component {
                 transparent
                 onPress={ () => Share.share({
                   title: event.name,
-                  message: `Check out this hand picked event - ${event.name}:\nLocalDetourNYC2017://?event=${JSON.stringify(event)}\n\nIf you haven't download our app yet, please download now before clicking the above event detail link:\nhttps://itunes.apple.com/us/app/localdetour/id1262262548?mt=8`,
+                  message: `Check out this event - ${event.name}:\n` +
+                    `LocalDetourNYC2017://?event=${global.encodeURIComponent(event.name)}\n\n` +
+                    'Click the link below to download LocalDetour:\n' +
+                    'https://itunes.apple.com/us/app/localdetour/id1262262548?mt=8',
                   //url: 'https://localdetour.herokuapp.com/',
                 }) }
               >
@@ -168,7 +170,7 @@ class Events extends Component {
   _checkoutEventDetail(event) {
     this.props.navigator.push({
       component: EventDetail,
-      passProps: { event },
+      passProps: { eventName: event.name },
     });
   }
 
@@ -234,9 +236,9 @@ export default compose(
   connect(
     function mapStateToProps(state) {
       return {
-        events: state.firebase.ordered && state.firebase.ordered.nyc &&
-          Array.isArray(state.firebase.ordered.nyc.events) ?
-          (state.firebase.ordered.nyc.events.map((event) => event.value)) : [],
+        events: (state.firebase.ordered && state.firebase.ordered.nyc &&
+          Array.isArray(state.firebase.ordered.nyc.events)) ?
+            state.firebase.ordered.nyc.events.map((event) => event.value) : [],
         auth: state.firebase.auth,
       };
     }
