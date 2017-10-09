@@ -1,9 +1,9 @@
-const prodCredential = require('./production');
-const testCredential = require('./test');
-const devCredential = require('./development');
+import * as prodCredential from './production';
+import * as testCredential from './test';
+import * as devCredential from './development';
 
 
-const env = typeof window === 'undefined' ? process.env.NODE_ENV : window.process.env.NODE_ENV;
+const env = process.env.NODE_ENV;
 let credential;
 
 switch (env) {
@@ -18,4 +18,4 @@ switch (env) {
     break;
 }
 
-module.exports = exports = credential;
+export { credential as default };

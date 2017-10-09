@@ -1,105 +1,149 @@
-import Signup from './Signup';
-import BaseComponent from './common/BaseComponent';
+import actionCreator from '../actioncreators/landing';
+import Walkthrough from './Walkthrough';
+import Events from './Events';
+import EventDetail from './EventDetail';
 import Swiper from 'react-native-swiper';
 import {
-  TouchableOpacity,
-  Image,
-  View,
+  Container,
+  Content,
+  Button,
   Text,
+} from 'native-base';
+import {
+  Linking,
+  AsyncStorage,
+  Image,
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import React from 'react';
+import { connect } from 'react-redux';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import qs from 'qs';
 
 
-// [TODO] Check the sample styles on GitHub.
 const styles = StyleSheet.create({
-  slide: {
-    flexGrow: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    marginTop: '195%',
-  },
   backgroundImage: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    resizeMode: 'stretch',
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-  },
-  heading: {
-    color: '#fff',
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  button: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 40,
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: 'white',
-    padding: 8,
-    backgroundColor: '#fff',
-  },
-  buttonText: {
-    color: '#111',
-    fontSize: 12,
+    //flexGrow: 1,
+    justifyContent: 'flex-end',
+    //alignItems: 'center',
+    //resizeMode: 'stretch',
   },
 });
 
-class Landing extends BaseComponent {
-  constructor(props) {
-    super(props);
-
-    this._bind('_signup');
-  }
+class Landing extends Component {
 
   static propTypes = {
-    navigator: PropTypes.object.isRequired,
+    isWaitingForAsyncOps: PropTypes.bool.isRequired,
+    dispatchFinishWaitingForAsyncOps: PropTypes.func.isRequired,
+
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
-  render() {
-    return (
-      <Swiper showsButtons={ true }>
-        <View style={ styles.slide }>
-          <Image
-            source={ require('../../../static/assets/images/v4_background.png') }
-            style={ styles.backgroundImage }
-          >
-            <Text style={ styles.heading }>
-              Let go venture!
-            </Text>
-            <TouchableOpacity style={ styles.button } onPress={ this._signup }>
-              <Text style={ styles.buttonText }>SIGN UP NOW</Text>
-            </TouchableOpacity>
-          </Image>
-        </View>
-        <View style={ styles.slide }>
-          <Image
-            source={ require('../../../static/assets/images/v3_background.png') }
-            style={ styles.backgroundImage }
-          />
-        </View>
-        <View style={ styles.slide }>
-          <Image
-            source={ require('../../../static/assets/images/v2_background.png') }
-            style={ styles.backgroundImage }
-          />
-        </View>
-      </Swiper>
-    );
+  componentDidMount() {
+    AsyncStorage.getItem('@SystemSetting:shouldSkipWalkthrough')
+      .then((shouldSkipWalkthrough) => {
+        if (shouldSkipWalkthrough === 'TRUE') {
+          this.props.navigator.replace({
+            component: Events,
+          });
+        } else {
+          this.props.dispatchFinishWaitingForAsyncOps();
+        }
+      })
+      .catch((err) => {
+        console.log(`Something went wrong when retrieving data - ${err}`);
+      });
+
+    Linking.getInitialURL()
+      .then((url) => {
+        if (url) {
+          this._handleOpenURL({ url });
+        }
+      })
+      .catch((err) => {
+        console.log(`Something went wrong when getting launch URL - ${err}`);
+      });
+
+    Linking.addEventListener('url', this._handleOpenURL);
   }
 
-  _signup = () => {
-    this.props.navigator.push({
-      title: 'Sign Up',
-      component: Signup,
+  componentWillUnmount() {
+    //Linking.removeEventListener('url', this._handleOpenURL);
+  }
+
+  _handleOpenURL = (event) => {
+    const url = event.url.split('?');
+    const path = url[0];
+    const params = url[1] ? qs.parse(url[1]) : null;
+
+    if (path && params && params.event) {
+      this.props.navigator.push({
+        component: EventDetail,
+        passProps: {
+          eventName: params.event,
+        },
+      });
+    }
+  }
+
+  _checkoutWalkthrough = () => {
+    this.props.navigator.replace({
+      component: Walkthrough,
     });
+  }
+
+  render() {
+    if (this.props.isWaitingForAsyncOps) return null;
+
+    const backgroundImageInlineStyle = {
+      height: Dimensions.get('window').height,
+      width: Dimensions.get('window').width,
+    };
+
+    return (
+      <Container>
+        <Content >
+          <Swiper showsButtons={ false }>
+            <Image
+              style={ [styles.backgroundImage, backgroundImageInlineStyle] }
+              source={ require('../../../static/assets/images/splash-screen.jpg') }
+              resizeMode="stretch"
+            >
+              <Button
+                block
+                light
+                onPress={ this._checkoutWalkthrough }
+                style={ {
+                  marginBottom: 80,
+                  marginHorizontal: 20,
+                  paddingTop: 25,
+                  paddingBottom: 25,
+                  backgroundColor: '#f96332',
+                } }
+              >
+                <Text style={ { fontSize: 17, color: 'white', fontWeight: 'bold' } }>Let’s Get Started</Text>
+              </Button>
+            </Image>
+          </Swiper>
+        </Content>
+      </Container>
+    );
   }
 
 }
 
-export { Landing as default };
+function mapStateToProps(state) {
+  return {
+    isWaitingForAsyncOps: state.landing.isWaitingForAsyncOps,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatchFinishWaitingForAsyncOps() {
+      dispatch(actionCreator.finishWaitingForAsyncOps());
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Landing);

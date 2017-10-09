@@ -1,6 +1,5 @@
 import Badge from './common/__Badge__';
 import Separator from './common/Separator';
-import BaseComponent from './common/BaseComponent';
 import { firebaseDb } from '../proxies/FirebaseProxy';
 import {
   StyleSheet,
@@ -10,7 +9,7 @@ import {
   TouchableHighlight,
   ListView,
 } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -25,49 +24,50 @@ const styles = StyleSheet.create({
   footer: {
     backgroundColor: '#E3E3E3',
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   noteInput: {
     height: 60,
     padding: 10,
     fontSize: 18,
     color: '#111',
-    flexGrow: 10
+    flexGrow: 10,
   },
   button: {
     height: 60,
     backgroundColor: '#48BBEC',
     flexGrow: 3,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   buttonText: {
     fontSize: 18,
-    color: 'white'
+    color: 'white',
   },
 });
 
-class Notes extends BaseComponent {
-
-  constructor(props) {
-    super(props);
-
-    this.listViewDataSource = new ListView.DataSource({
-      rowHasChanged: (originalRow, newRow) => newRow !== originalRow,
-    });
-    this.dataRef = firebaseDb.ref(this.props.userInfo.login).child('notes');
-
-    this.state = {
-      noteListViewDataSource: this.listViewDataSource.cloneWithRows([]),
-      newNote: '',
-      error: '',
-    };
-    this._bind('_handleClick', '_handleChange');
-  }
+class Notes extends Component {
 
   static propTypes = {
-    userInfo: PropTypes.object.isRequired,
+    userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  };
+
+  static _renderNote(note) {
+    return (
+      <View>
+        <View style={ styles.rowContainer }>
+          <Text>{ note }</Text>
+        </View>
+        <Separator />
+      </View>
+    );
   }
+
+  state = {
+    noteListViewDataSource: this.listViewDataSource.cloneWithRows([]),
+    newNote: '',
+    error: '',
+  };
 
   componentDidMount() {
     this.dataRef.on('value', (notesSnapshot) => {
@@ -80,6 +80,31 @@ class Notes extends BaseComponent {
       this.setState({
         noteListViewDataSource: this.listViewDataSource.cloneWithRows(notes),
       });
+    });
+  }
+
+  listViewDataSource = new ListView.DataSource({
+    rowHasChanged: (originalRow, newRow) => newRow !== originalRow,
+  });
+
+  dataRef = firebaseDb.ref(this.props.userInfo.login).child('notes');
+
+  _handleClick = () => {
+    this.dataRef.push(this.state.newNote)
+      .then(() => {
+        this.setState({
+          newNote: '',
+          error: '',
+        });
+      })
+      .catch((err) => {
+        this.setState({ error: JSON.stringify(err, null, 2) });
+      });
+  }
+
+  _handleChange = (event) => {
+    this.setState({
+      newNote: event.nativeEvent.text,
     });
   }
 
@@ -115,36 +140,6 @@ class Notes extends BaseComponent {
             <Text style={ styles.buttonText }>Submit</Text>
           </TouchableHighlight>
         </View>
-      </View>
-    );
-  }
-
-  _handleClick() {
-    this.dataRef.push(this.state.newNote)
-      .then(() => {
-        this.setState({
-          newNote: '',
-          error: '',
-        });
-      })
-      .catch((err) => {
-        this.setState({ error: JSON.stringify(err, null, 2) });
-      });
-  }
-
-  _handleChange(event) {
-    this.setState({
-      newNote: event.nativeEvent.text,
-    });
-  }
-
-  static _renderNote(note) {
-    return (
-      <View>
-        <View style={ styles.rowContainer }>
-          <Text>{ note }</Text>
-        </View>
-        <Separator />
       </View>
     );
   }

@@ -1,5 +1,5 @@
 {
-  "name": "localDetour",
+  "name": "LocalDetour",
   "version": "0.0.1",
   "description": "",
   "main": "./src/lib/src/app/components/Landing.js",
@@ -10,15 +10,48 @@
     "restrict-branches-no-push": "./bin/restrict-branches-no-push.sh"
   },
   "scripts": {
+    "-------------- EXPOSED --------------": "",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest",
+    "ios": "node node_modules/react-native/local-cli/cli.js run-ios",
+    "android": "node node_modules/react-native/local-cli/cli.js run-android",
+    "lint": "npm run eslint",
+    "unit-test": "npm run jest-unit-test",
+    "ui-test": "",
     "map-packager-port": "APP_ROOT=$PWD sh bin/remap-rn-packager-port.sh",
-    "map-adb-ports": "adb reverse tcp:8085 tcp:8085; adb reverse tcp:7007 tcp:7007; adb reverse tcp:3000 tcp:3000; adb reverse tcp:8097 tcp:8097"
+    "map-adb-ports": "adb reverse tcp:8085 tcp:8085; adb reverse tcp:7007 tcp:7007; adb reverse tcp:3000 tcp:3000; adb reverse tcp:8097 tcp:8097",
+    "precommit": "npm run lint && npm run coverage:unit-test",
+    "prepush": "npm run branch-check && npm run lint && npm run coverage:unit-test && npm run coverage:update-thresholds",
+    "version:bump": "npm run version:instruction && ./bin/version-bump.js",
+    "-------------- INTERNAL -------------": "",
+    "eslint": "eslint --format 'node_modules/eslint-friendly-formatter' --ext .js,.jsx src/lib/src/ src/spec/ bin/ firebase-cloud-functions/functions/index.js",
+    "jest-unit-test": "jest",
+    "coverage:unit-test": "npm run jest-unit-test -- --coverage",
+    "coverage:ui-test": "",
+    "coverage:update-thresholds": "echo 'disable `coverage:update-thresholds` for now' || ./bin/update-test-coverage.js",
+    "branch-check": "./bin/restrict-branches-to-push.sh",
+    "version:instruction": "echo 'Please specify full version number after `npm run version:bump`.  E.g. $ npm run version:bump 0.0.1'",
+    "-------------- LOCAL DEV ------------": "",
+    "debugger": "open 'rndebugger://set-debugger-loc?host=localhost&port=8085'",
+    "local-unit-test": "",
+    "local-ui-test": "",
+    "coverage:report": "",
+    "coverage:html-report": "open spec/coverage/index.html",
+    "jest:dev": "npm run jest-unit-test -- --watch=all",
+    "jest:update": "npm run jest-unit-test -- -u",
+    "jest:no-cache": "npm run jest-unit-test -- --no-cache"
   },
   "jest": {
     "preset": "react-native",
     "verbose": true,
+    "testMatch": [
+      "**/unit/**/*.(spec|test).js?(x)"
+    ],
     "coverageDirectory": "spec/coverage/"
+  },
+  "rnpm": {
+    "assets": [
+      "./src/lib/static/assets/fonts/"
+    ]
   },
   "engines": {
     "node": "6.11.1",
@@ -26,17 +59,29 @@
   },
   "dependencies": {
     "firebase": "4.1.2",
+    "moment": "2.18.1",
     "native-base": "2.2.1",
     "prop-types": "15.5.10",
+    "qs": "6.5.0",
     "react": "16.0.0-alpha.12",
     "react-native": "0.46.1",
-    "react-native-swiper": "1.5.4"
+    "react-native-calendar-events": "1.4.1",
+    "react-native-fbsdk": "0.6.0",
+    "react-native-fcm": "8.0.0",
+    "react-native-fetch-blob": "^0.10.8",
+    "react-native-maps": "0.15.3",
+    "react-native-photo-view": "1.4.0",
+    "react-native-swiper": "1.5.4",
+    "react-redux": "5.0.6",
+    "react-redux-firebase": "2.0.0-beta.7",
+    "redux": "3.7.2",
+    "redux-logger": "3.0.6",
+    "redux-thunk": "2.2.0"
   },
   "devDependencies": {
+    "babel-eslint": "7.2.3",
     "babel-jest": "20.0.3",
     "babel-preset-react-native": "1.9.2",
-    "jest": "20.0.4",
-    "react-test-renderer": "16.0.0-alpha.6",
     "eslint": "3.19.0",
     "eslint-config-airbnb": "15.0.1",
     "eslint-config-standard-react": "5.0.0",
@@ -44,13 +89,18 @@
     "eslint-plugin-chai-expect": "1.1.1",
     "eslint-plugin-import": "2.3.0",
     "eslint-plugin-jsx-a11y": "5.0.3",
-    "eslint-plugin-react": "7.0.1"
+    "eslint-plugin-prefer-object-spread": "1.2.1",
+    "eslint-plugin-react": "7.0.1",
+    "husky": "0.11.9",
+    "jest": "20.0.4",
+    "react-native-debugger-open": "0.3.12",
+    "react-test-renderer": "16.0.0-alpha.6"
   },
   "author": "Marcus Hsu",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git@github.com:kiddkevin00/spiritual-guide.git"
+    "url": "git@github.com:kiddkevin00/local-detour.git"
   },
   "private": true
 }

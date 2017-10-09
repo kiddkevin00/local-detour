@@ -1,9 +1,9 @@
-import BaseComponent from './BaseComponent';
 import {
   StyleSheet,
   View,
 } from 'react-native';
 import React from 'react';
+
 
 const styles = StyleSheet.create({
   separator: {
@@ -15,14 +15,10 @@ const styles = StyleSheet.create({
   },
 });
 
-class Separator extends BaseComponent {
-
-  render() {
-    return (
-      <View style={ styles.separator } />
-    );
-  }
-
+function Separator() {
+  return (
+    <View style={ styles.separator } />
+  );
 }
 
 export { Separator as default };

@@ -1,7 +1,6 @@
 import Profile from './__Profile__';
 import Repositories from './__Repositories__';
 import Notes from './__Notes__';
-import BaseComponent from './common/BaseComponent';
 import {
   StyleSheet,
   Text,
@@ -9,7 +8,7 @@ import {
   TouchableHighlight,
   Image,
 } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -28,21 +27,45 @@ const styles = StyleSheet.create({
   },
 });
 
-class Dashboard extends BaseComponent {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      username: '',
-      isLoading: false,
-      error: '',
-    };
-    this._bind('_goToProfile', '_goToRepos', '_goToNotes', '_makeBackground');
-  }
+class Dashboard extends Component {
 
   static propTypes = {
-    userInfo: PropTypes.object.isRequired,
+    userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  };
+
+  state = {
+    username: '',
+    isLoading: false,
+    error: '',
+  };
+
+  _goToProfile = () => {
+    this.props.navigator.push({
+      title: 'Profile',
+      component: Profile,
+      passProps: { userInfo: this.props.userInfo },
+    });
+  }
+
+  _goToRepos = () => {
+    this.props.navigator.push({
+      title: 'Repositories',
+      component: Repositories,
+      passProps: {
+        userInfo: this.props.userInfo,
+      },
+    });
+  }
+
+  _goToNotes = () => {
+    this.props.navigator.push({
+      title: 'Notes',
+      component: Notes,
+      passProps: {
+        userInfo: this.props.userInfo,
+      },
+    });
   }
 
   render() {
@@ -79,53 +102,6 @@ class Dashboard extends BaseComponent {
         </TouchableHighlight>
       </View>
     );
-  }
-
-  _goToProfile() {
-    this.props.navigator.push({
-      title: 'Profile',
-      component: Profile,
-      passProps: { userInfo: this.props.userInfo },
-    });
-  }
-
-  _goToRepos() {
-    this.props.navigator.push({
-      title: 'Repositories',
-      component: Repositories,
-      passProps: {
-        userInfo: this.props.userInfo,
-      },
-    });
-  }
-
-  _goToNotes() {
-    this.props.navigator.push({
-      title: 'Notes',
-      component: Notes,
-      passProps: {
-        userInfo: this.props.userInfo,
-      },
-    });
-  }
-
-  _makeBackground(btn) {
-    const obj = {
-      flexDirection: 'row',
-      alignSelf: 'stretch',
-      justifyContent: 'center',
-      flexGrow: 1,
-    };
-
-    if (btn === 0) {
-      obj.backgroundColor = '#48BBEC';
-    } else if (btn === 1) {
-      obj.backgroundColor = '#E77AAE';
-    } else {
-      obj.backgroundColor = '#758BF4';
-    }
-
-    return obj;
   }
 
 }

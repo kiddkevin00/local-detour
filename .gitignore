@@ -37,6 +37,7 @@ npm-debug.log
 yarn-error.log
 
 # BUCK
+#
 buck-out/
 \.buckd/
 *.keystore
@@ -51,3 +52,8 @@ buck-out/
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
+
+# custom entries
+#
+/spec/
+firebase-debug.log

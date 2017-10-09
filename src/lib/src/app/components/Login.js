@@ -1,7 +1,10 @@
+import actionCreator from '../actioncreators/login';
 import Events from './Events';
 import Signup from './Signup';
-import BaseComponent from './common/BaseComponent';
-import { firebaseAuth, firebaseGoogleAuthProvider } from '../proxies/FirebaseProxy';
+import { firebaseAuth } from '../proxies/FirebaseProxy';
+import {
+  LoginButton as FacebookSignInButton,
+} from 'react-native-fbsdk';
 import {
   ActivityIndicator,
   TouchableHighlight,
@@ -10,7 +13,9 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
-import React from 'react';
+import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 
 const styles = StyleSheet.create({
@@ -20,7 +25,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flexGrow: 70,
-    marginTop: 64,
+    //marginTop: 64,
     padding: 30,
     backgroundColor: '#23cfb9',
   },
@@ -32,8 +37,8 @@ const styles = StyleSheet.create({
   title: {
     alignSelf: 'center',
     marginBottom: 20,
-    color: '#F5F5F5',
     fontSize: 25,
+    color: '#F5F5F5',
   },
   formInput: {
     marginBottom: 10,
@@ -42,8 +47,8 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     padding: 4,
     height: 50,
-    color: 'white',
     fontSize: 23,
+    color: 'white',
   },
   loginButton: {
     justifyContent: 'center',
@@ -59,7 +64,7 @@ const styles = StyleSheet.create({
   signupButton: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10,
+    //marginTop: 10,
     marginBottom: 5,
     borderWidth: 1,
     borderRadius: 8,
@@ -68,31 +73,95 @@ const styles = StyleSheet.create({
     backgroundColor: 'orange',
   },
   footerText: {
+    fontSize: 12,
     color: '#a3a7b2',
-    fontSize: 14,
   },
   loginButtonText: {
-    color: '#111',
     fontSize: 18,
+    color: '#111',
   },
   signupButtonText: {
-    color: 'white',
     fontSize: 18,
+    color: 'white',
   },
 });
 
-class Login extends BaseComponent {
+class Login extends Component {
 
-  constructor(props) {
-    super(props);
+  static propTypes = {
+    dispatchFacebookPostLogin: PropTypes.func.isRequired,
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  };
 
-    this.state = {
-      formEmail: '',
-      formPassword: '',
-      isLoading: false,
-      error: '',
-    };
-    this._bind('_handleChange', '_handleLogin', '_gotoSignup');
+  state = {
+    formEmail: '',
+    formPassword: '',
+    isLoading: false,
+    error: '',
+  };
+
+  _handleLogin = async () => {
+    this.setState({
+      isLoading: true,
+    });
+
+    try {
+      const userInfo = await firebaseAuth
+        .signInWithEmailAndPassword(this.state.formEmail, this.state.formPassword);
+
+      this.props.navigator.replace({
+        component: Events,
+        passProps: {
+          userInfo: {
+            uid: userInfo.uid,
+            isAnonymous: userInfo.isAnonymous,
+          },
+        },
+      });
+
+      this.setState({
+        formEmail: '',
+        formPassword: '',
+        isLoading: false,
+        error: '',
+      });
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+
+      if (errorCode === 'auth/wrong-password') {
+        global.alert('Wrong password.');
+      } else {
+        global.alert(errorMessage);
+      }
+
+      this.setState({
+        isLoading: false,
+        error: errorMessage,
+      });
+    }
+  }
+
+  _handleFbPostLogin = async (error, result) => {
+    if (error) {
+      global.alert(`Facebook login error: ${result.error}`);
+    } else if (result.isCancelled) {
+      global.alert('Facebook login cancelled.');
+    } else {
+      this.props.dispatchFacebookPostLogin(this.props.navigator);
+    }
+  }
+
+  _gotoSignup = () => {
+    this.props.navigator.replace({
+      component: Signup,
+    });
+  }
+
+  _handleChange = (field, event) => {
+    this.setState({
+      [`form${field}`]: event.nativeEvent.text,
+    });
   }
 
   render() {
@@ -129,6 +198,11 @@ class Login extends BaseComponent {
           >
             <Text style={ styles.signupButtonText }>SIGN UP</Text>
           </TouchableHighlight>
+          <FacebookSignInButton
+            readPermissions={ ['public_profile', 'email', 'user_friends'] }
+            onLoginFinished={ this._handleFbPostLogin }
+            onLogoutFinished={ () => global.alert('Logout succeeded!') }
+          />
           <ActivityIndicator
             animating={ this.state.isLoading }
             color="#111"
@@ -145,57 +219,17 @@ class Login extends BaseComponent {
     );
   }
 
-  async _handleLogin() {
-    this.setState({
-      isLoading: true,
-    });
-
-    try {
-      const userInfo = await firebaseAuth
-        .signInWithEmailAndPassword(this.state.formEmail, this.state.formPassword);
-
-      this.props.navigator.push({
-        title: 'All Events',
-        component: Events,
-        passProps: { userInfo },
-      });
-
-      this.setState({
-        formEmail: '',
-        formPassword: '',
-        isLoading: false,
-        error: '',
-      });
-    } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-
-      if (errorCode === 'auth/wrong-password') {
-        alert('Wrong password.');
-      } else {
-        alert(errorMessage);
-      }
-
-      this.setState({
-        isLoading: false,
-        error: errorMessage,
-      });
-    }
-  }
-
-  _handleChange(field, event) {
-    this.setState({
-      [`form${field}`]: event.nativeEvent.text,
-    });
-  }
-
-  _gotoSignup() {
-    this.props.navigator.push({
-      title: 'Sign Up',
-      component: Signup,
-    });
-  }
-
 }
 
-export { Login as default };
+function mapStateToProps(state) {
+  return {};
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatchFacebookPostLogin(navigator) {
+      dispatch(actionCreator.facebookPostLogin(navigator));
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

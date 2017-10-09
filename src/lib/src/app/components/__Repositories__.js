@@ -1,7 +1,6 @@
 import Badge from './common/__Badge__';
 import WebViewWrapper from './common/WebViewWrapper';
 import Separator from './common/Separator';
-import BaseComponent from './common/BaseComponent';
 import GithubProxy from '../proxies/GithubProxy';
 import {
   StyleSheet,
@@ -10,7 +9,7 @@ import {
   ScrollView,
   TouchableHighlight,
 } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -21,39 +20,35 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'column',
     flexGrow: 1,
-    padding: 10
+    padding: 10,
   },
   name: {
     color: '#48BBEC',
     fontSize: 18,
-    paddingBottom: 5
+    paddingBottom: 5,
   },
   stars: {
     color: '#48BBEC',
     fontSize: 14,
-    paddingBottom: 5
+    paddingBottom: 5,
   },
   description: {
     fontSize: 14,
-    paddingBottom: 5
+    paddingBottom: 5,
   },
 });
 
-class Repositories extends BaseComponent {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      repos: [],
-      error: '',
-    };
-    this._bind('_openPage');
-  }
+class Repositories extends Component {
 
   static propTypes = {
-    userInfo: PropTypes.object.isRequired,
-  }
+    userInfo: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  };
+
+  state = {
+    repos: [],
+    error: '',
+  };
 
   componentDidMount() {
     GithubProxy.getRepos(this.props.userInfo.login)
@@ -65,12 +60,21 @@ class Repositories extends BaseComponent {
       })
       .catch((err) => {
         this.setState({ error: JSON.stringify(err, null, 2) });
-      })
+      });
+  }
+
+  _openPage = (url) => {
+    this.props.navigator.push({
+      title: 'Web Page',
+      component: WebViewWrapper,
+      passProps: { url },
+    });
   }
 
   render() {
     const userInfo = this.props.userInfo;
     const list = this.state.repos.map((item, index) => (
+      // eslint-disable-next-line react/no-array-index-key
       <View key={ `repo-${index}` }>
         <View style={ styles.rowContainer }>
           <TouchableHighlight
@@ -100,14 +104,6 @@ class Repositories extends BaseComponent {
         { list }
       </ScrollView>
     );
-  }
-
-  _openPage(url) {
-    this.props.navigator.push({
-      title: 'Web Page',
-      component: WebViewWrapper,
-      passProps: { url },
-    });
   }
 
 }

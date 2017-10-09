@@ -1,11 +1,11 @@
-const StandardErrorWrapper = require('../utils/standard-error-wrapper');
+const StandardErrorWrapper = require('../utils/StandardErrorWrapper');
 const constants = require('../constants/');
 
 
 class HttpRequest {
 
   static exec(url, options) {
-    return window.fetch(url, options)
+    return global.fetch(url, options)
       .then((response) => {
         if (response.status !== constants.SYSTEM.HTTP_STATUS_CODES.OK) {
           // Assumes that the response body follows the standard error format.
@@ -49,7 +49,7 @@ class HttpProxy {
     const url = HttpProxy._getFullUrl(_url, queryStringObj);
     const options = {
       headers,
-      body: window.JSON.stringify(body),
+      body: global.JSON.stringify(body),
       method: constants.SYSTEM.HTTP_METHODS.POST,
       mode: 'cors',
       credentials: 'include',
@@ -62,7 +62,7 @@ class HttpProxy {
     const url = HttpProxy._getFullUrl(_url, queryStringObj);
     const options = {
       headers,
-      body: window.JSON.stringify(body),
+      body: global.JSON.stringify(body),
       method: constants.SYSTEM.HTTP_METHODS.PUT,
       mode: 'cors',
       credentials: 'include',
@@ -75,7 +75,7 @@ class HttpProxy {
     const url = HttpProxy._getFullUrl(_url, queryStringObj);
     const options = {
       headers,
-      body: window.JSON.stringify(body),
+      body: global.JSON.stringify(body),
       method: constants.SYSTEM.HTTP_METHODS.DELETE,
       mode: 'cors',
       credentials: 'include',
@@ -88,7 +88,7 @@ class HttpProxy {
     let fullUrl;
 
     if (url[0] === '/') {
-      const env = window.process.env.NODE_ENV;
+      const env = process.env.NODE_ENV;
       let urlBase;
 
       switch (env) {
@@ -116,7 +116,7 @@ class HttpProxy {
   }
 
   static _parseQueryStringObj(queryStringObj) {
-    const esc = window.encodeURIComponent;
+    const esc = global.encodeURIComponent;
 
     return Object.keys(queryStringObj)
       .map((key) => `${esc(key)}=${esc(queryStringObj[key])}`)

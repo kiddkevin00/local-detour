@@ -1,17 +1,19 @@
 import EventDetail from './EventDetail';
 import Login from './Login';
 import Separator from './common/Separator';
-import BaseComponent from './common/BaseComponent';
 import { firebaseAuth, firebaseDb } from '../proxies/FirebaseProxy';
+import constants from '../constants/';
+import moment from 'moment';
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
   TouchableHighlight,
+  ScrollView,
   ListView,
 } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -74,25 +76,20 @@ const styles = StyleSheet.create({
   },
 });
 
-class Events extends BaseComponent {
-
-  constructor(props) {
-    super(props);
-
-    this.listViewDataSource = new ListView.DataSource({
-      rowHasChanged: (originalRow, newRow) => newRow._id !== originalRow._id,
-    });
-    this.dataRef = firebaseDb.ref('/nyc').child('events');
-
-    this.state = {
-      eventListViewDataSource: this.listViewDataSource.cloneWithRows([]),
-      newEvent: '',
-    };
-    this._bind('_handleLogout', '_handleClick', '_handleChange', '_renderEvent', '_checkoutEventDetail');
-  }
+class Events extends Component {
 
   static propTypes = {
-    userInfo: PropTypes.object//.isRequired,
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  };
+
+  // eslint-disable-next-line react/sort-comp
+  listViewDataSource = new ListView.DataSource({
+    rowHasChanged: (originalRow, newRow) => newRow._id !== originalRow._id,
+  });
+
+  state = {
+    eventListViewDataSource: this.listViewDataSource.cloneWithRows([]),
+    newEvent: '',
   };
 
   componentDidMount() {
@@ -113,11 +110,85 @@ class Events extends BaseComponent {
     this.dataRef.off();
   }
 
-  render() {
-    const userInfo = this.props.userInfo;
+  dataRef = firebaseDb.ref('/nyc').child('events');
 
+  _renderEvent = (event) => (
+    <View>
+      <View style={ styles.rowContainer }>
+        <TouchableHighlight
+          onPress={ this._checkoutEventDetail.bind(this, event) }
+          underlayColor="transparent"
+        >
+          <Text style={ styles.itemName }>{ event.name }</Text>
+        </TouchableHighlight>
+        <Text style={ styles.itemText }>{ event.where.address }</Text>
+        <Text style={ styles.itemText }>{ moment(event.when.startTimestamp).format('MMM Do h A') } - { moment(event.when.endTimestamp).format('MMM Do h A') }</Text>
+      </View>
+      <Separator />
+    </View>
+  )
+
+  _checkoutEventDetail = (event) => {
+    this.props.navigator.push({
+      title: 'Event Detail',
+      component: EventDetail,
+      passProps: { event },
+    });
+  }
+
+  _handleClick = () => {
+    this.dataRef
+      .child(this.state.newEvent)
+      .set({
+        ...constants.APP.SAMPLE_EVENT,
+        name: this.state.newEvent,
+      })
+      .then(() => {
+        this.setState({
+          newEvent: '',
+        });
+      })
+      .catch((err) => {
+        global.alert(JSON.stringify(err, null, 2));
+      });
+  }
+
+  _handleChange = (event) => {
+    this.setState({
+      newEvent: event.nativeEvent.text,
+    });
+  }
+
+  _handleLogout = async () => {
+    this.setState({
+      isLoading: true,
+    });
+
+    try {
+      await firebaseAuth.signOut();
+
+      this.props.navigator.replace({
+        title: 'Log In',
+        component: Login,
+      });
+
+      this.setState({
+        isLoading: false,
+      });
+    } catch (error) {
+      const errorMessage = error.message || 'Something went wrong.';
+
+      global.alert(errorMessage);
+
+      this.setState({
+        isLoading: false,
+      });
+    }
+  }
+
+  render() {
     return (
-      <View style={ styles.container }>
+      <ScrollView style={ styles.container }>
         <ListView
           style={ styles.main }
           dataSource={ this.state.eventListViewDataSource }
@@ -148,94 +219,8 @@ class Events extends BaseComponent {
             <Text style={ styles.logoutButtonText }>Logout</Text>
           </TouchableHighlight>
         </View>
-      </View>
+      </ScrollView>
     );
-  }
-
-  _renderEvent(event) {
-    return (
-      <View>
-        <View style={ styles.rowContainer }>
-          <TouchableHighlight
-            onPress={ this._checkoutEventDetail.bind(this, event) }
-            underlayColor="transparent"
-          >
-            <Text style={ styles.itemName }>{ event.name }</Text>
-          </TouchableHighlight>
-          <Text style={ styles.itemText }>{ event.address }</Text>
-          <Text style={ styles.itemText }>{ event.startDate } - { event.endDate }</Text>
-        </View>
-        <Separator />
-      </View>
-    );
-  }
-
-  _checkoutEventDetail(event) {
-    this.props.navigator.push({
-      title: 'Event Detail',
-      component: EventDetail,
-      passProps: { event },
-    });
-  }
-
-  _handleClick() {
-    this.dataRef
-      .push({
-        name: this.state.newEvent,
-        venue: 'Time Square',
-        address: '123 42nd street, New York, NY',
-        startDate: 'April 28',
-        endDate: 'April 30',
-        startTime: '6 PM',
-        endTime: '9 PM',
-        type: 'Public',
-        description: 'Arts Brookfield’s annual summer music festival, the Lowdown Hudson Music Fest, returns to the heart of downtown New York for its seventh summer. Bringing fun, lively, world-class musical talent to the picturesque Waterfront Plaza at Brookfield Place, this year’s festival will be headlined by quirky veteran rockers OK GO. The show is free to attend and open to the public.Free to attend, no tickets required.PLEASE NOTE: In keeping with the summer concert vibe, this year’s festival will be standing room only on a first come, first served basis.Event is rain or shine, except for extreme weather conditions.',
-        cost: 0,
-        externalLink: 'https://www.timeout.com/newyork/things-to-do/sunset-sail-happy-hour',
-        photoUrls: [],
-        tags: {},
-      })
-      .then(() => {
-        this.setState({
-          newEvent: '',
-        });
-      })
-      .catch((err) => {
-        alert(JSON.stringify(err, null, 2));
-      });
-  }
-
-  _handleChange(event) {
-    this.setState({
-      newEvent: event.nativeEvent.text,
-    });
-  }
-
-  async _handleLogout() {
-    this.setState({
-      isLoading: true,
-    });
-
-    try {
-      await firebaseAuth.signOut();
-
-      this.props.navigator.push({
-        title: 'Log In',
-        component: Login,
-      });
-
-      this.setState({
-        isLoading: false,
-      });
-    } catch (error) {
-      const errorMessage = error.message || 'Something went wrong.';
-
-      alert(errorMessage);
-
-      this.setState({
-        isLoading: false,
-      });
-    }
   }
 
 }

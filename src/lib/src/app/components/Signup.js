@@ -1,7 +1,6 @@
 import Events from './Events';
 import Login from './Login';
-import BaseComponent from './common/BaseComponent';
-import { firebaseAuth, firebaseGoogleAuthProvider } from '../proxies/FirebaseProxy';
+import { firebaseAuth } from '../proxies/FirebaseProxy';
 import {
   ActivityIndicator,
   TouchableHighlight,
@@ -10,7 +9,8 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 
 const styles = StyleSheet.create({
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flexGrow: 70,
-    marginTop: 64,
+    //marginTop: 64,
     padding: 30,
     backgroundColor: '#23cfb9',
   },
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   footerText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#a3a7b2',
   },
   loginButtonText: {
@@ -96,19 +96,113 @@ const styles = StyleSheet.create({
   },
 });
 
-class Signup extends BaseComponent {
+class Signup extends Component {
 
-  constructor(props) {
-    super(props);
+  static propTypes = {
+    navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  };
 
-    this.state = {
-      formFullName: '',
-      formEmail: '',
-      formPassword: '',
-      isLoading: false,
-      error: '',
-    };
-    this._bind('_handleChange', '_handleSignup', '_gotoLogin', '_signinAnonymously');
+  state = {
+    formFullName: '',
+    formEmail: '',
+    formPassword: '',
+    isLoading: false,
+    error: '',
+  };
+
+  _handleSignup = async () => {
+    this.setState({
+      isLoading: true,
+    });
+
+    try {
+      const userInfo = await firebaseAuth.createUserWithEmailAndPassword(this.state.formEmail,
+        this.state.formPassword);
+
+      userInfo.sendEmailVerification();
+
+      this.props.navigator.replace({
+        component: Events,
+        passProps: { userInfo },
+      });
+
+      this.setState({
+        formFullName: '',
+        formEmail: '',
+        formPassword: '',
+        isLoading: false,
+        error: '',
+      });
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+
+      if (errorCode === 'auth/weak-password') {
+        global.alert('The password is too weak.');
+      } else if (errorCode === 'auth/email-already-in-use') {
+        global.alert('The email is already in use.');
+      } else if (errorCode === 'auth/invalid-email') {
+        global.alert('The email is invalid.');
+      } else if (errorCode === 'auth/operation-not-allowed') {
+        global.alert('You must enable Email/Password auth in the Firebase Console.');
+      } else {
+        global.alert(errorMessage);
+      }
+
+      this.setState({
+        isLoading: false,
+        error: errorMessage,
+      });
+    }
+  }
+
+  _signinAnonymously = async () => {
+    this.setState({
+      isLoading: true,
+    });
+
+    try {
+      const userInfo = await firebaseAuth.signInAnonymously();
+
+      this.props.navigator.replace({
+        component: Events,
+        passProps: { userInfo },
+      });
+
+      this.setState({
+        formFullName: '',
+        formEmail: '',
+        formPassword: '',
+        isLoading: false,
+        error: '',
+      });
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+
+      if (errorCode === 'auth/operation-not-allowed') {
+        global.alert('You must enable Anonymous auth in the Firebase Console.');
+      } else {
+        global.alert(errorMessage);
+      }
+
+      this.setState({
+        isLoading: false,
+        error: errorMessage,
+      });
+    }
+  }
+
+  _gotoLogin = () => {
+    this.props.navigator.replace({
+      component: Login,
+    });
+  }
+
+  _handleChange = (field, event) => {
+    this.setState({
+      [`form${field}`]: event.nativeEvent.text,
+    });
   }
 
   render() {
@@ -173,104 +267,6 @@ class Signup extends BaseComponent {
         </View>
       </View>
     );
-  }
-
-  async _handleSignup() {
-    this.setState({
-      isLoading: true,
-    });
-
-    try {
-      const userInfo = await firebaseAuth.createUserWithEmailAndPassword(this.state.formEmail,
-        this.state.formPassword);
-
-      userInfo.sendEmailVerification();
-
-      this.props.navigator.push({
-        title: 'All Events',
-        component: Events,
-        passProps: { userInfo },
-      });
-
-      this.setState({
-        formFullName: '',
-        formEmail: '',
-        formPassword: '',
-        isLoading: false,
-        error: '',
-      });
-    } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-
-      if (errorCode === 'auth/weak-password') {
-        alert('The password is too weak.');
-      } else if (errorCode === 'auth/email-already-in-use') {
-        alert('The email is already in use.');
-      } else if (errorCode === 'auth/invalid-email') {
-        alert('The email is invalid.');
-      } else if (errorCode === 'auth/operation-not-allowed') {
-        alert('You must enable Email/Password auth in the Firebase Console.');
-      } else {
-        alert(errorMessage);
-      }
-
-      this.setState({
-        isLoading: false,
-        error: errorMessage,
-      });
-    }
-  }
-
-  _handleChange(field, event) {
-    this.setState({
-      [`form${field}`]: event.nativeEvent.text,
-    });
-  }
-
-  _gotoLogin() {
-    this.props.navigator.push({
-      title: 'Log In',
-      component: Login,
-    });
-  }
-
-  async _signinAnonymously() {
-    this.setState({
-      isLoading: true,
-    });
-
-    try {
-      const userInfo = await firebaseAuth.signInAnonymously();
-
-      this.props.navigator.push({
-        title: 'All Events',
-        component: Events,
-        passProps: { userInfo },
-      });
-
-      this.setState({
-        formFullName: '',
-        formEmail: '',
-        formPassword: '',
-        isLoading: false,
-        error: '',
-      });
-    } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-
-      if (errorCode === 'auth/operation-not-allowed') {
-        alert('You must enable Anonymous auth in the Firebase Console.');
-      } else {
-        alert(errorMessage);
-      }
-
-      this.setState({
-        isLoading: false,
-        error: errorMessage,
-      });
-    }
   }
 
 }

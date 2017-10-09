@@ -3,6 +3,12 @@ package com.localdetour;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.facebook.reactnative.androidsdk.FBSDKPackage;
+import com.reactnative.photoview.PhotoViewPackage;
+import com.calendarevents.CalendarEventsPackage;
+import com.evollu.react.fcm.FIRMessagingPackage;
+import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -22,7 +28,13 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage()
+        new MainReactPackage(),
+            new RNFetchBlobPackage(),
+            new FBSDKPackage(),
+            new PhotoViewPackage(),
+        new CalendarEventsPackage(),
+        new FIRMessagingPackage(),
+        new MapsPackage()
       );
     }
   };
