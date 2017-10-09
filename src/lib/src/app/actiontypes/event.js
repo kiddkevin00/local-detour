@@ -1,5 +1,5 @@
 const eventActionTypes = {
-  LOAD_EVENTS: 'LOAD_EVENTS',
+  SAVE_EVENT_PHOTO: 'SAVE_EVENT_PHOTO',
 };
 
 export default eventActionTypes;

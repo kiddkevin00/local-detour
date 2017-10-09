@@ -2,7 +2,7 @@ import actionTypes from '../actiontypes/';
 
 
 const initialState = {
-  events: []
+  photo: {}
 };
 
 function eventsReducer(state = initialState, action) {
@@ -10,10 +10,10 @@ function eventsReducer(state = initialState, action) {
   const actionPayload = action.payload;
 
   switch (actionType) {
-    case actionTypes.EVENT.LOAD_EVENTS:
+    case actionTypes.EVENT.SAVE_EVENT_PHOTO:
       return {
         ...state,
-        events: actionPayload.events,
+        photo: { ...state.photo, [actionPayload.eventName]: actionPayload.photoURI }
       };
     default:
       return state;
