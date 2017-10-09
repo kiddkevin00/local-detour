@@ -42,11 +42,7 @@ class Events extends Component {
     auth: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 
     navigator: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  };
-
-  state = {
-    photoTestURI: `https://firebasestorage.googleapis.com/v0/b/spiritual-guide-476dd.appspot.com/o/
-    public%2FGovIsland%2FGovIsland_6.jpg?alt=media&token=bf07f3c8-dd98-42ff-8788-94d875afa704`
+    getAndStoreEventPhotoAsync: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
@@ -77,6 +73,7 @@ class Events extends Component {
     const displayDate = today.isAfter(startDate) ? today.format('DD') : startDate.format('DD');
     const eventPhoto = this.props.eventPhoto;
     let photoURI = eventPhoto[event.name];
+
     if (!photoURI) {
       photoURI = event.heroPhoto;
       this.props.getAndStoreEventPhotoAsync(event);
