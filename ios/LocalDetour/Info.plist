@@ -33,7 +33,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>3</string>
 	<key>FacebookAppID</key>
 	<string>158721484707033</string>
 	<key>FacebookDisplayName</key>
@@ -55,9 +55,9 @@
 		<true/>
 	</dict>
 	<key>NSCalendarsUsageDescription</key>
-	<string>$(PRODUCT_NAME) use your calendar.</string>
+	<string>This allows $(PRODUCT_NAME) to save event detail to your calendar.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) location use.</string>
+	<string>This allows $(PRODUCT_NAME) to show the events near you.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>

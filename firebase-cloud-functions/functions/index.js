@@ -8,7 +8,7 @@ const admin = require('firebase-admin');
 
 const messagingTopic = 'nyc-events';
 
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp();
 
 /*
  * Takes the text parameter passed to this HTTP endpoint and insert it into the
@@ -30,33 +30,48 @@ exports.addMessage = functions.https.onRequest((req, res) => {
  * Listens for new messages added to /messages/:pushId/original and creates an
  * uppercase version of the message to /messages/:pushId/uppercase
  */
-exports.makeUppercase = functions.database.ref('/messages/{pushId}/original').onWrite((event) => {
-  const currentEventSnapshot = event.data;
-  const previousEventSnapShot = currentEventSnapshot.previous;
+exports.makeUppercase = functions.database.ref('/messages/{pushId}/original')
+  .onCreate((snapshot, context) => {
+    // Grab the current value of what was written to the Realtime Database.
+    const original = snapshot.val();
 
-  // Edits data only when it is first created.
-  if (previousEventSnapShot.exists()) {
-    return;
-  }
+    console.log('Uppercasing', context.params.pushId, original);
 
-  // Exits when the data is deleted.
-  if (!currentEventSnapshot.exists()) {
-    return;
-  }
+    const uppercase = original.toUpperCase();
 
-  // Grabs the current value of what was written to the Realtime Database.
-  const original = currentEventSnapshot.val();
-  const uppercase = original.toUpperCase();
+    // You must return a Promise when performing asynchronous tasks inside a Functions such as
+    // writing to the Firebase Realtime Database.
+    // Setting an "uppercase" sibling in the Realtime Database returns a Promise.
+    return snapshot.ref.parent.child('uppercase').set(uppercase);
+  });
 
-  console.log(`Uppercasing ${original} in ${event.params.pushId} to ${uppercase}`);
-
-  /*
-   * You must return a Promise when performing asynchronous tasks inside a Functions such as
-   * writing to the Firebase Realtime Database.
-   * Setting an "uppercase" sibling in the Realtime Database returns a Promise.
-   */
-  return currentEventSnapshot.ref.parent.child('uppercase').set(uppercase);
-});
+//exports.makeUppercase = functions.database.ref('/messages/{pushId}/original').onWrite((event) => {
+//  const currentEventSnapshot = event;
+//  const previousEventSnapShot = currentEventSnapshot.previous;
+//
+//  // Edits data only when it is first created.
+//  if (previousEventSnapShot.exists()) {
+//    return;
+//  }
+//
+//  // Exits when the data is deleted.
+//  if (!currentEventSnapshot.exists()) {
+//    return;
+//  }
+//
+//  // Grabs the current value of what was written to the Realtime Database.
+//  const original = currentEventSnapshot.val();
+//  const uppercase = original.toUpperCase();
+//
+//  console.log(`Uppercasing ${original} in ${event.params.pushId} to ${uppercase}`);
+//
+//  /*
+//   * You must return a Promise when performing asynchronous tasks inside a Functions such as
+//   * writing to the Firebase Realtime Database.
+//   * Setting an "uppercase" sibling in the Realtime Database returns a Promise.
+//   */
+//  return currentEventSnapshot.ref.parent.child('uppercase').set(uppercase);
+//});
 
 exports.sendPushNotification = functions.https.onRequest((req, res) => {
   const title = req.query.title || 'LocalDetour';
@@ -70,7 +85,7 @@ exports.sendPushNotification = functions.https.onRequest((req, res) => {
   const notification = {
     title,
     body,
-    //badge: '1', /// TODO
+    //badge: '1',
   };
 
   admin.messaging()
@@ -80,40 +95,53 @@ exports.sendPushNotification = functions.https.onRequest((req, res) => {
     });
 });
 
-exports.sendEventPushNotification = functions.database.ref('/nyc/events/{eventId}').onWrite((event) => {
-  const currentEventSnapshot = event.data;
-  const previousEventSnapShot = currentEventSnapshot.previous;
+exports.sendEventPushNotification = functions.database.ref('/nyc/events/{eventId}').onCreate((snapshot, context) => {
+  const notification = {
+    title: 'LocalDetour',
+    body: `Check out the new event:\n${snapshot.val().name || 'N/A'}`,
+    //badge: '1',
+  };
 
-  // Exits when the event is deleted.
-  if (!currentEventSnapshot.exists()) {
-    return;
-  }
+  console.log(`Sending push notification: ${JSON.stringify(notification, null, 2)} to ${messagingTopic}`);
 
-  // Sends new event push notification when the event is first created.
-  if (!previousEventSnapShot.exists()) {
-    const notification = {
-      title: 'LocalDetour',
-      body: `Check out the new event:\n${currentEventSnapshot.val().name || 'N/A'}`,
-      //badge: '1', /// TODO
-    };
-
-    console.log(`Sending push notification: ${JSON.stringify(notification, null, 2)} to ${messagingTopic}`);
-
-    return admin.messaging()
-      .sendToTopic(messagingTopic, { notification });
-  }
-
-  // Sends event update push notification when the event is updated.
-  if (currentEventSnapshot.changed()) {
-    const notification = {
-      title: 'LocalDetour',
-      body: `Check out the new information for ${currentEventSnapshot.val().name || 'N/A'}.`,
-      //badge: '1', /// TODO
-    };
-
-    //console.log(`Sending push notification: ${JSON.stringify(notification, null, 2)} to ${messagingTopic}`);
-
-    //return admin.messaging()
-    //  .sendToTopic(messagingTopic, { notification });
-  }
+  return admin.messaging()
+    .sendToTopic(messagingTopic, { notification }, { priority: 'high' });
 });
+
+//exports.sendEventPushNotification = functions.database.ref('/nyc/events/{eventId}').onWrite((event) => {
+//  const currentEventSnapshot = event;
+//  const previousEventSnapShot = currentEventSnapshot.previous;
+//
+//  // Exits when the event is deleted.
+//  if (!currentEventSnapshot.exists()) {
+//    return;
+//  }
+//
+//  // Sends new event push notification when the event is first created.
+//  if (!previousEventSnapShot.exists()) {
+//    const notification = {
+//      title: 'LocalDetour',
+//      body: `Check out the new event:\n${currentEventSnapshot.val().name || 'N/A'}`,
+//      //badge: '1', /// TODO
+//    };
+//
+//    console.log(`Sending push notification: ${JSON.stringify(notification, null, 2)} to ${messagingTopic}`);
+//
+//    return admin.messaging()
+//      .sendToTopic(messagingTopic, { notification });
+//  }
+//
+//  // Sends event update push notification when the event is updated.
+//  if (currentEventSnapshot.changed()) {
+//    const notification = {
+//      title: 'LocalDetour',
+//      body: `Check out the new information for ${currentEventSnapshot.val().name || 'N/A'}.`,
+//      //badge: '1', /// TODO
+//    };
+//
+//    //console.log(`Sending push notification: ${JSON.stringify(notification, null, 2)} to ${messagingTopic}`);
+//
+//    //return admin.messaging()
+//    //  .sendToTopic(messagingTopic, { notification });
+//  }
+//});

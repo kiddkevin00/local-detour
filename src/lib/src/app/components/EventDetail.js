@@ -271,8 +271,7 @@ class EventDetail extends Component {
       constants.APP.SAMPLE_EVENT;
     const photosView = (
       Array.isArray(event.photos) ? (
-        event.photos
-          .reduce(this._reducePhotosView, [])
+        event.photos.reduce(this._reducePhotosView, [])
       ) : (
         <Row>
           <Text note>coming soon...</Text>
@@ -283,10 +282,10 @@ class EventDetail extends Component {
     const today = moment();
     const displayMonth = today.isAfter(startDate) ? today.format('MMM').toUpperCase() : startDate.format('MMM').toUpperCase();
     const displayDate = today.isAfter(startDate) ? today.format('DD') : startDate.format('DD');
-    const diaplyDateInterval = moment(event.when.startTimestamp).format('MMM DD') !== moment(event.when.endTimestamp).format('MMM DD') ?
-      `${moment(event.when.startTimestamp).format('MMM DD')} - ${moment(event.when.endTimestamp).format('MMM DD')}` :
-      moment(event.when.startTimestamp).format('MMM DD');
-    const displayTimeInterval = event.when.display || `${moment(event.when.startTimestamp).format('hh:mm A')} - ${moment(event.when.endTimestamp).format('hh:mm A')}`;
+    const diaplyDateInterval = startDate.format('MMM DD') !== moment(event.when.endTimestamp).format('MMM DD') ?
+      `${startDate.format('MMM DD')} - ${moment(event.when.endTimestamp).format('MMM DD')}` :
+      startDate.format('MMM DD');
+    const displayTimeInterval = event.when.display || `${startDate.format('hh:mm A')} - ${moment(event.when.endTimestamp).format('hh:mm A')}`;
 
     return (
       <Container>

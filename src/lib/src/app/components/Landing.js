@@ -103,7 +103,7 @@ class Landing extends Component {
 
     return (
       <Container>
-        <Content >
+        <Content>
           <Swiper showsButtons={ false }>
             <Image
               style={ [styles.backgroundImage, backgroundImageInlineStyle] }

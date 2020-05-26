@@ -4,7 +4,7 @@ How to Run the App on iOS or Android
 The following steps assume that you are developing on Mac.
 
 ## Common setup
-  - Clone this repo: `git clone https://github.com/kiddkevin00/spiritual-guide.git`.
+  - Clone this repo: `git clone https://github.com/kiddkevin00/local-detour.git`.
   - Install Xcode and update to the latest version.
   - Download and install [Android Studio](https://developer.android.com/studio/index.html).
 
@@ -26,12 +26,12 @@ The following steps assume that you are developing on Mac.
   - Create file in "$HOME/.gradle/gradle.properties" and add `REACT_NATIVE_PACKAGER_PORT = 8085` to it.
 
 ## Run on iOS
-  - `cd spiritual-guide`
+  - `cd local-detour/`
   - `react-native start`
   - `react-native run-ios`
 
 ## Run on Android
-  - `cd spiritual-guide`
+  - `cd local-detour/`
   - `react-native start`
   - `npm run map-adb-ports;` [8097 (Nuclide/Atom)](https://github.com/facebook/nuclide/issues/408)
   - `react-native run-android`

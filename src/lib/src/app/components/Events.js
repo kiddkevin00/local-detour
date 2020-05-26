@@ -64,6 +64,45 @@ class Events extends Component {
       });
   }
 
+  _saveToCalenderApp = async function (event) {
+    try {
+      const savedEventId = await CalendarEvents.saveToCalendarEvents(event.name, {
+        location: event.where && event.where.address,
+        startDate: (event.when && event.when.startTimestamp) ? new Date(event.when.startTimestamp) : new Date(),
+        endDate: (event.when && event.when.endTimestamp) ? new Date(event.when.endTimestamp) : new Date(),
+        alarms: [{ date: -60 * 24 }], // 24 hours.
+        description: event.detail,
+        notes: event.detail,
+      });
+
+      if (savedEventId) {
+        Alert.alert('Success', 'The event has been saved to your calendar and will remind you one day before it starts');
+        //CalendarEvents.showSavedEventInCalendarApp(event.when && event.when.startTimestamp);
+      }
+    } catch (err) {
+      console.log(`Something went wrong when saving event to calendar app - ${err}`);
+    }
+  }
+
+  _checkoutEventDetail(event) {
+    this.props.navigator.push({
+      component: EventDetail,
+      passProps: { eventName: event.name },
+    });
+  }
+
+  _gotoMapView = () => {
+    this.props.navigator.replace({
+      component: EventMapView,
+    });
+  }
+
+  _gotoSetting = () => {
+    this.props.navigator.push({
+      component: Setting,
+    });
+  }
+
   _renderEvent = (event) => {
     const startDate = moment(event.when.startTimestamp);
     const today = moment();
@@ -122,58 +161,6 @@ class Events extends Component {
         </Card>
       </ListItem>
     );
-  }
-
-  _saveToCalenderApp = async function (event) {
-    try {
-      const savedEventId = await CalendarEvents.saveToCalendarEvents(event.name, {
-        location: event.where && event.where.address,
-        startDate: (event.when && event.when.startTimestamp) ? new Date(event.when.startTimestamp) : new Date(),
-        endDate: (event.when && event.when.endTimestamp) ? new Date(event.when.endTimestamp) : new Date(),
-        alarms: [{ date: -60 * 24 }], // 24 hours.
-        description: event.detail,
-        notes: event.detail,
-      });
-
-      if (savedEventId) {
-        Alert.alert('Success', 'The event has been saved to your calendar and will remind you one day before it starts');
-        //CalendarEvents.showSavedEventInCalendarApp(event.when && event.when.startTimestamp);
-      }
-    } catch (err) {
-      console.log(`Something went wrong when saving event to calendar app - ${err}`);
-    }
-  }
-
-  _checkoutEventDetail(event) {
-    this.props.navigator.push({
-      component: EventDetail,
-      passProps: { eventName: event.name },
-    });
-  }
-
-  _gotoMapView = () => {
-    this.props.navigator.replace({
-      component: EventMapView,
-    });
-  }
-
-  _gotoSetting = () => {
-    this.props.navigator.push({
-      component: Setting,
-    });
-  }
-
-  static _filterEvents(events) {
-    return events.filter((event) => {
-      const today = moment();
-
-      // Filters out past events.
-      if (today.isAfter(event.when.endTimestamp)) {
-        return false;
-      }
-      return true;
-    });
-
   }
 
   render() {
